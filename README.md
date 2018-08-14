@@ -1,6 +1,6 @@
-# Banking of Things IoT Python SDK
+# Banking of Things Python SDK
 
-IoT BoT SDK for Python
+The BoT SDK for Python
 
 
 ## System Requirements

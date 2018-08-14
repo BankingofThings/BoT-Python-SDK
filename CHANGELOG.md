@@ -1,4 +1,4 @@
-Banking of Things IoT Python SDK release notes
+Banking of Things Python SDK release notes
 ============================
 
 v0.0.0

@@ -1,4 +1,4 @@
-# Contribute to the Banking of Things IoT Python SDK
+# Contribute to the Banking of Things Python SDK
 
 ### *Pull requests are welcome!*
 
