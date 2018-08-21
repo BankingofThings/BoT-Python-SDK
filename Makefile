@@ -1,5 +1,5 @@
-init:
-    pip install -r requirements.txt
+install: ; pip install -r requirements.txt
 
-tests:
-    py.test tests
+server: ; python server.py $(makerID)
+
+activate: ; python -c "from bot_python_sdk.polling_service import PollingService; PollingService().run()"

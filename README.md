@@ -1,40 +1,68 @@
-# Banking of Things Python SDK
+<img src="https://bankingofthings.io/img/github-header.png" style="margin:auto" alt="BoT">
 
-The BoT SDK for Python
+# BoT-Python-SDK
 
-
-## System Requirements
-
-The SDK depends on the following system libraries:
-
-* libssl-dev
-
-```sh
-apt-get install libssl-dev
-```
-
+This is our Banking of Things SDK that enables your IoT devices to perform seamless autonomous payments.
 ## Installation
 
-Install using `pip`:
+Clone the repository on your device, for example with ssh:
+```bash
+git clone git@github.com:BankingofThings/BoT-Python-SDK.git
+```
+### Installing Hatch
 
-```sh 
-pip install botiotsdk
+First things first, make sure you have python 3.5+ and [Install Hatch](https://pypi.org/project/hatch/).
+
+### Creating the virtual environment
+```bash
+hatch env BoT-Python-SDK
+hatch shell BoT-Python-SDK
+```
+
+### Installing dependencies
+```bash 
+make install
 ```
 
 ## Configuration
 
-Register as a maker account to get your makerID at [BankingofThings.io](https://bankingofthings.io).
+### First run
+Get your makerID from your BoT Account and run the server in your virtual environment in the root of the SDK:
 
-```python
-import botiotsdk
-botiotsdk.configure({
-    "mode": "sandbox", # sandbox or live
-    "makerID": "YOUR-MAKER-ID"
-})
+```bash
+make server makerID=YOUR_MAKER_ID
 ```
 
-## Tests
+replacing `YOUR_MAKER_ID` with your own BoT makerID.
 
-```sh 
-make tests
+To run the server normally after you've configured it, simply run in your venv:
+```bash
+make server
 ```
+
+## Using the SDK
+
+### Retrieving actions
+```bash
+GET /actions
+```
+
+### Triggering actions
+```bash
+POST /
+body: {
+  "actionID": YOUR_ACTION_ID,
+  "value": OPTIONAL_VALUE
+}
+```
+
+## Troubleshooting
+
+If you've paired your device with the QR code that was generated in the root (`qr.png`), it might not have been activated.
+
+Run the next command in your venv to start the activation process:
+```bash
+make activate
+``` 
+
+Please refer to the complete [Documentation](https://docs.bankingofthings.io)
