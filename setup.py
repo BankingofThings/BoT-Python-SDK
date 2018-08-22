@@ -20,12 +20,11 @@ setup(
     version=version,
     description='',
     long_description=readme,
-    author='Coen Mooij',
-    author_email='coenmooij@gmail.com',
-    maintainer='Coen Mooij',
-    maintainer_email='coenmooij@gmail.com',
-    url='https://github.com/_/BoT-Python-SDK',
-    license='MIT/Apache-2.0',
+    author='Banking of Things',
+    author_email='bankingofthings@ing.nl',
+    maintainer='Banking of Things',
+    maintainer_email='bankingofthings@ing.nl',
+    url='https://github.com/BankingofThings/BoT-Python-SDK',
 
     keywords=[
         '',
@@ -34,8 +33,6 @@ setup(
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License',
-        'License :: OSI Approved :: Apache Software License',
         'Natural Language :: English',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 2.7',
