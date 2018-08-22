@@ -1,4 +1,4 @@
-install: ; pip install -r requirements.txt
+install: ; pip install --upgrade setuptools && pip install -r requirements.txt
 
 server: ; python server.py $(makerID)
 
@@ -6,4 +6,4 @@ activate: ; python -c "from bot_python_sdk.polling_service import PollingService
 
 test: ; pytest
 
-environment: ; pip install virtualenv ; virtualenv env
+environment: ; sudo pip install virtualenv && virtualenv venv
