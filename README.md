@@ -31,6 +31,10 @@ Then we run our newly created environment like this:
 ```bash
 source venv/bin/activate
 ```
+To exit the virtual environment, type:
+```bash
+deactivate
+```
 
 > From now on, every command you run should be inside the virtual environment, unless specified differently.
 
