@@ -2,6 +2,10 @@
 
 # BoT-Python-SDK
 
+[![Build Status](https://travis-ci.com/BankingofThings/BoT-Python-SDK.svg?token=ic37boNh1zbtjppb1zLc&branch=master)](https://travis-ci.com/BankingofThings/BoT-Python-SDK)
+
+[comment]: # (Todo replace build status with open source one)
+
 This is our Banking of Things SDK that enables your IoT devices to perform seamless autonomous payments.
 ## Installation
 
