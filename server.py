@@ -20,6 +20,6 @@ if not Store().has_config():
 
 # If OS is windows based, it doesn't support gunicorn so we run waitress
 if os.name == 'nt':
-    subprocess.run(['waitress-serve', '--port=3001', 'bot_python_sdk.api:api'])
+    subprocess.Popen(['waitress-serve', '--port=3001', 'bot_python_sdk.api:api'])
 else:
-    subprocess.run(['gunicorn', '-b', '127.0.0.1:3001', 'bot_python_sdk.api:api'])
+    subprocess.Popen(['gunicorn', '-b', '127.0.0.1:3001', 'bot_python_sdk.api:api'])
