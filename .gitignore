@@ -14,3 +14,4 @@ config.py
 qr.png
 actions.py
 last_triggered.py
+.pytest_cache/
