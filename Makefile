@@ -1,8 +1,8 @@
 install: ; pip install --upgrade setuptools && pip install -r requirements.txt
 
-server: ; python server.py $(makerID)
+server: ; python3 server.py $(makerID)
 
-activate: ; python -c "from bot_python_sdk.polling_service import PollingService; PollingService().run()"
+activate: ; python3 -c "from bot_python_sdk.polling_service import PollingService; PollingService().run()"
 
 test: ; pytest
 

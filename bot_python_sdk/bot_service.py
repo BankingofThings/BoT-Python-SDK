@@ -1,11 +1,13 @@
+import falcon
 import json
 import jwt
 import requests
 import sys
+from requests_toolbelt.adapters.fingerprint import FingerprintAdapter
 
 sys.path.append('../')
 from config import __private_key__, __maker_id__, __device_id__
-from environment import __api_url__, __endpoint__
+from environment import __api_url__, __endpoint__, __ssl_fingerprint__
 
 
 class BoTService:
@@ -19,7 +21,7 @@ class BoTService:
     def get_actions(self):
         print('Retrieving actions...')
         url = __api_url__ + __endpoint__ + '/actions/' + __maker_id__
-        response = requests.get(url)
+        response = self._get(url)
         decoded = self._decode(response.text)
         return json.loads(decoded['bot'])
 
@@ -40,7 +42,26 @@ class BoTService:
             'makerID': __maker_id__,
             'deviceID': __device_id__
         }
-        return requests.post(url, data=body, headers=headers)
+        session = requests.Session()
+        session.mount(__api_url__, FingerprintAdapter(__ssl_fingerprint__))
+        try:
+            return session.post(url, data=body, headers=headers)
+        except requests.exceptions.SSLError:
+            print('SSL Fingerprint verification failed. Could not verify server.')
+            raise falcon.HTTPServiceUnavailable(
+                description="SSL Fingerprint verification failed. Could not verify server."
+            )
+
+    def _get(self, url):
+        session = requests.Session()
+        session.mount(__api_url__, FingerprintAdapter(__ssl_fingerprint__))
+        try:
+            return session.get(url)
+        except requests.exceptions.SSLError:
+            print('SSL Fingerprint verification failed. Could not verify server.')
+            raise falcon.HTTPServiceUnavailable(
+                description="SSL Fingerprint verification failed. Could not verify server."
+            )
 
     def _decode(self, encoded_string):
         file = open('public.pem')
