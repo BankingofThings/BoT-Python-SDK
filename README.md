@@ -6,7 +6,7 @@
 
 [comment]: # (Todo replace build status with open source one)
 
-Banking of Things is an IoT-SDK-NodeJS that enables your IoT devices to perform seamless autonomous payments on your behalf. 
+Banking of Things enables your IoT devices to perform seamless autonomous payments on your behalf. 
 For more information, visit [bankingofthings.io](https://bankingofthings.io/).
 
 ## Getting Started
