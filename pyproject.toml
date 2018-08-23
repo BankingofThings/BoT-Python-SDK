@@ -2,8 +2,8 @@
 name = 'BoT-Python-SDK'
 version = '0.0.1'
 description = ''
-author = 'Coen Mooij'
-author_email = 'coenmooij@gmail.com'
+author = 'Banking of Things'
+author_email = 'bankingofthings@ing.nl'
 url = 'https://github.com/BankingofThings/BoT-Python-SDK'
 
 [requires]
