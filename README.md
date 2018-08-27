@@ -29,14 +29,14 @@ cd BoT-Python-SDK
 ### Install using a virtual environment
 First we install `virtualenv` && create an environment `venv` with:
 ```bash
-# For Debian/Ubuntu/Raspberry Pi
-make environment-debian
+# For Raspberry Pi
+make environment-pi
 
-# Alternatively, use one of the following:
+# For Mac OS X
 make environment-osx
+
+# For Windows
 make environment-windows
-make environment-alpine
-make environment-RHEL
 ```
 Then we run our newly created environment like this:
 ```bash
