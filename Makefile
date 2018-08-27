@@ -6,7 +6,7 @@ activate: ; python3 -c "from bot_python_sdk.polling_service import PollingServic
 
 test: ; pytest
 
-environment-raspberry: ; python3 -m venv venv && sudo apt-get install build-essential libssl-dev libffi-dev python3-dev
+environment-raspberry: ; sudo apt-get install build-essential libssl-dev libffi-dev python3-dev python3-venv && python3 -m venv venv
 
 environment-osx: ; python3 -m venv venv
 
