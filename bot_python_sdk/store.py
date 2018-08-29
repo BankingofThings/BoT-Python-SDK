@@ -30,7 +30,7 @@ class Store:
             file = open('last_triggered.py', 'w')
             file.write(json.dumps(data))
         else:
-            file = open('last_triggered.py')
+            file = open('last_triggered.py', 'w')
             data = json.loads(file.read())
             data[action_id] = time
             file.write(json.dumps(data))
