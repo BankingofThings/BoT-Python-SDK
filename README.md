@@ -1,4 +1,4 @@
-<img src="https://bankingofthings.io/img/github-header.png" style="margin:auto" alt="BoT">
+![Banking of Things Header](readme-header.png)
 
 # BoT-Python-SDK
 
@@ -74,14 +74,16 @@ make server
 ```
 
 ## Troubleshooting
-If you've paired your device with the QR code that was generated in the root (`qr.png`), it might not have been activated.
+If you've paired your device with the QR code that was generated in the root (`qr.png`), it might not have been paired 
+and/or activated. There are a couple of solutions to fix this. 
 
-Run the next command in your venv to start the activation process:
-```bash
-make activate
-``` 
-This will start polling the API for 2 minutes to activate the device. It will only work if you've successfully paired 
-your device with your phone, using the `/pairing` endpoint, bluetooth or the generated QR code `qr.png`. 
+* You can stop and start your server. Simply `CTRL C` to stop and `make server` to start again.
+* You can manually call `make pair` or `make activate` in your venv to start the specific process. 
+ 
+This will start polling the API 6 times every 5 seconds to pair or activate the device. 
+
+It will only work if you've successfully paired your device with your phone, using the `/pairing` endpoint, bluetooth 
+or the generated QR code `qr.png`. 
 
 
 ## Using the SDK

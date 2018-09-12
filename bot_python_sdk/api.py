@@ -1,70 +1,71 @@
 import falcon
-import qrcode
-import sys
 import subprocess
 
-from bot_python_sdk.bot_service import BoTService
-from bot_python_sdk.store import Store
-from bot_python_sdk.trigger import Trigger
-from qrcode.image.pure import PymagingImage
+from bot_python_sdk.action_service import ActionService
+from bot_python_sdk.activation_service import ActivationService
+from bot_python_sdk.configuration_service import ConfigurationService
+from bot_python_sdk.device_status import DeviceStatus
+from bot_python_sdk.logger import Logger
+from bot_python_sdk.pairing_service import PairingService
 
-sys.path.append('../')
-import config
+LOCATION = 'Controller'
+INCOMING_REQUEST_MESSAGE = 'Incoming request: '
 
+ACTION_ID_KEY = 'actionID'
+VALUE_KEY = 'value'
 
-class TriggerResource:
-    def on_post(self, request, response):
-        data = request.media
-        if not 'actionID' in data.keys():
-            response.status = falcon.HTTP_BAD_REQUEST
-            response.media = {"message": "Missing parameter 'actionID'"}
-            return
-        action_id = data['actionID']
-        value = data['value'] if 'value' in data.keys() else None
-
-        trigger = Trigger(action_id, value)
-
-        if not trigger.frequency_is_valid():
-            response.status = falcon.HTTP_BAD_REQUEST
-            response.media = {'message': 'Unable to trigger action. Maximum frequency reached.'}
-            return
-
-        success = trigger.send()
-        if success:
-            response.status = falcon.HTTP_CREATED
-            response.media = {'message': 'Action triggered'}
-        else:
-            response.status = falcon.HTTP_METHOD_NOT_ALLOWED
-            response.media = {'message': 'Unable to trigger action'}
+ACTIONS_ENDPOINT = '/actions'
+PAIRING_ENDPOINT = '/pairing'
 
 
 class ActionsResource:
-    def on_get(self, request, response):
-        actions = BoTService().get_actions()
-        Store().store_actions(actions)
-        print(actions)
-        response.media = actions
+    @staticmethod
+    def on_get(request, response):
+        Logger.info(LOCATION, INCOMING_REQUEST_MESSAGE + 'GET /actions')
+        response.media = ActionService().get_actions()
+
+    @staticmethod
+    def on_post(request, response):
+        if ConfigurationService().get_device_status() is not DeviceStatus.ACTIVE.value:
+            error = 'Not allowed to trigger actions when device is not activated.'
+            Logger.error(LOCATION, error)
+            raise falcon.HTTPForbidden(description=error)
+        Logger.info(LOCATION, INCOMING_REQUEST_MESSAGE + 'POST /actions')
+        data = request.media
+        if ACTION_ID_KEY not in data.keys():
+            Logger.error(LOCATION, 'Missing parameter `actionID` for POST /actions')
+            raise falcon.HTTPBadRequest
+
+        action_id = data[ACTION_ID_KEY]
+        value = data[VALUE_KEY] if VALUE_KEY in data.keys() else None
+
+        ActionService().trigger_action(action_id, value)
+        response.media = {'message': 'Action triggered'}
 
 
 class PairingResource:
-    def on_get(self, request, response):
-        subprocess.Popen(['make', 'activate'])
-        data = {
-            "device_id": config.__device_id__,
-            "maker_id": config.__maker_id__,
-            "public_key": self.strip(config.__public_key__)
-        }
-        image = qrcode.make(data, image_factory=PymagingImage)
-        Store().store_qrcode(image)
-        response.media = data
-
-    def strip(self, string):
-        string = string.replace('-----BEGIN RSA PUBLIC KEY-----\n', '')
-        string = string.replace('-----END RSA PUBLIC KEY-----\n', '')
-        return string
+    @staticmethod
+    def on_get(request, response):
+        Logger.info(LOCATION, INCOMING_REQUEST_MESSAGE + 'GET /pairing')
+        configuration_service = ConfigurationService()
+        if configuration_service.get_device_status() is not DeviceStatus.NEW.value:
+            Logger.error(LOCATION, 'Device is already paired.')
+            raise falcon.HTTPForbidden(description='Device is already paired')
+        response.media = configuration_service.get_device_info()
+        subprocess.Popen(['make', 'pair'])
 
 
-api = falcon.API()
-api.add_route('/', TriggerResource())
-api.add_route('/actions', ActionsResource())
-api.add_route('/pairing', PairingResource())
+api = application = falcon.API()
+api.add_route(ACTIONS_ENDPOINT, ActionsResource())
+api.add_route(PAIRING_ENDPOINT, PairingResource())
+
+# On startup resume pairing & activation process
+deviceStatus = ConfigurationService().get_device_status()
+if deviceStatus == DeviceStatus.NEW.value:
+    Logger.info(LOCATION, 'DeviceStatus = NEW')
+    PairingService().run()
+if deviceStatus == DeviceStatus.PAIRED.value:
+    Logger.info(LOCATION, 'DeviceStatus = PAIRED')
+    ActivationService().run()
+if deviceStatus == DeviceStatus.ACTIVE.value:
+    Logger.success(LOCATION, 'DeviceStatus = ACTIVE')

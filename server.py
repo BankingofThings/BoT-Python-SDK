@@ -1,22 +1,14 @@
-import subprocess
 import os
+import subprocess
 import sys
 
-from bot_python_sdk.store import Store
-from bot_python_sdk.key_generator import KeyGenerator
+from bot_python_sdk.configuration_service import ConfigurationService
 
-if not Store().has_config():
+if not ConfigurationService.has_configuration():
     if len(sys.argv) <= 1:
-        exit('Please add your makerID to configure the SDK: "python server.py YOUR_MAKER_ID"')
-    maker_id = sys.argv[1]
-
-    key_generator = KeyGenerator()
-    key_generator.generate_key()
-    public_key = key_generator.public_key()
-    private_key = key_generator.private_key()
-    uuid = key_generator.generate_uuid()
-
-    Store().store_config(maker_id, uuid, private_key, public_key)
+        exit('Please add your makerID to configure the SDK: "make server makerID=YOUR_MAKER_ID"')
+    maker_id = sys.argv[1]  # 1 -> First argument after server.py
+    ConfigurationService.initialize_configuration(maker_id)
 
 # If OS is windows based, it doesn't support gunicorn so we run waitress
 if os.name == 'nt':
