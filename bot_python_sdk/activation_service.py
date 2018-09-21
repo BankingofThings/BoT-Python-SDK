@@ -24,6 +24,7 @@ class ActivationService:
             Logger.info(LOCATION, 'Activating device, attempt: ' + str(tries))
             if self.activate():
                 self.configuration_service.set_device_status(DeviceStatus.ACTIVE.value)
+                ConfigurationService.resume_configuration()
                 break
             time.sleep(POLLING_INTERVAL_IN_SECONDS)
 

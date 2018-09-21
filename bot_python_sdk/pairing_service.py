@@ -25,7 +25,7 @@ class PairingService:
             Logger.info(LOCATION, 'Pairing device, attempt: ' + str(tries))
             if self.pair():
                 self.configuration_service.set_device_status(DeviceStatus.PAIRED.value)
-                ActivationService().run()
+                ConfigurationService.resume_configuration()
                 break
             time.sleep(POLLING_INTERVAL_IN_SECONDS)
 

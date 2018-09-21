@@ -1,9 +1,11 @@
 import qrcode
 from qrcode.image.pure import PymagingImage
 
+from bot_python_sdk.activation_service import ActivationService
 from bot_python_sdk.device_status import DeviceStatus
 from bot_python_sdk.key_generator import KeyGenerator
 from bot_python_sdk.logger import Logger
+from bot_python_sdk.pairing_service import PairingService
 from bot_python_sdk.store import Store
 
 LOCATION = 'Configuration Service'
@@ -36,6 +38,18 @@ class ConfigurationService:
         Store.set_configuration(configuration)
         ConfigurationService.generate_qr_code(configuration)
         Logger.success(LOCATION, 'Configuration successfully initialized.')
+
+    @staticmethod
+    def resume_configuration():
+        deviceStatus = ConfigurationService().get_device_status()
+        if deviceStatus == DeviceStatus.NEW.value:
+            Logger.info(LOCATION, 'DeviceStatus = NEW')
+            PairingService().run()
+        if deviceStatus == DeviceStatus.PAIRED.value:
+            Logger.info(LOCATION, 'DeviceStatus = PAIRED')
+            ActivationService().run()
+        if deviceStatus == DeviceStatus.ACTIVE.value:
+            Logger.success(LOCATION, 'DeviceStatus = ACTIVE')
 
     @staticmethod
     def generate_qr_code(configuration):

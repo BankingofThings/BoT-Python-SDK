@@ -2,11 +2,9 @@ import falcon
 import subprocess
 
 from bot_python_sdk.action_service import ActionService
-from bot_python_sdk.activation_service import ActivationService
 from bot_python_sdk.configuration_service import ConfigurationService
 from bot_python_sdk.device_status import DeviceStatus
 from bot_python_sdk.logger import Logger
-from bot_python_sdk.pairing_service import PairingService
 
 LOCATION = 'Controller'
 INCOMING_REQUEST_MESSAGE = 'Incoming request: '
@@ -58,14 +56,4 @@ class PairingResource:
 api = application = falcon.API()
 api.add_route(ACTIONS_ENDPOINT, ActionsResource())
 api.add_route(PAIRING_ENDPOINT, PairingResource())
-
-# On startup resume pairing & activation process
-deviceStatus = ConfigurationService().get_device_status()
-if deviceStatus == DeviceStatus.NEW.value:
-    Logger.info(LOCATION, 'DeviceStatus = NEW')
-    PairingService().run()
-if deviceStatus == DeviceStatus.PAIRED.value:
-    Logger.info(LOCATION, 'DeviceStatus = PAIRED')
-    ActivationService().run()
-if deviceStatus == DeviceStatus.ACTIVE.value:
-    Logger.success(LOCATION, 'DeviceStatus = ACTIVE')
+ConfigurationService.resume_configuration()

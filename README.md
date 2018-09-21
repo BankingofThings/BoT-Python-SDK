@@ -26,6 +26,9 @@ git clone git@github.com:BankingofThings/BoT-Python-SDK.git
 cd BoT-Python-SDK
 ```
 
+### Prerequisites
+Make sure you have python installed on your device. The SDK is tested on Python 2.7+. Inside the `venv` we need python 3.
+
 ### Install using a virtual environment
 First we install `virtualenv` && create an environment `venv` with:
 ```bash
@@ -80,7 +83,7 @@ and/or activated. There are a couple of solutions to fix this.
 * You can stop and start your server. Simply `CTRL C` to stop and `make server` to start again.
 * You can manually call `make pair` or `make activate` in your venv to start the specific process. 
  
-This will start polling the API 6 times every 5 seconds to pair or activate the device. 
+This will start polling the API 3 times every 5 seconds to pair or activate the device. 
 
 It will only work if you've successfully paired your device with your phone, using the `/pairing` endpoint, bluetooth 
 or the generated QR code `qr.png`. 
