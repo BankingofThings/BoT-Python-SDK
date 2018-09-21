@@ -17,6 +17,7 @@ REQUIRES = []
 
 setup(
     name='BoT-Python-SDK',
+    license='Apache-2.0',
     version=version,
     description='',
     long_description=readme,
