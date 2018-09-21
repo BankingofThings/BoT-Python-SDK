@@ -4,21 +4,25 @@ from OpenSSL.crypto import PKey
 from OpenSSL.crypto import TYPE_RSA
 from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat, PrivateFormat, NoEncryption
 
+from bot_python_sdk.logger import Logger
+
 
 class KeyGenerator:
-    def __init__(self):
-        self.key = None
-
     def generate_key(self):
+        Logger.info('Key Generator', 'Generating KeyPair...')
         key = PKey()
         key.generate_key(TYPE_RSA, 1024)
-        self.key = key.to_cryptography_key()
+        key = key.to_cryptography_key()
+        return self._public_key(key), self._private_key(key)
 
-    def public_key(self):
-        return self.key.public_key().public_bytes(Encoding.PEM, PublicFormat.PKCS1).decode("utf-8")
+    @staticmethod
+    def _public_key(key):
+        return key.public_key().public_bytes(Encoding.PEM, PublicFormat.PKCS1).decode("utf-8")
 
-    def private_key(self):
-        return self.key.private_bytes(Encoding.PEM, PrivateFormat.TraditionalOpenSSL, NoEncryption()).decode("utf-8")
+    @staticmethod
+    def _private_key(key):
+        return key.private_bytes(Encoding.PEM, PrivateFormat.TraditionalOpenSSL, NoEncryption()).decode("utf-8")
 
-    def generate_uuid(self):
-        return uuid.uuid4()
+    @staticmethod
+    def generate_uuid():
+        return str(uuid.uuid4())

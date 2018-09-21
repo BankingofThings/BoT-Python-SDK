@@ -2,7 +2,9 @@ install: ; pip install --upgrade pip && pip install --upgrade setuptools && pip 
 
 server: ; python3 server.py $(makerID)
 
-activate: ; python3 -c "from bot_python_sdk.polling_service import PollingService; PollingService().run()"
+pair: ; python3 -c "from bot_python_sdk.pairing_service import PairingService; PairingService().run()"
+
+activate: ; python3 -c "from bot_python_sdk.activation_service import ActivationService; ActivationService().run()"
 
 test: ; pytest
 

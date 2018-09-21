@@ -7,7 +7,7 @@ author_email = 'bankingofthings@ing.nl'
 url = 'https://github.com/BankingofThings/BoT-Python-SDK'
 
 [requires]
-python_version = ['2.7', '3.5', '3.6', 'pypy', 'pypy3']
+python_version = ['3.5', '3.6', 'pypy', 'pypy3']
 
 [build-system]
 requires = ['setuptools', 'wheel']
