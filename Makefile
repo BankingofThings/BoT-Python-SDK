@@ -2,9 +2,13 @@ install: ; pip install --upgrade pip && pip install --upgrade setuptools && pip 
 
 server: ; python3 server.py $(makerID)
 
-pair: ; python3 -c "from bot_python_sdk.pairing_service import PairingService; PairingService().run()"
+configuration: ; python3 -c "from bot_python_sdk.configuration_service import ConfigurationService; ConfigurationService().resume_configuration()"
 
-activate: ; python3 -c "from bot_python_sdk.activation_service import ActivationService; ActivationService().run()"
+pair: ; python3 -c "from bot_python_sdk.configuration_service import ConfigurationService; ConfigurationService().pair()"
+
+activate: ; python3 -c "from bot_python_sdk.configuration_service import ConfigurationService; ConfigurationService().activate()"
+
+qr: ; python3 -c "from bot_python_sdk.configuration_service import ConfigurationService; ConfigurationService().generate_qr_code()"
 
 test: ; pytest
 

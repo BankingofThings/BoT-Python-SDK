@@ -5,7 +5,7 @@ import requests
 
 from requests_toolbelt.adapters.fingerprint import FingerprintAdapter
 
-from bot_python_sdk.configuration_service import ConfigurationService
+from bot_python_sdk.configuration_store import ConfigurationStore
 from bot_python_sdk.logger import Logger
 from bot_python_sdk.store import Store
 
@@ -19,7 +19,7 @@ RESPONSE_DATA_KEY = 'bot'
 class BoTService:
 
     def __init__(self):
-        self.configurationService = ConfigurationService()
+        self.configuration = ConfigurationStore().get()
 
     def post(self, url, data):
         session = requests.Session()
@@ -28,7 +28,7 @@ class BoTService:
             response = session.post(
                 API_URL + url,
                 data=self._create_request_body(data),
-                headers=self._create_request_headers()
+                headers=self.configuration.get_headers()
             )
             if response.status_code < 200 or response.status_code >= 300:
                 Logger.error(LOCATION, 'status: ' + response.status_code + ', body: ' + response.text)
@@ -39,18 +39,17 @@ class BoTService:
             Logger.error(LOCATION, 'Failed to POST resource.')
             raise falcon.HTTPServiceUnavailable
 
-    @staticmethod
-    def get(url):
+    def get(self, url):
         session = requests.Session()
         session.mount(API_URL, FingerprintAdapter(SSL_FINGERPRINT))
         try:
-            response = session.get(API_URL + url)
+            response = session.get(API_URL + url, headers=self.configuration.get_headers())
             if response.status_code < 200 or response.status_code >= 300:
-                Logger.error(LOCATION, 'status: ' + response.status_code + ', body: ' + response.text)
+                Logger.error(LOCATION, 'status: ' + str(response.status_code) + ', body: ' + response.text)
                 raise falcon.HTTPServiceUnavailable
-            return BoTService._decode(response.text)
+            return self._decode(response.text)
         except requests.exceptions.SSLError:
-            BoTService._handle_ssl_exception()
+            self._handle_ssl_exception()
         except:
             Logger.error(LOCATION, 'Failed to GET resource.')
             raise falcon.HTTPServiceUnavailable
@@ -58,17 +57,10 @@ class BoTService:
     def _create_request_body(self, data):
         jwt_token = jwt.encode(
             {RESPONSE_DATA_KEY: data},
-            self.configurationService.get_private_key(),
+            self.configuration.get_private_key(),
             algorithm='RS256'
         ).decode('UTF-8')
         return json.dumps({RESPONSE_DATA_KEY: jwt_token})
-
-    def _create_request_headers(self):
-        return {
-            'Content-Type': 'application/json',
-            'makerID': self.configurationService.get_maker_id(),
-            'deviceID': self.configurationService.get_device_id()
-        }
 
     @staticmethod
     def _decode(token):

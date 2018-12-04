@@ -17,12 +17,12 @@ class Frequency(Enum):
 
 
 FrequenciesInSeconds = {
-    Frequency.ALWAYS.value: 0,
-    Frequency.YEARLY.value: 31536000,  # Based on 365 days
-    Frequency.HALF_YEARLY.value: 15768000,  # Half of yearly
-    Frequency.MONTHLY.value: 2419200,  # Based on 28 days
-    Frequency.WEEKLY.value: 604800,
-    Frequency.DAILY.value: 86400,
-    Frequency.HOURLY.value: 3600,
-    Frequency.MINUTELY.value: 60
+    Frequency.ALWAYS: 0,
+    Frequency.YEARLY: 31536000,  # Based on 365 days
+    Frequency.HALF_YEARLY: 15768000,  # Half of yearly
+    Frequency.MONTHLY: 2419200,  # Based on 28 days
+    Frequency.WEEKLY: 604800,
+    Frequency.DAILY: 86400,
+    Frequency.HOURLY: 3600,
+    Frequency.MINUTELY: 60
 }

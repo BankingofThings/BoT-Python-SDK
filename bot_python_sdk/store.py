@@ -18,7 +18,7 @@ class Store:
     @staticmethod
     def get_actions():
         if not os.path.isfile(_actions_file_path):
-            return False
+            return []
         file = open(_actions_file_path, 'r')
         actions = json.loads(file.read())
         file.close()

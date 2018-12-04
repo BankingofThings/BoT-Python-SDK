@@ -14,10 +14,10 @@ Visit our official documentation on [docs.bankingofthings.io](http://docs.banki
 The main steps are:
 - Setting up your device (e.g. a Raspberry Pi)
 - Installing the SDK
-- Defining Actions on the [portal](https://portal.bankingofthings.io/)
+- Defining Actions on the [Maker Portal](https://maker.bankingofthings.io/)
 - Pairing the device with your phone (iOS only for now, android on the way)
 - Trigger actions on your device
-- Check results in your [dashboard](https://portal.bankingofthings.io/)
+- Check results in the [Maker Portal > Dashboard](https://maker.bankingofthings.io/)
 
 ## Installation
 Clone the repository on your device, for example with ssh, and enter the folder:
@@ -81,11 +81,11 @@ If you've paired your device with the QR code that was generated in the root (`q
 and/or activated. There are a couple of solutions to fix this. 
 
 * You can stop and start your server. Simply `CTRL C` to stop and `make server` to start again.
-* You can manually call `make pair` or `make activate` in your venv to start the specific process. 
+* You can manually call either `make configuration`, `make pair` or `make activate` in your venv to start the specific process. 
  
 This will start polling the API 3 times every 5 seconds to pair or activate the device. 
 
-It will only work if you've successfully paired your device with your phone, using the `/pairing` endpoint, bluetooth 
+It will only work if you've successfully paired your device with your phone, using the `/pairing` endpoint, 
 or the generated QR code `qr.png`. 
 
 
@@ -93,18 +93,21 @@ or the generated QR code `qr.png`.
 All of these commands can be run outside of your virtual environment.
 
 ### Pairing your device
+To get the device information you need to pair the device (usually done with the BoT Companion App)
 ```bash
 curl localhost:3001/pairing
 ```
 
 ### Retrieving actions
+To get a list of the actions from the maker that are published & enabled for this specific device:
 ```bash
 curl localhost:3001/actions
 ```
 
 ### Triggering actions
+To trigger an action (e.g. send a push notification):
 ```bash
-curl -d '{"actionID":"YOUR_ACTION_ID"}' -H "Content-Type: application/json" -X POST http://localhost:3001/
+curl -d '{"actionID":"YOUR_ACTION_ID"}' -H "Content-Type: application/json" -X POST http://localhost:3001/actions
 ```
 
 ## Contributing
@@ -119,7 +122,7 @@ Join them by contributing to the SDK or by contributing to the documentation.
 [Slack](https://bit.ly/JoinBoTSlack) is our main feedback channel for the SDK and documentation.
 
 ### Direct feedback
-Use the feedback button on the [portal](https://portal.bankingofthings.io/).
+Use the feedback button on the [Maker Portal](https://maker.bankingofthings.io/).
 
 ### Meetups
 We also organize meetups, e.g. demo or hands-on workshops. Keep an eye on our meetup group for any events coming up soon. 

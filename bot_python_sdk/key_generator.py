@@ -8,6 +8,9 @@ from bot_python_sdk.logger import Logger
 
 
 class KeyGenerator:
+    def __init__(self):
+        pass
+
     def generate_key(self):
         Logger.info('Key Generator', 'Generating KeyPair...')
         key = PKey()
@@ -16,13 +19,13 @@ class KeyGenerator:
         return self._public_key(key), self._private_key(key)
 
     @staticmethod
+    def generate_uuid():
+        return str(uuid.uuid4())
+
+    @staticmethod
     def _public_key(key):
         return key.public_key().public_bytes(Encoding.PEM, PublicFormat.PKCS1).decode("utf-8")
 
     @staticmethod
     def _private_key(key):
         return key.private_bytes(Encoding.PEM, PrivateFormat.TraditionalOpenSSL, NoEncryption()).decode("utf-8")
-
-    @staticmethod
-    def generate_uuid():
-        return str(uuid.uuid4())

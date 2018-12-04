@@ -3,57 +3,72 @@ import subprocess
 
 from bot_python_sdk.action_service import ActionService
 from bot_python_sdk.configuration_service import ConfigurationService
+from bot_python_sdk.configuration_store import ConfigurationStore
 from bot_python_sdk.device_status import DeviceStatus
 from bot_python_sdk.logger import Logger
 
 LOCATION = 'Controller'
-INCOMING_REQUEST_MESSAGE = 'Incoming request: '
+INCOMING_REQUEST = 'Incoming request: '
 
-ACTION_ID_KEY = 'actionID'
+DEVICE_ID_KEY = 'deviceId'
+MAKER_ID_KEY = 'makerId'
+PUBLIC_KEY_KEY = 'publicKey'
+
+ACTION_ID = 'actionID'
 VALUE_KEY = 'value'
 
+METHOD_GET = 'GET'
+METHOD_POST = 'POST'
 ACTIONS_ENDPOINT = '/actions'
 PAIRING_ENDPOINT = '/pairing'
 
 
 class ActionsResource:
-    @staticmethod
-    def on_get(request, response):
-        Logger.info(LOCATION, INCOMING_REQUEST_MESSAGE + 'GET /actions')
-        response.media = ActionService().get_actions()
+    def __init__(self):
+        self.action_service = ActionService()
+        self.configuration_store = ConfigurationStore()
 
-    @staticmethod
-    def on_post(request, response):
-        if ConfigurationService().get_device_status() is not DeviceStatus.ACTIVE.value:
+    def on_get(self, request, response):
+        Logger.info(LOCATION, INCOMING_REQUEST + METHOD_GET + ' ' + ACTIONS_ENDPOINT)
+        response.media = self.action_service.get_actions()
+
+    def on_post(self, request, response):
+        configuration = self.configuration_store.get()
+
+        if configuration.get_device_status() is not DeviceStatus.ACTIVE:
             error = 'Not allowed to trigger actions when device is not activated.'
             Logger.error(LOCATION, error)
             raise falcon.HTTPForbidden(description=error)
-        Logger.info(LOCATION, INCOMING_REQUEST_MESSAGE + 'POST /actions')
+
+        Logger.info(LOCATION, INCOMING_REQUEST + METHOD_POST + ' ' + ACTIONS_ENDPOINT)
         data = request.media
-        if ACTION_ID_KEY not in data.keys():
-            Logger.error(LOCATION, 'Missing parameter `actionID` for POST /actions')
+        if ACTION_ID not in data.keys():
+            Logger.error(LOCATION, 'Missing parameter `' + ACTION_ID + '` for ' + METHOD_POST + ' ' + ACTIONS_ENDPOINT)
             raise falcon.HTTPBadRequest
 
-        action_id = data[ACTION_ID_KEY]
+        action_id = data[ACTION_ID]
         value = data[VALUE_KEY] if VALUE_KEY in data.keys() else None
 
-        ActionService().trigger_action(action_id, value)
+        self.action_service.trigger(action_id, value)
         response.media = {'message': 'Action triggered'}
 
 
 class PairingResource:
-    @staticmethod
-    def on_get(request, response):
-        Logger.info(LOCATION, INCOMING_REQUEST_MESSAGE + 'GET /pairing')
-        configuration_service = ConfigurationService()
-        if configuration_service.get_device_status() is not DeviceStatus.NEW.value:
-            Logger.error(LOCATION, 'Device is already paired.')
-            raise falcon.HTTPForbidden(description='Device is already paired')
-        response.media = configuration_service.get_device_info()
+    def __init__(self):
+        self.configuration_store = ConfigurationStore()
+
+    def on_get(self, request, response):
+        Logger.info(LOCATION, INCOMING_REQUEST + METHOD_GET + ' ' + PAIRING_ENDPOINT)
+        configuration = self.configuration_store.get()
+        if configuration.get_device_status() is not DeviceStatus.NEW:
+            error = 'Device is already paired.'
+            Logger.error(LOCATION, error)
+            raise falcon.HTTPForbidden(description=error)
+        response.media = configuration.get_device_information
         subprocess.Popen(['make', 'pair'])
 
 
 api = application = falcon.API()
 api.add_route(ACTIONS_ENDPOINT, ActionsResource())
 api.add_route(PAIRING_ENDPOINT, PairingResource())
-ConfigurationService.resume_configuration()
+ConfigurationService().resume_configuration()
