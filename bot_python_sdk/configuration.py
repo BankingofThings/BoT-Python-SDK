@@ -53,6 +53,7 @@ class Configuration:
 
     def get_headers(self):
         return {
+            'Content-Type': 'application/json',
             'makerID': self.maker_id,
             'deviceID': self.device_id
         }

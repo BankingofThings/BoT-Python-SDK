@@ -33,7 +33,7 @@ Make sure you have python installed on your device. The SDK is tested on Python 
 First we install `virtualenv` && create an environment `venv` with:
 ```bash
 # For Raspberry Pi
-make environment-pi
+make environment-raspberry
 
 # For Mac OS X
 make environment-osx

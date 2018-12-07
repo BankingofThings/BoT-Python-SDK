@@ -31,7 +31,7 @@ class BoTService:
                 headers=self.configuration.get_headers()
             )
             if response.status_code < 200 or response.status_code >= 300:
-                Logger.error(LOCATION, 'status: ' + response.status_code + ', body: ' + response.text)
+                Logger.error(LOCATION, 'status: ' + str(response.status_code) + ', body: ' + response.text)
                 raise falcon.HTTPServiceUnavailable
         except requests.exceptions.SSLError:
             self._handle_ssl_exception()
