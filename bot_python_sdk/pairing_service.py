@@ -28,7 +28,7 @@ class PairingService:
         return False
 
     def pair(self):
-        response = self.bot_service.get(RESOURCE + '/' + self.maker_id + '/' + self.device_id)
+        response = self.bot_service.get(RESOURCE)
         paired = response == 'true'
         if paired:
             Logger.success(LOCATION, 'Device successfully paired.')
