@@ -29,7 +29,7 @@ class PairingService:
 
     def pair(self):
         response = self.bot_service.get(RESOURCE)
-        paired = response == 'true'
+        paired = response.status is True
         if paired:
             Logger.success(LOCATION, 'Device successfully paired.')
         else:
