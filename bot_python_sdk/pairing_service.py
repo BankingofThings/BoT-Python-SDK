@@ -28,10 +28,15 @@ class PairingService:
         return False
 
     def pair(self):
-        response = self.bot_service.get(RESOURCE)
-        paired = response.status is True
-        if paired:
+        try:
+            response = self.bot_service.get(RESOURCE)
+        except:
+            Logger.error(LOCATION, 'Failed pairing attempt.')
+            return False
+
+        if response['status'] is True:
             Logger.success(LOCATION, 'Device successfully paired.')
+            return True
         else:
             Logger.error(LOCATION, 'Failed pairing attempt.')
-        return paired
+            return False

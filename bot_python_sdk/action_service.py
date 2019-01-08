@@ -30,7 +30,7 @@ class ActionService:
     def get_actions(self):
         Logger.info(LOCATION, 'Retrieving actions...')
         try:
-            actions = json.loads(self.bot_service.get(ACTIONS_ENDPOINT))
+            actions = self.bot_service.get(ACTIONS_ENDPOINT)
             Logger.success(LOCATION, 'Successfully retrieved ' + str(len(actions)) + ' action(s) from server')
             Store.set_actions(actions)
             return actions
@@ -47,9 +47,14 @@ class ActionService:
         Logger.success(LOCATION, 'Action valid')
 
         data = self.create_trigger_body(action_id, value)
-        self.bot_service.post(ACTIONS_ENDPOINT, data)
-        Logger.success(LOCATION, 'Successfully triggered action: ' + action_id)
-        self.store.set_last_triggered(action_id, time.time())
+        try:
+            self.bot_service.post(ACTIONS_ENDPOINT, data)
+            Logger.success(LOCATION, 'Successfully triggered action: ' + action_id)
+            self.store.set_last_triggered(action_id, time.time())
+            return True
+        except:
+            Logger.error(LOCATION, 'Unable to trigger action: ' + action_id)
+            return False
 
     def _validate_frequency(self, action):
         last_triggered = self.store.get_last_triggered(action[ACTION_ID])
