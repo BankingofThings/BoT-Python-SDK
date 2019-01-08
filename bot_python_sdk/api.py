@@ -49,8 +49,11 @@ class ActionsResource:
         action_id = data[ACTION_ID]
         value = data[VALUE_KEY] if VALUE_KEY in data.keys() else None
 
-        self.action_service.trigger(action_id, value)
-        response.media = {'message': 'Action triggered'}
+        success = self.action_service.trigger(action_id, value)
+        if success:
+            response.media = {'message': 'Action triggered'}
+        else:
+            raise falcon.HTTPServiceUnavailable
 
 
 class PairingResource:

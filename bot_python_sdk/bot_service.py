@@ -44,15 +44,16 @@ class BoTService:
         session.mount(API_URL, FingerprintAdapter(SSL_FINGERPRINT))
         try:
             response = session.get(API_URL + url, headers=self.configuration.get_headers())
+            data = self._decode(response.text)
             if response.status_code < 200 or response.status_code >= 300:
-                Logger.error(LOCATION, 'status: ' + str(response.status_code) + ', body: ' + response.text)
+                Logger.error(
+                    LOCATION,
+                    'status: ' + str(response.status_code) + ', body: ' + json.dumps(data)
+                )
                 raise falcon.HTTPServiceUnavailable
-            return self._decode(response.text)
+            return self._get_response(data)
         except requests.exceptions.SSLError:
             self._handle_ssl_exception()
-        except:
-            Logger.error(LOCATION, 'Failed to GET resource.')
-            raise falcon.HTTPServiceUnavailable
 
     def _create_request_body(self, data):
         jwt_token = jwt.encode(
@@ -63,16 +64,20 @@ class BoTService:
         return json.dumps({RESPONSE_DATA_KEY: jwt_token})
 
     @staticmethod
+    def _get_response(data):
+        if RESPONSE_DATA_KEY not in data:
+            Logger.error(LOCATION, 'Unexpected response format from BoT.' + json.dumps(data))
+            raise falcon.HTTPInternalServerError
+        return json.loads(data[RESPONSE_DATA_KEY])
+
+    @staticmethod
     def _decode(token):
         try:
             data = jwt.decode(token, Store.get_bot_public_key(), algorithms=['RS256'])
         except:
             Logger.error(LOCATION, 'Could not decode message from BoT.')
             raise falcon.HTTPInternalServerError
-        if RESPONSE_DATA_KEY not in data:
-            Logger.error(LOCATION, 'Unexpected response format from BoT.')
-            raise falcon.HTTPInternalServerError
-        return data[RESPONSE_DATA_KEY]
+        return data
 
     @staticmethod
     def _handle_ssl_exception():
