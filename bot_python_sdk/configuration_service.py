@@ -1,3 +1,4 @@
+import json
 import qrcode
 from qrcode.image.pure import PymagingImage
 
@@ -52,6 +53,7 @@ class ConfigurationService:
 
     def generate_qr_code(self):
         Logger.info(LOCATION, 'Generating QR Code for alternative pairing...')
-        image = qrcode.make(self.configuration.get_device_information(), image_factory=PymagingImage)
+        device_information = self.configuration.get_device_information()
+        image = qrcode.make(json.dumps(device_information), image_factory=PymagingImage)
         Store.save_qrcode(image)
         Logger.success(LOCATION, 'QR Code successfully generated')

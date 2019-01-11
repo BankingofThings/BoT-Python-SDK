@@ -20,9 +20,9 @@ The main steps are:
 - Check results in the [Maker Portal > Dashboard](https://maker.bankingofthings.io/)
 
 ## Installation
-Clone the repository on your device, for example with ssh, and enter the folder:
+Clone the repository on your device and enter the folder:
 ```bash
-git clone git@github.com:BankingofThings/BoT-Python-SDK.git
+git clone https://github.com/BankingofThings/BoT-Python-SDK.git
 cd BoT-Python-SDK
 ```
 
