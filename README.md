@@ -1,35 +1,32 @@
-![Banking of Things Header](readme-header.png)
+![readme-header](readme-header.png)
 
-# BoT-Python-SDK
+[![Build Status](https://travis-ci.com/BankingofThings/BoT-Python-SDK.svg?branch=master)](https://travis-ci.com/BankingofThings/BoT-Python-SDK)
 
-[![Build Status](https://travis-ci.com/BankingofThings/BoT-Python-SDK.svg?token=ic37boNh1zbtjppb1zLc&branch=master)](https://travis-ci.com/BankingofThings/BoT-Python-SDK)
+FINN enables your IoT devices to perform seamless autonomous payments on your behalf. 
+For more information, visit us at [makethingsfinn.com](makethingsfinn.com)
 
-[comment]: # (Todo replace build status with open source one)
-
-Banking of Things enables your IoT devices to perform seamless autonomous payments on your behalf. 
-For more information, visit [bankingofthings.io](https://bankingofthings.io/).
-
-## Getting Started
-Visit our official documentation on [docs.bankingofthings.io](http://docs.bankingofthings.io/) for a complete overview. 
+# Getting Started
+Visit our [official documentation](http://docs.bankingofthings.io/) for a complete overview. 
 The main steps are:
+
 - Setting up your device (e.g. a Raspberry Pi)
 - Installing the SDK
 - Defining Actions on the [Maker Portal](https://maker.bankingofthings.io/)
-- Pairing the device with your phone (iOS only for now, android on the way)
+- Pairing the device with your phone
 - Trigger actions on your device
 - Check results in the [Maker Portal > Dashboard](https://maker.bankingofthings.io/)
 
-## Installation
+# Installation
 Clone the repository on your device and enter the folder:
 ```bash
 git clone https://github.com/BankingofThings/BoT-Python-SDK.git
 cd BoT-Python-SDK
 ```
 
-### Prerequisites
+## Prerequisites
 Make sure you have python installed on your device. The SDK is tested on Python 2.7+. Inside the `venv` we need python 3.
 
-### Install using a virtual environment
+## Install using a virtual environment
 First we install `virtualenv` && create an environment `venv` with:
 ```bash
 # For Raspberry Pi
@@ -52,31 +49,31 @@ deactivate
 
 > From now on, every command you run should be inside the virtual environment, unless specified differently.
 
-### Installing dependencies
+## Installing dependencies
 To install dependencies run:
 ```bash 
 make install
 ```
 
-## Running tests
+# Running tests
 Now that our environment is up & running, we can try to see if it works. To see if the tests are working, simply run:
 ```bash
 make test
 ```
 
-## Configuration
+# Configuration
 On your first run, replace YOUR_MAKER_ID with the makerID from your BoT Account and run:
 ```bash
 make server makerID=YOUR_MAKER_ID
 ```
 
-## Running the server
+# Running the server
 To run the server normally after you've configured it, simply run in your venv:
 ```bash
 make server
 ```
 
-## Troubleshooting
+# Troubleshooting
 If you've paired your device with the QR code that was generated in the root (`qr.png`), it might not have been paired 
 and/or activated. There are a couple of solutions to fix this. 
 
@@ -89,54 +86,47 @@ It will only work if you've successfully paired your device with your phone, usi
 or the generated QR code `qr.png`. 
 
 
-## Using the SDK
-All of these commands can be run outside of your virtual environment.
+# Using the SDK
+The following commands can be run outside of your virtual environment.
 
-### Pairing your device
+## Pairing your device
 To get the device information you need to pair the device (usually done with the BoT Companion App)
 ```bash
 curl localhost:3001/pairing
 ```
 
-### Retrieving actions
+## Retrieving actions
 To get a list of the actions from the maker that are published & enabled for this specific device:
 ```bash
 curl localhost:3001/actions
 ```
 
-### Triggering actions
+## Triggering actions
 To trigger an action (e.g. send a push notification):
 ```bash
 curl -d '{"actionID":"YOUR_ACTION_ID"}' -H "Content-Type: application/json" -X POST http://localhost:3001/actions
 ```
 
-## Contributing
-All improvements to Banking of Things SDK are very welcome! Currently, we are running a closed beta test, and will be 
-going fully open-source soon. We believe your input can help create a lively community and the best version of Banking 
-of Things. We’ve already implemented much of the feedback given to us by community members and will continue to do so. 
-Join them by contributing to the SDK or by contributing to the documentation.
+# Contributing
+Any improvement to the FINN SDK are very much welcome! Our software is open-source and we believe your input can help create a lively community and the best version of FINN. We’ve already implemented much of the feedback given to us by community members and will continue to do so. Join them by contributing to the SDK or by contributing to the documentation.
 
-## Community
+## Automated testing
+At the moment we do not have high test-coverage. You're free to make a PR to add tests! To run the tests:
+```bash
+make test
+```
 
-### Slack
-[Slack](https://bit.ly/JoinBoTSlack) is our main feedback channel for the SDK and documentation.
+# Community
 
-### Direct feedback
-Use the feedback button on the [Maker Portal](https://maker.bankingofthings.io/).
+## Slack
+Slack is our main feedback channel for the SDK and documentation. Join our [Slack channel](https://ing-bankingofthings.slack.com/join/shared_invite/enQtNDEyODg3MDE1NDg4LWJhNGFiOTFhZmVlNGQwMTM4ZjQzNmZmZDk5ZGZiNjNlZTVjZjNmYjE0Y2MxZjU5MWQxNmY5MTgzYzAxNmFiNGU) and be part of the FINN community.<br/>
 
-### Meetups
-We also organize meetups, e.g. demo or hands-on workshops. Keep an eye on our meetup group for any events coming up soon. 
-Here you will be able to see the BoT software in action and meet the team.  
-
-[meetup.com/Amsterdam-ING-Banking-of-Things/](https://meetup.com/Amsterdam-ING-Banking-of-Things/)
-
-## About Banking of Things
-After winning the ING Innovation Bootcamp in 2017, Banking of Things is now part of the ING Accelerator Program. 
-Our aim is to become the Internet of Things (IoT) payment standard that enables service-led business models.
-
-BoT offers a very trusted connection between human, phone and connected device (thing).
-That secure connection is used to enable any of those things to respond to triggers in a desired way. 
-For example: a car pays for charging by itself.
-
-We believe BoT offers tremendous business opportunities. However, at heart, we are enthusiasts.
-Every member of the team has a passion for innovation. That’s why we love working on Banking of Things. 
+## Meetups
+We also organize meetups, e.g. demo or hands-on workshops. Keep an eye on our meetup group for any events coming up soon. Here you will be able to see the FINN software in action and meet the team.<br/>
+[Meetup/Amsterdam-ING-Banking-of-Things](meetup.com/Amsterdam-ING-Banking-of-Things/).
+ 
+# About FINN
+After winning the ING Innovation Bootcamp in 2017, FINN is now part of the ING Accelerator Program. Our aim is to become the new Internet of Things (IoT) payment standard that enables service-led business models. FINN offers safe, autonomous transactions for smart devices.
+We believe our software offers tremendous business opportunities. However, at heart, we are enthusiasts. Every member of our team has a passion for innovation. That’s why we love working on FINN.
+[makethingsfinn.com](makethingsfinn.com)
+ 
