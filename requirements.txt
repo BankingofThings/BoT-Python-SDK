@@ -14,7 +14,7 @@ pyOpenSSL==18.0.0
 python-mimeparse==1.6.0
 pytest==3.7.2
 qrcode==6.0
-requests==2.19.1
+requests==2.20.0
 requests-toolbelt==0.8.0
 six==1.11.0
 urllib3==1.23
