@@ -1,10 +1,9 @@
 import falcon
-import json
 import time
 
 from bot_python_sdk.bot_service import BoTService
 from bot_python_sdk.configuration_store import ConfigurationStore
-from bot_python_sdk.frequency import Frequency, FrequenciesInSeconds
+from bot_python_sdk.frequency import FrequenciesInSeconds
 from bot_python_sdk.key_generator import KeyGenerator
 from bot_python_sdk.logger import Logger
 from bot_python_sdk.store import Store
@@ -61,7 +60,7 @@ class ActionService:
         if last_triggered is None:
             return  # It was never triggered, so it is valid, unless we ever introduce Frequency: 'never'
         frequency = action[FREQUENCY]
-        if not Frequency.is_valid(frequency):
+        if frequency not in FrequenciesInSeconds.keys():
             self._handle_unsupported_frequency(frequency)
 
         if FrequenciesInSeconds[frequency] > time.time() - last_triggered:
