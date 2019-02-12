@@ -1,7 +1,6 @@
 import json
 import qrcode
 from qrcode.image.pure import PymagingImage
-
 from bot_python_sdk.activation_service import ActivationService
 from bot_python_sdk.configuration_store import ConfigurationStore
 from bot_python_sdk.device_status import DeviceStatus
@@ -52,8 +51,11 @@ class ConfigurationService:
             self.configuration_store.save(self.configuration)
 
     def generate_qr_code(self):
-        Logger.info(LOCATION, 'Generating QR Code for alternative pairing...')
-        device_information = self.configuration.get_device_information()
-        image = qrcode.make(json.dumps(device_information), image_factory=PymagingImage)
-        Store.save_qrcode(image)
-        Logger.success(LOCATION, 'QR Code successfully generated')
+        try:
+            Logger.info(LOCATION, 'Generating QR Code for alternative pairing...')
+            device_information = self.configuration.get_device_information()
+            image = qrcode.make(json.dumps(device_information), image_factory=PymagingImage)
+            Store.save_qrcode(image)
+            Logger.success(LOCATION, 'QR Code successfully generated')
+        except:
+            Logger.error(LOCATION, 'QR Code not generated')
