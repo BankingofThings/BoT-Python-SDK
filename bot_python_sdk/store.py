@@ -102,5 +102,6 @@ class Store:
             with open(_bot_public_key) as file:
                 public_key = file.read()
                 return public_key
-        except IOError:
+        except IOError as io_error:
             Logger.error(LOCATION, 'Unable to read in {0} path'.format(_bot_public_key))
+            raise io_error.message
