@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.com/BankingofThings/BoT-Python-SDK.svg?branch=master)](https://travis-ci.com/BankingofThings/BoT-Python-SDK)
 
 FINN enables your IoT devices to perform seamless autonomous payments on your behalf. 
-For more information, visit us at [makethingsfinn.com](makethingsfinn.com)
+For more information, visit us at [makethingsfinn.com](https://www.makethingsfinn.com)
 
 # Getting Started
 Visit our [official documentation](http://docs.bankingofthings.io/) for a complete overview. 
