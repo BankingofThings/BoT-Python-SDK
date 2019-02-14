@@ -57,5 +57,6 @@ class ConfigurationService:
             image = qrcode.make(json.dumps(device_information), image_factory=PymagingImage)
             Store.save_qrcode(image)
             Logger.success(LOCATION, 'QR Code successfully generated')
-        except:
+        except Exception as exception:
             Logger.error(LOCATION, 'QR Code not generated')
+            raise exception

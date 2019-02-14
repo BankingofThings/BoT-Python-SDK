@@ -12,16 +12,13 @@ LOCATION = 'Store'
 
 
 class Store:
-    def __init__(self):
-        pass
-
     @staticmethod
     def set_actions(actions):
         try:
-            with open(_actions_file_path, 'w') as action_file:
-                action_file.write(json.dumps(actions))
+            with open(_actions_file_path, 'w') as actions_file:
+                actions_file.write(json.dumps(actions))
         except IOError as io_error:
-            Logger.error(LOCATION, 'Unable to write in {0} path. Error message : {1}'.format(_actions_file_path, io_error.message))
+            Logger.error(LOCATION, io_error.message)
             raise io_error
 
     @staticmethod
@@ -29,11 +26,11 @@ class Store:
         if not os.path.isfile(_actions_file_path):
             return []
         try:
-            with open(_actions_file_path, 'r') as action_file:
-                actions = json.loads(action_file.read())
+            with open(_actions_file_path, 'r') as actions_file:
+                actions = json.loads(actions_file.read())
                 return actions
         except IOError as io_error:
-            Logger.error(LOCATION, 'Unable to read in {0} path. Error message : {1}'.format(_actions_file_path, io_error.message))
+            Logger.error(LOCATION, io_error.message)
             raise io_error
 
     @staticmethod
@@ -45,7 +42,7 @@ class Store:
                 data = json.loads(last_triggered_file.read())
                 return data[action_id] if action_id in data.keys() else None
         except IOError as io_error:
-            Logger.error(LOCATION, 'Unable to read in {0} path. Error message : {1}'.format(_last_triggered_file_path, io_error.message))
+            Logger.error(LOCATION, io_error.message)
             raise io_error
 
     @staticmethod
@@ -59,7 +56,7 @@ class Store:
             with open(_last_triggered_file_path, 'w') as last_triggered_file:
                 last_triggered_file.write(json.dumps(data))
         except IOError as io_error:
-            Logger.error(LOCATION, 'Unable to write in {0} path. Error message : {1}'.format(_last_triggered_file_path, io_error.message))
+            Logger.error(LOCATION, io_error.message)
             raise io_error
 
     @staticmethod
@@ -68,7 +65,7 @@ class Store:
             with open(_qr_image_path, 'wb') as qr_image:
                 image.save(qr_image)
         except IOError as io_error:
-            Logger.error(LOCATION, 'Unable to save image in {0} path. Error message : {1}'.format(_qr_image_path, io_error.message))
+            Logger.error(LOCATION, io_error.message)
             raise io_error
 
     @staticmethod
@@ -78,7 +75,7 @@ class Store:
                 configuration = configuration_file.read()
                 return json.loads(configuration)
         except IOError as io_error:
-            Logger.error(LOCATION, 'Unable to read in {0} path. Error message : {1}'.format(_configuration_file_path, io_error.message))
+            Logger.error(LOCATION, io_error.message)
             raise io_error
 
     @staticmethod
@@ -87,7 +84,7 @@ class Store:
             with open(_configuration_file_path, 'w') as configuration_file:
                 configuration_file.write(json.dumps(configuration))
         except IOError as io_error:
-            Logger.error(LOCATION, 'Unable to write in {0} path. Error message : {1}'.format(_configuration_file_path, io_error.message))
+            Logger.error(LOCATION, io_error.message)
             raise io_error
 
 
@@ -103,5 +100,5 @@ class Store:
                 public_key = bot_file.read()
                 return public_key
         except IOError as io_error:
-            Logger.error(LOCATION, 'Unable to read in {0} path. Error message : {1}'.format(_bot_public_key, io_error.message))
+            Logger.error(LOCATION, io_error.message)
             raise io_error
