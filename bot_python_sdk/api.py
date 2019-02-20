@@ -1,5 +1,6 @@
 import falcon
 import subprocess
+import json
 
 from bot_python_sdk.action_service import ActionService
 from bot_python_sdk.configuration_service import ConfigurationService
@@ -67,7 +68,7 @@ class PairingResource:
             error = 'Device is already paired.'
             Logger.error(LOCATION, error)
             raise falcon.HTTPForbidden(description=error)
-        response.media = configuration.get_device_information
+        response.media = json.dumps(configuration.get_device_information)
         subprocess.Popen(['make', 'pair'])
 
 
