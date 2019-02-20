@@ -68,7 +68,8 @@ class PairingResource:
             error = 'Device is already paired.'
             Logger.error(LOCATION, error)
             raise falcon.HTTPForbidden(description=error)
-        response.media = json.dumps(configuration.get_device_information)
+        device_information = configuration.get_device_information()
+        response.media = json.dumps(device_information)
         subprocess.Popen(['make', 'pair'])
 
 
