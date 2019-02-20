@@ -1,6 +1,5 @@
 import json
 import qrcode
-import base64
 from qrcode.image.pure import PymagingImage
 from bot_python_sdk.activation_service import ActivationService
 from bot_python_sdk.configuration_store import ConfigurationStore
@@ -55,9 +54,7 @@ class ConfigurationService:
         try:
             Logger.info(LOCATION, 'Generating QR Code for alternative pairing...')
             device_information = self.configuration.get_device_information()
-            device_info_serialize = json.dumps(device_information)
-            device_info_encoded = device_info_serialize.encode("utf-8")
-            image = qrcode.make(base64.standard_b64encode(device_info_encoded), image_factory=PymagingImage)
+            image = qrcode.make(json.dumps(device_information), image_factory=PymagingImage)
             Store.save_qrcode(image)
             Logger.success(LOCATION, 'QR Code successfully generated')
         except Exception as exception:
