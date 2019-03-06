@@ -22,6 +22,7 @@ METHOD_GET = 'GET'
 METHOD_POST = 'POST'
 ACTIONS_ENDPOINT = '/actions'
 PAIRING_ENDPOINT = '/pairing'
+ACTIVATION_ENDPOINT = '/activation'
 
 
 class ActionsResource:
@@ -73,7 +74,16 @@ class PairingResource:
         subprocess.Popen(['make', 'pair'])
 
 
+class ActivationResource:
+    def __init__(self):
+        self.configuration_service = ConfigurationService()
+
+    def on_get(self):
+        self.configuration_service.resume_configuration()
+
+
 api = application = falcon.API()
 api.add_route(ACTIONS_ENDPOINT, ActionsResource())
 api.add_route(PAIRING_ENDPOINT, PairingResource())
+api.add_route(ACTIVATION_ENDPOINT, ActivationResource())
 ConfigurationService().resume_configuration()

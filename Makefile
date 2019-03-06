@@ -12,7 +12,7 @@ qr: ; python3 -c "from bot_python_sdk.configuration_service import Configuration
 
 test: ; pytest
 
-environment-raspberry: ; sudo apt-get -y install build-essential libssl-dev libffi-dev python3-dev python3-venv && python3 -m venv venv
+environment-raspberry: ; sudo apt-get update && sudo apt-get -y install build-essential libssl-dev libffi-dev python3-dev python3-venv && python3 -m venv venv
 
 environment-osx: ; python3 -m venv venv
 

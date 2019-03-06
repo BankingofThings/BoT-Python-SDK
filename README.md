@@ -42,7 +42,7 @@ Then we run our newly created environment like this:
 ```bash
 source venv/bin/activate
 ```
-To exit the virtual environment, type:
+To exit the virtual environment, type the following command. If you execute this, you need to rerun the previous one.
 ```bash
 deactivate
 ```
@@ -50,7 +50,7 @@ deactivate
 > From now on, every command you run should be inside the virtual environment, unless specified differently.
 
 ## Installing dependencies
-To install dependencies run:
+To install dependencies run (inside the venv):
 ```bash 
 make install
 ```
@@ -62,7 +62,8 @@ make test
 ```
 
 # Configuration
-On your first run, replace YOUR_MAKER_ID with the makerID from your BoT Account and run:
+Sign in to the [Maker Portal](https://maker.bankingofthings.io/) and get the makerID from your account.
+On your first run, replace YOUR_MAKER_ID with the makerID from your Maker portal, section Account, and run:
 ```bash
 make server makerID=YOUR_MAKER_ID
 ```
@@ -107,6 +108,12 @@ curl localhost:3001/actions
 To trigger an action (e.g. send a push notification):
 ```bash
 curl -d '{"actionID":"YOUR_ACTION_ID"}' -H "Content-Type: application/json" -X POST http://localhost:3001/actions
+```
+
+###
+If you get an error in which your device is not paired or activated, you can call the following endpoint to continue this process:
+```bash
+curl localhost:3001/activation
 ```
 
 # Contributing
