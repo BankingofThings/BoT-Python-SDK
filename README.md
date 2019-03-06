@@ -27,6 +27,11 @@ cd BoT-Python-SDK
 Make sure you have python installed on your device. The SDK is tested on Python 2.7+. Inside the `venv` we need python 3.
 
 ## Install using a virtual environment
+Update package list with:
+```bash
+sudo apt-get update
+```
+
 First we install `virtualenv` && create an environment `venv` with:
 ```bash
 # For Raspberry Pi
