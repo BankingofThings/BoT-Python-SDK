@@ -72,6 +72,8 @@ To run the server normally after you've configured it, simply run in your venv:
 ```bash
 make server
 ```
+## Pairing and activating action(s)
+Pair your device and activate an action using the companion app with the QR code that was generated in the BoT-Python-SDK/storage/qr.png.
 
 # Troubleshooting
 If you've paired your device with the QR code that was generated in the root (`qr.png`), it might not have been paired 
