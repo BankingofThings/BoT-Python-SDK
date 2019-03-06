@@ -47,7 +47,7 @@ Then we run our newly created environment like this:
 ```bash
 source venv/bin/activate
 ```
-To exit the virtual environment, type:
+To exit the virtual environment, type the following command. If you execute this, you need to rerun the previous one.
 ```bash
 deactivate
 ```
