@@ -76,6 +76,19 @@ make server
 ## Pairing and activating action(s)
 Pair your device and activate an action using the companion app with the QR code that was generated in the BoT-Python-SDK/storage/qr.png.
 
+You can stop your server (e.g. with `CTRL + C`) or open a separate tab to open `BoT-Python-SDK/storage/qr.png`. 
+Then, to open the QR code:
+```bash
+sudo apt-get install feh
+feh storage/qr.png
+```
+Now you scan it with the Finn Companion App.
+
+After this you can restart the server again with:
+```bash
+make server
+```
+
 # Troubleshooting
 If you've paired your device with the QR code that was generated in the root (`qr.png`), it might not have been paired 
 and/or activated. There are a couple of solutions to fix this. 
@@ -105,6 +118,9 @@ curl localhost:3001/actions
 ```
 
 ## Triggering actions
+To create actions you need to go to the [Maker Portal](https://maker.bankingofthings.io/). 
+Follow the steps on the screen to create the action. You will get an actionID at the end.
+
 To trigger an action (e.g. send a push notification):
 ```bash
 curl -d '{"actionID":"YOUR_ACTION_ID"}' -H "Content-Type: application/json" -X POST http://localhost:3001/actions
