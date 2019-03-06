@@ -76,13 +76,15 @@ make server
 ## Pairing and activating action(s)
 Pair your device and activate an action using the companion app with the QR code that was generated in the BoT-Python-SDK/storage/qr.png.
 
-To open this qr code from command line, run:
+You can stop your server with `CTRL C` or open a separate tab to open BoT-Python-SDK/storage/qr.png.
+Then open the QR code do:
 ```bash
 sudo apt-get install feh
 feh storage/qr.png
 ```
+Now scan it with your phone.
 
-Start server again:
+Start server againif you stopped it:
 ```bash
 make server
 ```
