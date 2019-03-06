@@ -8,7 +8,7 @@ pair: ; python3 -c "from bot_python_sdk.configuration_service import Configurati
 
 activate: ; python3 -c "from bot_python_sdk.configuration_service import ConfigurationService; ConfigurationService().activate()"
 
-reset: ; python3 -c "from bot_python_sdk.configuration_service import ConfigurationService; ConfigurationService().reset()"
+reset: ; python3 -c "from bot_python_sdk.store import Store; Store().remove_configuration()"
 
 qr: ; python3 -c "from bot_python_sdk.configuration_service import ConfigurationService; ConfigurationService().generate_qr_code()"
 

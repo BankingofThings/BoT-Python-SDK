@@ -92,6 +92,19 @@ class Store:
         return os.path.isfile(_configuration_file_path)
 
     @staticmethod
+    def remove_configuration():
+        try:
+            if Store.has_configuration():
+                os.remove(_configuration_file_path)
+                os.remove(_qr_image_path)
+                Logger.success(LOCATION, 'Successfully removed configuration file')
+            else:
+                Logger.warning(LOCATION, 'Could not reset, no configuration available')
+        except IOError as io_error:
+            Logger.error(LOCATION, io_error.message)
+            raise io_error
+
+    @staticmethod
     def get_bot_public_key():
         try:
             with open(_bot_public_key) as bot_file:
