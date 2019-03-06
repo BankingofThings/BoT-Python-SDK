@@ -120,6 +120,9 @@ curl localhost:3001/actions
 ```
 
 ## Triggering actions
+To create actions you need to go to [Maker Portal](https://maker.bankingofthings.io/) and create actions. 
+Follow the steps on the screen to create the action. You will get an action ID at the end.
+
 To trigger an action (e.g. send a push notification):
 ```bash
 curl -d '{"actionID":"YOUR_ACTION_ID"}' -H "Content-Type: application/json" -X POST http://localhost:3001/actions
