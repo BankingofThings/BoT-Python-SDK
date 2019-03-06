@@ -62,7 +62,7 @@ make test
 ```
 
 # Configuration
-Sign in to https://maker.bankingofthings.io and get the makerID from your account.
+Sign in to the [Maker Portal](https://maker.bankingofthings.io/) and get the makerID from your account.
 On your first run, replace YOUR_MAKER_ID with the makerID from your Maker portal, section Account, and run:
 ```bash
 make server makerID=YOUR_MAKER_ID
@@ -107,9 +107,12 @@ To trigger an action (e.g. send a push notification):
 ```bash
 curl -d '{"actionID":"YOUR_ACTION_ID"}' -H "Content-Type: application/json" -X POST http://localhost:3001/actions
 ```
-Note : if 403 received, stop the server and restart it
-Ctrl+c
-make server
+
+###
+If you get an error in which your device is not paired or activated, you can call the following endpoint to continue this process:
+```bash
+curl localhost:3001/activation
+```
 
 # Contributing
 Any improvement to the FINN SDK are very much welcome! Our software is open-source and we believe your input can help create a lively community and the best version of FINN. We’ve already implemented much of the feedback given to us by community members and will continue to do so. Join them by contributing to the SDK or by contributing to the documentation.
