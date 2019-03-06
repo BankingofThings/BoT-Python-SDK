@@ -68,7 +68,7 @@ make test
 
 # Configuration
 Sign in to https://maker.bankingofthings.io and get the makerID from your account.
-On your first run, replace YOUR_MAKER_ID with the makerID from your BoT Account and run:
+On your first run, replace YOUR_MAKER_ID with the makerID from your Maker portal, section Account, and run:
 ```bash
 make server makerID=YOUR_MAKER_ID
 ```
