@@ -76,12 +76,22 @@ make server
 ## Pairing and activating action(s)
 Pair your device and activate an action using the companion app with the QR code that was generated in the BoT-Python-SDK/storage/qr.png.
 
+Display the QR in terminal itself 
+
+```bash
+export LC_ALL=en_US.UTF-8
+python showqr.py
+```
+
+OR
+
 You can stop your server (e.g. with `CTRL + C`) or open a separate tab to open `BoT-Python-SDK/storage/qr.png`. 
 Then, to open the QR code:
 ```bash
 sudo apt-get install feh
 feh storage/qr.png
 ```
+
 Now you scan it with the Finn Companion App.
 
 After this you can restart the server again with:
