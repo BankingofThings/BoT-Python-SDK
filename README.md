@@ -104,6 +104,8 @@ or the generated QR code `qr.png`.
 
 # Using the SDK
 The following commands can be run outside of your virtual environment.
+Open a new tab Ctrl+Shift+W to run commands
+Switch tabs with Ctrl+Shif+PgUP and Ctrl+Shift+PgDown
 
 ## Pairing your device
 To get the device information you need to pair the device (usually done with the BoT Companion App)
