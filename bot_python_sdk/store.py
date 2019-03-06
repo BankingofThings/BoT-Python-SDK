@@ -87,8 +87,6 @@ class Store:
             Logger.error(LOCATION, io_error.message)
             raise io_error
 
-
-
     @staticmethod
     def has_configuration():
         return os.path.isfile(_configuration_file_path)

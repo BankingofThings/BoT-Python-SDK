@@ -24,6 +24,9 @@ class ConfigurationStore:
         dictionary = self._to_dictionary(configuration)
         self.store.set_configuration(dictionary)
 
+    def remove(self):
+        self.store.set_configuration({})
+
     @staticmethod
     def _to_dictionary(configuration):
         return {

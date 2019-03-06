@@ -50,6 +50,9 @@ class ConfigurationService:
             self.configuration.set_device_status(DeviceStatus.ACTIVE.value)
             self.configuration_store.save(self.configuration)
 
+    def reset(self):
+        self.configuration_store.remove()
+
     def generate_qr_code(self):
         try:
             Logger.info(LOCATION, 'Generating QR Code for alternative pairing...')
