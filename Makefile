@@ -8,11 +8,13 @@ pair: ; python3 -c "from bot_python_sdk.configuration_service import Configurati
 
 activate: ; python3 -c "from bot_python_sdk.configuration_service import ConfigurationService; ConfigurationService().activate()"
 
+reset: ; python3 -c "from bot_python_sdk.store import Store; Store().remove_configuration()"
+
 qr: ; python3 -c "from bot_python_sdk.configuration_service import ConfigurationService; ConfigurationService().generate_qr_code()"
 
 test: ; pytest
 
-environment-raspberry: ; sudo apt-get -y install build-essential libssl-dev libffi-dev python3-dev python3-venv && python3 -m venv venv
+environment-raspberry: ; sudo apt-get update && sudo apt-get -y install build-essential libssl-dev libffi-dev python3-dev python3-venv && python3 -m venv venv
 
 environment-osx: ; python3 -m venv venv
 

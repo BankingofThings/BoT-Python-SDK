@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.com/BankingofThings/BoT-Python-SDK.svg?branch=master)](https://travis-ci.com/BankingofThings/BoT-Python-SDK)
 
 FINN enables your IoT devices to perform seamless autonomous payments on your behalf. 
-For more information, visit us at [makethingsfinn.com](makethingsfinn.com)
+For more information, visit us at [makethingsfinn.com](https://www.makethingsfinn.com)
 
 # Getting Started
 Visit our [official documentation](http://docs.bankingofthings.io/) for a complete overview. 
@@ -42,7 +42,7 @@ Then we run our newly created environment like this:
 ```bash
 source venv/bin/activate
 ```
-To exit the virtual environment, type:
+To exit the virtual environment, type the following command. If you execute this, you need to rerun the previous one.
 ```bash
 deactivate
 ```
@@ -50,7 +50,7 @@ deactivate
 > From now on, every command you run should be inside the virtual environment, unless specified differently.
 
 ## Installing dependencies
-To install dependencies run:
+To install dependencies run (inside the venv):
 ```bash 
 make install
 ```
@@ -62,13 +62,39 @@ make test
 ```
 
 # Configuration
-On your first run, replace YOUR_MAKER_ID with the makerID from your BoT Account and run:
+Sign in to the [Maker Portal](https://maker.bankingofthings.io/) and get the makerID from your account.
+On your first run, replace YOUR_MAKER_ID with the makerID from your Maker portal, section Account, and run:
 ```bash
 make server makerID=YOUR_MAKER_ID
 ```
 
 # Running the server
 To run the server normally after you've configured it, simply run in your venv:
+```bash
+make server
+```
+## Pairing and activating action(s)
+Pair your device and activate an action using the companion app with the QR code that was generated in the BoT-Python-SDK/storage/qr.png.
+
+Display the QR in terminal itself 
+
+```bash
+export LC_ALL=en_US.UTF-8
+python showqr.py
+```
+
+OR
+
+You can stop your server (e.g. with `CTRL + C`) or open a separate tab to open `BoT-Python-SDK/storage/qr.png`. 
+Then, to open the QR code:
+```bash
+sudo apt-get install feh
+feh storage/qr.png
+```
+
+Now you scan it with the Finn Companion App.
+
+After this you can restart the server again with:
 ```bash
 make server
 ```
@@ -102,9 +128,18 @@ curl localhost:3001/actions
 ```
 
 ## Triggering actions
+To create actions you need to go to the [Maker Portal](https://maker.bankingofthings.io/). 
+Follow the steps on the screen to create the action. You will get an actionID at the end.
+
 To trigger an action (e.g. send a push notification):
 ```bash
 curl -d '{"actionID":"YOUR_ACTION_ID"}' -H "Content-Type: application/json" -X POST http://localhost:3001/actions
+```
+
+###
+If you get an error in which your device is not paired or activated, you can call the following endpoint to continue this process:
+```bash
+curl localhost:3001/activation
 ```
 
 # Contributing

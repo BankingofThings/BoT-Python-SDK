@@ -1,5 +1,6 @@
 import falcon
 import subprocess
+import json
 
 from bot_python_sdk.action_service import ActionService
 from bot_python_sdk.configuration_service import ConfigurationService
@@ -21,6 +22,7 @@ METHOD_GET = 'GET'
 METHOD_POST = 'POST'
 ACTIONS_ENDPOINT = '/actions'
 PAIRING_ENDPOINT = '/pairing'
+ACTIVATION_ENDPOINT = '/activation'
 
 
 class ActionsResource:
@@ -67,11 +69,21 @@ class PairingResource:
             error = 'Device is already paired.'
             Logger.error(LOCATION, error)
             raise falcon.HTTPForbidden(description=error)
-        response.media = configuration.get_device_information
+        device_information = configuration.get_device_information()
+        response.media = json.dumps(device_information)
         subprocess.Popen(['make', 'pair'])
+
+
+class ActivationResource:
+    def __init__(self):
+        self.configuration_service = ConfigurationService()
+
+    def on_get(self):
+        self.configuration_service.resume_configuration()
 
 
 api = application = falcon.API()
 api.add_route(ACTIONS_ENDPOINT, ActionsResource())
 api.add_route(PAIRING_ENDPOINT, PairingResource())
+api.add_route(ACTIVATION_ENDPOINT, ActivationResource())
 ConfigurationService().resume_configuration()
