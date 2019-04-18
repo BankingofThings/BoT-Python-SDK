@@ -6,6 +6,7 @@ from bot_python_sdk.action_service import ActionService
 from bot_python_sdk.configuration_service import ConfigurationService
 from bot_python_sdk.configuration_store import ConfigurationStore
 from bot_python_sdk.device_status import DeviceStatus
+from bot_python_sdk.bluetooth_service import BluetoothService
 from bot_python_sdk.logger import Logger
 
 LOCATION = 'Controller'
@@ -23,6 +24,9 @@ METHOD_POST = 'POST'
 ACTIONS_ENDPOINT = '/actions'
 PAIRING_ENDPOINT = '/pairing'
 ACTIVATION_ENDPOINT = '/activation'
+
+#BLE TEST
+BLE_ENDPOINT = '/ble-test'
 
 
 class ActionsResource:
@@ -81,9 +85,28 @@ class ActivationResource:
     def on_get(self):
         self.configuration_service.resume_configuration()
 
+class BluetoothResource:
+    def __init__(self):
+        self.configuration_service = ConfigurationService()
+
+    
+    def on_get(self, request, response):
+        Logger.info(LOCATION, INCOMING_REQUEST + METHOD_GET + ' ' + BLE_ENDPOINT)
+        bluetooth_service = BluetoothService()
+        bluetooth_test_information = bluetooth_service.discover_bluetooth_test(self)
+        #bluetooth_test_information = bluetooth_service.discover_ble_test(self)
+        #bluetooth_test_information = bluetooth_service.advertising_ble_test(self)
+        
+        response.media = json.dumps(bluetooth_information)
+        subprocess.Popen(['make', 'pair'])
+
+
 
 api = application = falcon.API()
 api.add_route(ACTIONS_ENDPOINT, ActionsResource())
 api.add_route(PAIRING_ENDPOINT, PairingResource())
 api.add_route(ACTIVATION_ENDPOINT, ActivationResource())
+#BLE-Test-endpoint
+api.add_route(BLE_ENDPOINT, BluetoothResource())
+
 ConfigurationService().resume_configuration()
