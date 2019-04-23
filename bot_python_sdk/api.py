@@ -97,7 +97,6 @@ class BluetoothResource:
         Logger.info(LOCATION, INCOMING_REQUEST + METHOD_GET + ' ' + BLE_TEST_ENDPOINT)
         scansec = 5
         bluetooth_service_info = self.bluetooth_service.ble_advertising()
-        #bluetooth_service_info = BluetoothService.connection_establishment(self)
         response.media = json.dumps(bluetooth_service_info)      
 
 

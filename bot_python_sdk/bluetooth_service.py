@@ -25,7 +25,7 @@ class BluetoothService:
             service.start_advertising(UUID,MAJOR,MINOR,TXPOWER,INTERVAL)
             time.sleep(15)
             service.stop_advertising()
-            returnResponse = {"response" : "success"}
+            advertising_response= {"response" : "success"}
         except:
             Logger.error(LOCATION, 'Failed advertising_ble_test')
             advertising_response = {"message" : "failed"}
