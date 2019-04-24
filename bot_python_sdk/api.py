@@ -95,10 +95,14 @@ class BluetoothResource:
         
     def on_get(self, request, response):
         Logger.info(LOCATION, INCOMING_REQUEST + METHOD_GET + ' ' + BLE_TEST_ENDPOINT)
-        scansec = 5
-        bluetooth_service_info = self.bluetooth_service.ble_advertising()
-        response.media = json.dumps(bluetooth_service_info)      
-
+        try:
+            bluetooth_service_info = self.bluetooth_service.connection_establishment_server()
+        except Exception as exception:
+            bluetooth_service_info = "failed"
+            raise exception
+            pass
+        response.media = json.dumps(bluetooth_service_info)
+        
 
 api = application = falcon.API()
 api.add_route(ACTIONS_ENDPOINT, ActionsResource())
