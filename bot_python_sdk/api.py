@@ -27,7 +27,7 @@ METHOD_POST = 'POST'
 ACTIONS_ENDPOINT = '/actions'
 PAIRING_ENDPOINT = '/pairing'
 ACTIVATION_ENDPOINT = '/activation'
-#BLE Test Endpoint
+#BLE Test Route
 BLE_TEST_ENDPOINT= '/ble-test'
 
 
@@ -87,7 +87,8 @@ class ActivationResource:
     def on_get(self):
         self.configuration_service.resume_configuration()
         
-        
+#bluetooth service to test the ble pairing. 
+#Yet to integrate ble while starting the SDK.        
 class BluetoothResource:
     def __init__(self):
         self.bluetooth_service = BluetoothService()
@@ -96,14 +97,14 @@ class BluetoothResource:
     def on_get(self, request, response):
         Logger.info(LOCATION, INCOMING_REQUEST + METHOD_GET + ' ' + BLE_TEST_ENDPOINT)
         try:
-            bluetooth_service_info = self.bluetooth_service.connection_establishment_server()
+            bluetooth_service_info = self.bluetooth_service.initialize()
         except Exception as exception:
             bluetooth_service_info = "failed"
             raise exception
             pass
         response.media = json.dumps(bluetooth_service_info)
         
-
+        
 api = application = falcon.API()
 api.add_route(ACTIONS_ENDPOINT, ActionsResource())
 api.add_route(PAIRING_ENDPOINT, PairingResource())
