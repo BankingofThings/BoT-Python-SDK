@@ -18,8 +18,8 @@ class BluetoothService:
         active =True
         bleno.on('stateChange',self.onStateChange)
         bleno.on('advertisingStart', self.onAdvertisingStart)
+        
         bleno.start()
-        return "success"
         
 
         
@@ -38,20 +38,22 @@ class BluetoothService:
             BluetoothService.startAdvertising(self)
         else:
             Logger.info(LOCATION, 'Bluetooth is powered off. Stopping advertising...')
-            BluetoothService.startAdvertising(self)
+            BluetoothService.stopAdvertising(self)
     
     def onAdvertisingStart(self,error):
         if error:
             Logger.error(LOCATION,'Failed to start advertising.')
         else:
             Logger.info(LOCATION, 'Successfully started advertising.')
+            
         
         if not error:
+            
             def on_setServiceError(error):
                 if error:
                     Logger.error(LOCATION, 'setServices: ' , error)
                 else:
                     Logger.info(LOCATION, 'Successfully set services.')
                 
-            bleno.setServices([blenoService])
+            bleno.setServices([blenoService], on_setServiceError)
 

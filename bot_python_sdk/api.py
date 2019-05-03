@@ -9,7 +9,6 @@ from bot_python_sdk.configuration_store import ConfigurationStore
 from bot_python_sdk.device_status import DeviceStatus
 from bot_python_sdk.logger import Logger
 
-#BLE Service Test
 from bot_python_sdk.bluetooth_service import BluetoothService
 
 LOCATION = 'Controller'
@@ -87,32 +86,12 @@ class ActivationResource:
     def on_get(self):
         self.configuration_service.resume_configuration()
         
-#bluetooth service to test the ble pairing. 
-#Yet to integrate ble while starting the SDK.        
-class BluetoothResource:
-    def __init__(self):
-        self.bluetooth_service = BluetoothService()
-
-        
-    def on_get(self, request, response):
-        Logger.info(LOCATION, INCOMING_REQUEST + METHOD_GET + ' ' + BLE_TEST_ENDPOINT)
-        try:
-            bluetooth_service_info = self.bluetooth_service.initialize()
-        except Exception as exception:
-            bluetooth_service_info = "failed"
-            raise exception
-            pass
-        response.media = json.dumps(bluetooth_service_info)
-        
         
 api = application = falcon.API()
 api.add_route(ACTIONS_ENDPOINT, ActionsResource())
 api.add_route(PAIRING_ENDPOINT, PairingResource())
 api.add_route(ACTIVATION_ENDPOINT, ActivationResource())
 
-#BLE Test
-api.add_route(BLE_TEST_ENDPOINT, BluetoothResource())
-
 
 ConfigurationService().resume_configuration()
-
+BluetoothService().initialize()

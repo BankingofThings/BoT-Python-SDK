@@ -1,15 +1,18 @@
-   
+    
 from pybleno import *
 import array
 import struct
 import sys
 import traceback
 import socket
+import json
 from builtins import str
 from bot_python_sdk.logger import Logger
 from bot_python_sdk.configuration import Configuration
+from bot_python_sdk.configuration_store import ConfigurationStore
 
 bleno = Bleno()
+Location = 'Bluetooth Service'
 
 class DeviceCharacteristic(Characteristic):
     
@@ -18,21 +21,28 @@ class DeviceCharacteristic(Characteristic):
             'uuid': 'CAD1B5132DA446099908234C6D1B2A9C',
             'properties': ['read'],
           })
-          
+        self.byteData = bytearray()
+        self.configuration_store = ConfigurationStore() 
           
     def onReadRequest(self, offset, callback):
-        self.configuration = Configuration()
         
         if not offset:
+            configuration = self.configuration_store.get()
+            Logger.info(Location, 'Device data being read by connected device.')
+            device_information = configuration.get_device_information()
+           
             data = {
-            'deviceID': self.configuration.get_device_id(),
-            'makerID': self.configuration.get_maker_id(),
+            'deviceID': device_information['deviceID'],
+            'makerID': device_information['makerID'],
             'name': socket.gethostname(),
-            'publicKey' : self.configuration.get_public_key()
+            'publicKey' : device_information['publicKey']
             }
-            writeUInt8(data, 0)
-            callback(Characteristic.RESULT_SUCCESS, data);
-        else:
-            callback(Characteristic.RESULT_ATTR_NOT_LONG, None)
-        
+          
+           
+            self.byteData.extend(map(ord, json.dumps(data)))
             
+            
+             
+            Logger.info(Location, json.dumps(data))
+            
+        callback(Characteristic.RESULT_SUCCESS, self.byteData[offset:])
