@@ -26,7 +26,6 @@ cd BoT-Python-SDK
 ## Prerequisites
 Make sure you have python installed on your device. The SDK is tested on Python 2.7+. Inside the `venv` we need python 3.
 
-`gattlib` required for ble pairing
 
 ## Install using a virtual environment
 First we install `virtualenv` && create an environment `venv` with:

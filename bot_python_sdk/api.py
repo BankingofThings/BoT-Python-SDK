@@ -1,8 +1,6 @@
 import falcon
 import subprocess
 import json
-
-
 from bot_python_sdk.action_service import ActionService
 from bot_python_sdk.configuration_service import ConfigurationService
 from bot_python_sdk.configuration_store import ConfigurationStore
@@ -26,8 +24,6 @@ METHOD_POST = 'POST'
 ACTIONS_ENDPOINT = '/actions'
 PAIRING_ENDPOINT = '/pairing'
 ACTIVATION_ENDPOINT = '/activation'
-#BLE Test Route
-BLE_TEST_ENDPOINT= '/ble-test'
 
 
 class ActionsResource:
@@ -92,6 +88,8 @@ api.add_route(ACTIONS_ENDPOINT, ActionsResource())
 api.add_route(PAIRING_ENDPOINT, PairingResource())
 api.add_route(ACTIVATION_ENDPOINT, ActivationResource())
 
-
 ConfigurationService().resume_configuration()
+
+#Initialize the Bluetooth service class to process
+#handle BLE specific envents and callbacks
 BluetoothService().initialize()

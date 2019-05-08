@@ -1,20 +1,17 @@
     
 from pybleno import *
-import array
-import struct
-import sys
-import traceback
-import socket
 import json
+import subprocess
 from builtins import str
 from bot_python_sdk.logger import Logger
 from bot_python_sdk.pairing_service import PairingService
 
 bleno = Bleno()
-Location = 'Bluetooth Service'
+LOCATION = 'Bluetooth Service'
 
+# Cofiguration Characteristic
 class ConfigureCharacteristic(Characteristic):
-    
+    # On initializing this class set the uuid for read and write request
     def __init__(self):
         self.option = {'uuid' : '2901', 'value' : 'desc'}
         Characteristic.__init__(self, {
@@ -22,27 +19,29 @@ class ConfigureCharacteristic(Characteristic):
             'properties': ['read','write'],
             'descriptors': [
                     Descriptor(self.option)],
-            'value': None
-            
+            'value': None   
           })
         self.byteData = bytearray()
-        
-        
-    def onWriteRequest(self, data, offset, withoutResponse, callback):  
-         if offset:
+
+    # Check the offset value to know the status of write request
+    # Check the characteristic by using offset length
+    # Start pairing service if device skipped wifi setup
+    # Configure the wifi details with device and start the pairing service.
+    def onWriteRequest(self, data, offset, withoutResponse, callback):
+        if offset:
             callback(Characteristic.RESULT_ATTR_NOT_LONG)
-         else:
+        else:
             callback(Characteristic.RESULT_SUCCESS)
         
-         if offset > len(data):
+        if offset > len(data):
             callback(bleno.Characteristic.RESULT_INVALID_OFFSET)
-            Logger.error('Error in Characteristic')
-         else:
+            Logger.error(LOCATION, 'Error in Characteristic')
+        else:
             callback(Characteristic.RESULT_SUCCESS, data[offset:]);        
             details = json.loads(data)
             
             if details['Skip'] == True:
-                Logger.info(Location, 'Connected device skipped Wifi setup. ' +
+                Logger.info(LOCATION, 'Connected device skipped Wifi setup. ' +
                 'Initializing pairing process...')
                 PairingService().run()
             else:
@@ -57,27 +56,25 @@ class ConfigureCharacteristic(Characteristic):
                                   '" \r\n        ' + \
                                   'key_mgmt=WPA-PSK \r\n}'
                     
-                Logger.info(Location, 'Wifi setup complete. Initializing pairing process...')
+                Logger.info(LOCATION, 'Wifi setup complete. Initializing pairing process...')
                 PairingService().run()
                 time.sleep(3)
-
-
                 subprocess.run(['sudo echo \'' + wifiDetails + '\' > ./wpa_supplicant.conf'],shell=True)
-
                 subprocess.run(["sudo", "cp", "./wpa_supplicant.conf", "/etc/wpa_supplicant/"])
-               
-
                 subprocess.run(["sudo", "rm", "./wpa_supplicant.conf"])
                 subprocess.run(["sudo", "sleep", "1", "&&", "reboot"])
-
     
-    
-    
-        
+    # OnReadRequest shall be trigged when configure characteristics information
+    # are needed. As per the offset the data shall be sent back via the callback.
+    # On the first request the offset shall be 0, hence the function compiles
+    # the necessary information w.r.t device configure information and returns through callback.
+    # Since the entire data is not sent back by the caller, every time the offset value
+    # is updated by the caller. This means from the specified offset the data needs to be sent
+    # as byte sequence through CB. The sent data shall be of JSON format.
     def onReadRequest(self, offset, callback):
         if not offset:
             data = {'BoT': 'Configuration Done'}
-            Logger.info(Location,'Connected device configuration complete. ' +
+            Logger.info(LOCATION,'Connected device configuration complete. ' +
             'Start pairing process...')
             self.byteData.extend(map(ord, json.dumps(data)))
             PairingService().run()

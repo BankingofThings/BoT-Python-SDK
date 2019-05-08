@@ -1,4 +1,4 @@
-install: ; sudo pip3 install --upgrade pip &&sudo pip3 install --upgrade setuptools &&sudo pip3 install -r requirements.txt
+install: ; sudo pip3 install --upgrade pip && sudo pip3 install --upgrade setuptools && sudo pip3 install -r requirements.txt
 
 server: ; sudo python3 server.py $(makerID)
 
