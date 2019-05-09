@@ -2,7 +2,6 @@ from pybleno import *
 import socket
 import json
 from bot_python_sdk.logger import Logger
-from bot_python_sdk.configuration import Configuration
 from bot_python_sdk.configuration_store import ConfigurationStore
 
 bleno = Bleno()

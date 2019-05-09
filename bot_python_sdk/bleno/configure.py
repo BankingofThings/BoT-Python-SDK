@@ -2,7 +2,6 @@
 from pybleno import *
 import json
 import subprocess
-from builtins import str
 from bot_python_sdk.logger import Logger
 from bot_python_sdk.pairing_service import PairingService
 
@@ -80,4 +79,3 @@ class ConfigureCharacteristic(Characteristic):
             PairingService().run()
         callback(Characteristic.RESULT_SUCCESS, self.byteData[offset:])
             
-        

@@ -1,14 +1,9 @@
     
 from pybleno import *
-import array
-import struct
-import sys
-import traceback
 import netifaces
 import json
-from builtins import str
 from bot_python_sdk.logger import Logger
-from bot_python_sdk.configuration import Configuration
+
 
 bleno = Bleno()
 
