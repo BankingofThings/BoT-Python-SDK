@@ -18,14 +18,28 @@ class ConfigurationService:
     def __init__(self):
         self.configuration_store = ConfigurationStore()
         self.configuration = self.configuration_store.get()
-        self.key_generator = KeyGenerator()
+        self.key_generator = KeyGenerator()    
+    
 
     def initialize_configuration(self, maker_id):
         Logger.info(LOCATION, 'Initializing configuration...')
         public_key, private_key = KeyGenerator().generate_key()
         device_id = self.key_generator.generate_uuid()
-        device_status = DeviceStatus.NEW.value
-        self.configuration.initialize(maker_id, device_id, device_status, public_key, private_key)
+        #initialize the alternative id.
+        aid = 0
+        # Option for Multi pairing
+        # If the option is yes, then alternative id needed
+        print('Enable Multi pair(yes/no)')
+        status = input()
+        if(status == 'yes'):
+            device_status = DeviceStatus.MULTIPAIR.value
+            print('Enter your alternativeID:')
+            aid = input()
+            
+        else:
+            device_status = DeviceStatus.NEW.value
+        # Added alternative id as an argument to initializing the configuration
+        self.configuration.initialize(maker_id, device_id, device_status, aid , public_key, private_key)
         self.configuration_store.save(self.configuration)
         self.generate_qr_code()
         Logger.success(LOCATION, 'Configuration successfully initialized.')

@@ -4,7 +4,6 @@ import netifaces
 import json
 from bot_python_sdk.logger import Logger
 
-
 bleno = Bleno()
 
 LOCATION = 'Bluetooth Service'

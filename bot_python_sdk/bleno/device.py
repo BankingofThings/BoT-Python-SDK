@@ -3,6 +3,7 @@ import socket
 import json
 from bot_python_sdk.logger import Logger
 from bot_python_sdk.configuration_store import ConfigurationStore
+from bot_python_sdk.device_status import DeviceStatus
 
 bleno = Bleno()
 LOCATION = 'Bluetooth Service'
@@ -31,6 +32,7 @@ class DeviceCharacteristic(Characteristic):
         if not offset:
             configuration = self.configuration_store.get()
             Logger.info(LOCATION, 'Device data being read by connected device.')
+            device_status = configuration.get_device_status()
             device_information = configuration.get_device_information()
             data = {
             'deviceID': device_information['deviceID'],
@@ -38,6 +40,12 @@ class DeviceCharacteristic(Characteristic):
             'name': socket.gethostname(),
             'publicKey' : device_information['publicKey']
             }
+            
+                        
+            # Added required information for Multipairing device.
+            if(device_status == DeviceStatus.MULTIPAIR):
+                data['multipair'] = 1
+                data['aid'] = device_information['aid']
             
             self.byteData.extend(map(ord, json.dumps(data))) 
             Logger.info(LOCATION, json.dumps(data))

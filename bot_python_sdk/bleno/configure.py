@@ -4,6 +4,7 @@ import json
 import subprocess
 from bot_python_sdk.logger import Logger
 from bot_python_sdk.pairing_service import PairingService
+import time
 
 bleno = Bleno()
 LOCATION = 'Bluetooth Service'
@@ -31,15 +32,22 @@ class ConfigureCharacteristic(Characteristic):
             callback(Characteristic.RESULT_ATTR_NOT_LONG)
         else:
             callback(Characteristic.RESULT_SUCCESS)
-        
         if offset > len(data):
             callback(bleno.Characteristic.RESULT_INVALID_OFFSET)
             Logger.error(LOCATION, 'Error in Characteristic')
         else:
-            callback(Characteristic.RESULT_SUCCESS, data[offset:]);        
-            details = json.loads(data)
+            callback(Characteristic.RESULT_SUCCESS);
             
-            if details['Skip'] == True:
+            #changes
+            details = json.loads(data.decode())
+            skipWifiConfig = False;
+            
+            try:
+                skipWifiConfig = details['Skip']
+            except:
+                Logger.info(LOCATION, 'Wifi Configuration is available ..' )
+            
+            if  skipWifiConfig == True:
                 Logger.info(LOCATION, 'Connected device skipped Wifi setup. ' +
                 'Initializing pairing process...')
                 PairingService().run()
@@ -60,8 +68,12 @@ class ConfigureCharacteristic(Characteristic):
                 time.sleep(3)
                 subprocess.run(['sudo echo \'' + wifiDetails + '\' > ./wpa_supplicant.conf'],shell=True)
                 subprocess.run(["sudo", "cp", "./wpa_supplicant.conf", "/etc/wpa_supplicant/"])
+                Logger.info(LOCATION, 'Wifi configuration done! Device reboot in progress')
+                
                 subprocess.run(["sudo", "rm", "./wpa_supplicant.conf"])
-                subprocess.run(["sudo", "sleep", "1", "&&", "reboot"])
+                subprocess.run(["sudo", "sleep" , "1"])
+                subprocess.run(["sudo","reboot"])
+                
     
     # OnReadRequest shall be trigged when configure characteristics information
     # are needed. As per the offset the data shall be sent back via the callback.
@@ -79,3 +91,4 @@ class ConfigureCharacteristic(Characteristic):
             PairingService().run()
         callback(Characteristic.RESULT_SUCCESS, self.byteData[offset:])
             
+        
