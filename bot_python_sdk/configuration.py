@@ -62,7 +62,6 @@ class Configuration:
         # Check the device status if that is Multi pairing mode
         # add the additional required values for  Multipairing
         if(self.device_status == DeviceStatus.MULTIPAIR.value or self.device_status == DeviceStatus.MULTIPAIR):
-            print('entered true block')
             data['multipair'] = 1
             data['aid'] = self.aid
             
