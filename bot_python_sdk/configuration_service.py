@@ -12,14 +12,12 @@ from bot_python_sdk.store import Store
 
 LOCATION = 'Configuration Service'
 
-
 class ConfigurationService:
 
     def __init__(self):
         self.configuration_store = ConfigurationStore()
         self.configuration = self.configuration_store.get()
-        self.key_generator = KeyGenerator()    
-    
+        self.key_generator = KeyGenerator()
 
     def initialize_configuration(self, maker_id):
         Logger.info(LOCATION, 'Initializing configuration...')
@@ -35,7 +33,6 @@ class ConfigurationService:
             device_status = DeviceStatus.MULTIPAIR.value
             print('Enter your alternativeID:')
             aid = input()
-            
         else:
             device_status = DeviceStatus.NEW.value
         # Added alternative id as an argument to initializing the configuration
@@ -71,7 +68,6 @@ class ConfigurationService:
             device_information = self.configuration.get_device_information()
             image = qrcode.make(json.dumps(device_information), image_factory=PymagingImage)
             Store.save_qrcode(image)
-
             Logger.success(LOCATION, 'QR Code successfully generated')
         except Exception as exception:
             Logger.error(LOCATION, 'QR Code not generated')

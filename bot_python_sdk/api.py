@@ -18,6 +18,7 @@ PUBLIC_KEY_KEY = 'publicKey'
 
 ACTION_ID = 'actionID'
 VALUE_KEY = 'value'
+ALTERNATIVER_ID ='alternativeID'
 
 METHOD_GET = 'GET'
 METHOD_POST = 'POST'
@@ -37,8 +38,9 @@ class ActionsResource:
 
     def on_post(self, request, response):
         configuration = self.configuration_store.get()
+        device_status = configuration.get_device_status()
 
-        if configuration.get_device_status() is not DeviceStatus.ACTIVE:
+        if device_status is not DeviceStatus.ACTIVE and device_status is not DeviceStatus.MULTIPAIR:
             error = 'Not allowed to trigger actions when device is not activated.'
             Logger.error(LOCATION, error)
             raise falcon.HTTPForbidden(description=error)
@@ -49,10 +51,16 @@ class ActionsResource:
             Logger.error(LOCATION, 'Missing parameter `' + ACTION_ID + '` for ' + METHOD_POST + ' ' + ACTIONS_ENDPOINT)
             raise falcon.HTTPBadRequest
 
+        if device_status is DeviceStatus.MULTIPAIR:
+            if ALTERNATIVER_ID not in data.keys():
+                Logger.error(LOCATION, 'Missing parameter `' + ALTERNATIVER_ID + '` for ' + METHOD_POST + ' ' + ACTIONS_ENDPOINT)
+                raise falcon.HTTPBadRequest
+
         action_id = data[ACTION_ID]
         value = data[VALUE_KEY] if VALUE_KEY in data.keys() else None
+        alternative_id = data[ALTERNATIVER_ID] if ALTERNATIVER_ID in data.keys() else None
 
-        success = self.action_service.trigger(action_id, value)
+        success = self.action_service.trigger(action_id, value, alternative_id)
         if success:
             response.media = {'message': 'Action triggered'}
         else:

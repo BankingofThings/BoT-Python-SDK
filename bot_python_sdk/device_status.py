@@ -6,4 +6,3 @@ class DeviceStatus(Enum):
     PAIRED = 'PAIRED'
     ACTIVE = 'ACTIVE'
     MULTIPAIR = 'MULTIPAIR'
-

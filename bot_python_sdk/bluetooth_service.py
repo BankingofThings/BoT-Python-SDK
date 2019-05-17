@@ -5,29 +5,36 @@ from bot_python_sdk.logger import Logger
 from bot_python_sdk.bleno.bleno_service import BlenoService
 
 LOCATION = 'Bluetooth Service'
+#bleno service object
 blenoService = BlenoService()
+#bleno object creation
 bleno = Bleno()
 
-#Bluetooth Module
+'''
+Bluetooth service class responsible for start/stop advertising, handling 
+state chanegs, initialize the pybleno, register the necessay callbacks
+with pybleno to process the events from BLE stack.
+'''
 class BluetoothService:
     
-    #Initializing the bluetooth module for state change and advertising
+    #register event handlers with pybleno and start the bleno service
     def initialize(self):
         bleno.on('stateChange',self.onStateChange)
         bleno.on('advertisingStart', self.onAdvertisingStart)        
         bleno.start()
 
-    #Checking the bluetooth state and start the advertising
+    #start advertising depending on ble state (powered on/off)
     def startAdvertising(self):
         if (bleno.state == 'poweredOn'):            
             bleno.startAdvertising(socket.gethostname(), [blenoService.uuid])
-       
+
+    #stop advertising
     def stopAdvertising(self):
         bleno.stopAdvertising()
         if platform.system() == 'darwin':
             bleno.disconnect()
 
-    #Advertising has been start and stop depends on the state
+    #handle state change events from BLE stack
     def onStateChange(self,state):
         if state == 'poweredOn':
             Logger.info(LOCATION, 'Bluetooth powered on. Starting advertising...')
@@ -36,14 +43,15 @@ class BluetoothService:
             Logger.info(LOCATION, 'Bluetooth is powered off. Stopping advertising...')
             BluetoothService.stopAdvertising(self)
     
-    #Advertising start event will show status of advertising and set the service.
-    #Characteristic will be set into the set service 
+    '''
+    handle advertising start notification from the BLE stack. On successful advertisement 
+    set the custom bleno service and register the event handler.
+    '''
     def onAdvertisingStart(self,error):
         if error:
             Logger.error(LOCATION,'Failed to start advertising.')
         else:
             Logger.info(LOCATION, 'Successfully started advertising.')
-                  
         if not error:            
             def on_setServiceError(error):
                 if error:

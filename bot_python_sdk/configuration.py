@@ -1,7 +1,6 @@
 from bot_python_sdk.device_status import DeviceStatus
 import json
 
-
 class Configuration:
 
     def __init__(self):
@@ -16,8 +15,6 @@ class Configuration:
     def is_initialized(self):
         return self.initialized
     
-    
-    #Added alternative id for an initializing
     def initialize(self, maker_id, device_id, device_status, aid, public_key, private_key):
         self.maker_id = maker_id
         self.device_id = device_id
@@ -55,19 +52,15 @@ class Configuration:
 
     def get_device_information(self):
         data = {
-                'deviceID': self.device_id,
-                'makerID': self.maker_id,
-                'publicKey': self.get_stripped_public_key()}
-        
-        # Check the device status if that is Multi pairing mode
-        # add the additional required values for  Multipairing
+            'deviceID': self.device_id,
+            'makerID': self.maker_id,
+            'publicKey': self.get_stripped_public_key()
+		}
+        #Check if its multipairing mode and initialize the necessary data stuctures
         if(self.device_status == DeviceStatus.MULTIPAIR.value or self.device_status == DeviceStatus.MULTIPAIR):
             data['multipair'] = 1
             data['aid'] = self.aid
-            
         return data
-        
-
 
     def get_headers(self):
         return {
