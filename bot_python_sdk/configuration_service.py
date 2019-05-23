@@ -12,7 +12,6 @@ from bot_python_sdk.store import Store
 
 LOCATION = 'Configuration Service'
 
-
 class ConfigurationService:
 
     def __init__(self):
@@ -24,8 +23,20 @@ class ConfigurationService:
         Logger.info(LOCATION, 'Initializing configuration...')
         public_key, private_key = KeyGenerator().generate_key()
         device_id = self.key_generator.generate_uuid()
-        device_status = DeviceStatus.NEW.value
-        self.configuration.initialize(maker_id, device_id, device_status, public_key, private_key)
+        #initialize the alternative id.
+        aid = 0
+        # Option for Multi pairing
+        # If the option is yes, then alternative id needed
+        print('Enable Multi pair(yes/no)')
+        status = input()
+        if(status == 'yes'):
+            device_status = DeviceStatus.MULTIPAIR.value
+            print('Enter your alternativeID:')
+            aid = input()
+        else:
+            device_status = DeviceStatus.NEW.value
+        # Added alternative id as an argument to initializing the configuration
+        self.configuration.initialize(maker_id, device_id, device_status, aid , public_key, private_key)
         self.configuration_store.save(self.configuration)
         self.generate_qr_code()
         Logger.success(LOCATION, 'Configuration successfully initialized.')
@@ -57,7 +68,6 @@ class ConfigurationService:
             device_information = self.configuration.get_device_information()
             image = qrcode.make(json.dumps(device_information), image_factory=PymagingImage)
             Store.save_qrcode(image)
-
             Logger.success(LOCATION, 'QR Code successfully generated')
         except Exception as exception:
             Logger.error(LOCATION, 'QR Code not generated')
