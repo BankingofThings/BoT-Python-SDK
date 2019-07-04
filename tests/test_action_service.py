@@ -10,7 +10,7 @@ def test_create_trigger_body(generate_uuid, get_device_id):
 
 	uuid = 42
 	generate_uuid.return_value = uuid
-	device_id = 43
+	device_id = '43'
 	get_device_id.return_value = device_id
 	action_id = '44'
 	alt_id = '45'
