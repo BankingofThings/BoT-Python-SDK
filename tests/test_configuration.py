@@ -56,10 +56,3 @@ def test_get_device_information(resource):
 
 	assert configuration.get_device_information() == device_info
 
-
-
-
-
-
-
-	
