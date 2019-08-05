@@ -90,5 +90,5 @@ class ConfigureCharacteristic(Characteristic):
             Logger.info(LOCATION,'Connected device configuration complete. ' +
             'Start pairing process...')
             self.configureData.extend(map(ord, json.dumps(data)))
-            PairingService().run()
+            #PairingService().run()
         callback(Characteristic.RESULT_SUCCESS, self.configureData[offset:])

@@ -89,7 +89,7 @@ class ActivationResource:
 
     def on_get(self):
         self.configuration_service.resume_configuration()
-        
+
         
 api = application = falcon.API()
 api.add_route(ACTIONS_ENDPOINT, ActionsResource())
@@ -101,3 +101,4 @@ ConfigurationService().resume_configuration()
 #Initialize the Bluetooth service class to process
 #handle BLE specific envents and callbacks
 BluetoothService().initialize()
+ConfigurationService().resume_configuration()
