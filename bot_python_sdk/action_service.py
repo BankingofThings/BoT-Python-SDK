@@ -39,7 +39,7 @@ class ActionService:
             Logger.success(LOCATION, 'Successfully loaded ' + str(len(actions)) + ' cached action(s)')
             return actions
 
-    def trigger(self, action_id, value=None, alternative_id=None):
+    def trigger(self, action_id, value=None, alternative_id=None, queue_id=None):
         Logger.info(LOCATION, 'Triggering action: ' + action_id)
         action = self._get_action(action_id)
         self._validate_frequency(action)
