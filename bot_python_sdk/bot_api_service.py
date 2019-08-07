@@ -14,6 +14,7 @@ from bot_python_sdk.device_status import DeviceStatus
 from bot_python_sdk.logger import Logger
 
 from bot_python_sdk.bluetooth_service import BluetoothService
+import bot_python_sdk.ActionTriggerHandler as actionHandler
 
 ## Global variables to interface with BOT Services.
 LOCATION = 'Controller'
@@ -107,6 +108,7 @@ class ActionsResource:
         """@var configuration_store : stores configuration store object"""
         self.action_service = ActionService()
         self.configuration_store = ConfigurationStore()
+        self.actionshandler = actionHandler.ActionTriggerHandler()
 
     ## Gets the list of actions from the action service/makerid server.
     #  @param self The object pointer.
@@ -145,15 +147,32 @@ class ActionsResource:
         value = data[VALUE_KEY] if VALUE_KEY in data.keys() else None
         alternative_id = data[ALTERNATIVER_ID] if ALTERNATIVER_ID in data.keys() else None
 
-        success = self.action_service.trigger(action_id, value, alternative_id)
-        response = ''
-        if success:
-            response = {'message': 'Action triggered'}
-            return response
+        # !Warning : check first if network is available or not and then trigger
+        if (self.actionshandler.isInternetAvailable('www.google.com')):
+            success = self.action_service.trigger(action_id, value, alternative_id)
+            response = ''
+            if success:
+               response = {'message': 'Action triggered'}
+               return response
+            else:
+              error = 'action service trigger failed, service not available'
+              raise ServiceUnavailableError(error)
         else:
-            error = 'action service trigger failed, service not available'
-            raise ServiceUnavailableError(error)
+            #!TBD: need to see if we need to check actions offline mode enable/disable through some variables ?
+            Logger.info(LOCATION, 'Offline Mode triggered : Action Trigger getting saved ....')
+            multipairEnabled = False
+            if device_status is DeviceStatus.MULTIPAIR:
+                multipairEnabled = True
+            req = self.actionshandler.createReq(actionID=action_id, alternativeID=alternative_id, multipair=multipairEnabled, value=value)
 
+            if (self.actionshandler.store(req) == True):
+                Logger.info(LOCATION, 'Request stored successfully !!')
+                error = 'Network Unavailable! action trigger request saved '
+                raise NetworkUnavailableError(error)
+            else:
+                Logger.error(LOCATION, 'Request store Failed !!')
+                error = 'Network Unavailable! action trigger failed to save '
+                raise ActionsTriggerStoreError(error)
 
 class PairingResource:
     
@@ -199,6 +218,12 @@ class BoTApiService():
         self.makerID = makerid
         self.multipairStatus = multipairing
         self.aid = aid
+        self.actionshandler = actionHandler.ActionTriggerHandler()
+
+    def disableOfflineMode(self):
+        Logger.info(LOCATION, "Disabling Offline Mode ...")
+        self.actionshandler.stop()
+        Logger.info(LOCATION, "Action Handler Stopped ...")
 
     def start(self):
         configuration_service = ConfigurationService()
@@ -217,3 +242,10 @@ class BoTApiService():
         #Initialize the Bluetooth service class to process BLE specific events and callbacks
         BluetoothService().initialize()
         configuration_service.resume_configuration()
+
+    def enableOfflineMode(self):
+        Logger.info(LOCATION, "Enabling Offline Mode Processing ...")
+        #start the Actions handler thread
+        self.actionshandler.initialize()
+        self.actionshandler.start()
+

@@ -44,7 +44,7 @@ class ActionService:
         action = self._get_action(action_id)
         self._validate_frequency(action)
         Logger.success(LOCATION, 'Action valid')
-        data = self.create_trigger_body(action_id, value, alternative_id)
+        data = self.create_trigger_body(action_id, value, alternative_id, queue_id)
         try:
             self.bot_service.post(ACTIONS_ENDPOINT, data)
             Logger.success(LOCATION, 'Successfully triggered action: ' + action_id)
@@ -74,7 +74,7 @@ class ActionService:
         Logger.error(LOCATION, 'Action not found')
         raise falcon.HTTPBadRequest(description='Action not found')
 
-    def create_trigger_body(self, action_id, value, alternative_id):
+    def create_trigger_body(self, action_id, value, alternative_id, queue_id):
         data = {
             ACTION_ID: action_id,
             DEVICE_ID: self.configuration.get_device_id(),
@@ -84,6 +84,8 @@ class ActionService:
             data[ALTERNATIVE_ID] = str(alternative_id)   
         if value is not None:
             data[VALUE] = str(value)
+        if queue_id is not None:
+            data[QUEUE_ID] = str(queue_id)
         return data
 
     @staticmethod
