@@ -176,7 +176,7 @@ class ActionTriggerHandler():
 
         self.to_watch = os.path.abspath(_actions_np_db_file_path)
         for method in BOTFileEventHandler._methods:
-          print("Registering Event Handler : {}".format(method))
+          Logger.info(LOCATION, "Registering Event Handler : {}".format(method))
           self.register_inotify_methods(BOTFileEventHandler,method)
         self.watchMgr.add_watch(self.to_watch, pyinotify.ALL_EVENTS)
         self.eventnotifier.start()
