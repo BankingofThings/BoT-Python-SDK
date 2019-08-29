@@ -36,6 +36,7 @@ make environment-raspberry
 
 # For Mac OS X
 make environment-osx
+NOTE: Latest SDK (with BLE enabled) may not work on MacOS as the BLE PyBleno library was never verified/Tested on MacOS.
 
 # For Windows
 make environment-windows
@@ -160,7 +161,7 @@ make test
    |        3      | Secure HTTP communication - BoT Service    | Supported | Secure SSL communication with API Dev portal supported in Python SDK |
    |        4      | Multipairing Mode                          | Supported | Supported in Python SDK |
    |        5      | Logging                                    | Supported | Supported in Python SDK - INFO, WARNING, SUCCESS and ERROR |
-   |        6      | Offline Trigger Management                 | Supported | Supported in Python SDK - Saving/Processing of action triggers during network offline/online mode respectively |
+   |        6      | Offline Trigger Management                 | Supported | Saving/Processing of action triggers during network offline/online mode. Will work only with Python SDK as module feature |
    |        7      | Python SDK as Module                       | Supported | Supported in Python SDK |
 
 # Community
