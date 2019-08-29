@@ -35,8 +35,16 @@ class ConfigurationService:
             aid = input()
         else:
             device_status = DeviceStatus.NEW.value
+        
+        print('Enable Bluetooth (yes/no; default is yes)')
+        bluetooth = input()
+        if bluetooth == 'no':
+            bluetooth_enabled = False
+        else:
+            bluetooth_enabled = True
+
         # Added alternative id as an argument to initializing the configuration
-        self.configuration.initialize(maker_id, device_id, device_status, aid , public_key, private_key)
+        self.configuration.initialize(maker_id, device_id, device_status, bluetooth_enabled, aid, public_key, private_key)
         self.configuration_store.save(self.configuration)
         self.generate_qr_code()
         Logger.success(LOCATION, 'Configuration successfully initialized.')

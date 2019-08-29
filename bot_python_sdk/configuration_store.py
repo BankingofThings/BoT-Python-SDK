@@ -10,6 +10,7 @@ PUBLIC_KEY = 'publicKey'
 PRIVATE_KEY = 'privateKey'
 #Added alternative id for JSON field name
 ALTERNATIVE_ID = 'alternativeId'
+BLUETOOTH_ENABLED = 'bluetoothEnabled'
 
 class ConfigurationStore:
 
@@ -36,7 +37,8 @@ class ConfigurationStore:
             DEVICE_STATUS: configuration.get_device_status(),
             PUBLIC_KEY: configuration.get_public_key(),
             PRIVATE_KEY: configuration.get_private_key(),
-            ALTERNATIVE_ID: configuration.get_alternative_id()
+            ALTERNATIVE_ID: configuration.get_alternative_id(),
+            BLUETOOTH_ENABLED: configuration.is_bluetooth_enabled()
         }
 
     @staticmethod
@@ -46,6 +48,7 @@ class ConfigurationStore:
             dictionary[MAKER_ID],
             dictionary[DEVICE_ID],
             DeviceStatus[dictionary[DEVICE_STATUS]],
+            dictionary[BLUETOOTH_ENABLED],
             dictionary[ALTERNATIVE_ID],
             dictionary[PUBLIC_KEY],
             dictionary[PRIVATE_KEY]
