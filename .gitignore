@@ -12,3 +12,4 @@ venv/
 wheelhouse/
 storage/
 .pytest_cache/
+env/
