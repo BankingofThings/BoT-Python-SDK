@@ -23,4 +23,4 @@ psutil==5.6.2
 future==0.17.1
 psutil==5.6.2
 netifaces==0.10.9
-
+pyinotify==0.9.6

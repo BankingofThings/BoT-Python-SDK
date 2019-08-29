@@ -15,6 +15,7 @@ The main steps are:
 - Pairing the device with your phone
 - Trigger actions on your device
 - Check results in the [Maker Portal > Dashboard](https://maker.bankingofthings.io/)
+- Supported SDK Features
 
 # Installation
 Clone the repository on your device and enter the folder:
@@ -35,6 +36,7 @@ make environment-raspberry
 
 # For Mac OS X
 make environment-osx
+NOTE: Latest SDK (with BLE enabled) may not work on MacOS as the BLE PyBleno library was never verified/Tested on MacOS.
 
 # For Windows
 make environment-windows
@@ -151,6 +153,16 @@ At the moment we do not have high test-coverage. You're free to make a PR to add
 ```bash
 make test
 ```
+## Supported SDK Features
+   | Sl. No        | SDK Feature                                | Status    | Remarks |
+   | :-----------: |:-------------------------------------------| :---------| :-------|
+   |        1      | QR Code Pairing                            | Supported | Supported in Python SDK |
+   |        2      | Bluetooth Low Energy (BLE) Pairing         | Supported | Supported in Python SDK |
+   |        3      | Secure HTTP communication - BoT Service    | Supported | Secure SSL communication with API Dev portal supported in Python SDK |
+   |        4      | Multipairing Mode                          | Supported | Supported in Python SDK |
+   |        5      | Logging                                    | Supported | Supported in Python SDK - INFO, WARNING, SUCCESS and ERROR |
+   |        6      | Offline Trigger Management                 | Supported | Saving/Processing of action triggers during network offline/online mode. Will work only with Python SDK as module feature |
+   |        7      | Python SDK as Module                       | Supported | Supported in Python SDK |
 
 # Community
 

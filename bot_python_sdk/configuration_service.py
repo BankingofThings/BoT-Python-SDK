@@ -19,22 +19,31 @@ class ConfigurationService:
         self.configuration = self.configuration_store.get()
         self.key_generator = KeyGenerator()
 
-    def initialize_configuration(self, maker_id):
+    def initialize_configuration(self, maker_id, sever=1, multipair='no', altId=0):
         Logger.info(LOCATION, 'Initializing configuration...')
         public_key, private_key = KeyGenerator().generate_key()
         device_id = self.key_generator.generate_uuid()
         #initialize the alternative id.
         aid = 0
-        # Option for Multi pairing
-        # If the option is yes, then alternative id needed
-        print('Enable Multi pair(yes/no)')
-        status = input()
+        #If its running as server
+        if (sever == 1):
+          # Option for Multi pairing
+          # If the option is yes, then alternative id needed
+          print('Enable Multi pair(yes/no)')
+          status = input()
+        else:
+          status = multipair
+
         if(status == 'yes'):
             device_status = DeviceStatus.MULTIPAIR.value
-            print('Enter your alternativeID:')
-            aid = input()
+            if (sever == 1):
+              print('Enter your alternativeID:')
+              aid = input()
+            else:
+              aid = altId
         else:
             device_status = DeviceStatus.NEW.value
+
         # Added alternative id as an argument to initializing the configuration
         self.configuration.initialize(maker_id, device_id, device_status, aid , public_key, private_key)
         self.configuration_store.save(self.configuration)
@@ -43,7 +52,11 @@ class ConfigurationService:
 
     def resume_configuration(self):
         device_status = self.configuration.get_device_status()
-        Logger.info(LOCATION, 'DeviceStatus = ' + device_status.value)
+        try:
+           Logger.info(LOCATION, 'DeviceStatus = ' + device_status.value)
+        except:
+           Logger.info(LOCATION, 'DeviceStatus = ' + device_status)
+
         if device_status == DeviceStatus.NEW:
             self.pair()
         if device_status == DeviceStatus.PAIRED:

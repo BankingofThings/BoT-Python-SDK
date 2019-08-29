@@ -24,5 +24,5 @@ def test_create_trigger_body(generate_uuid, get_device_id):
             VALUE: value
 		}
 
-	assert as_obj.create_trigger_body(action_id, value, alt_id) == trigger_body
+	assert as_obj.create_trigger_body(action_id, value, alt_id, uuid) == trigger_body
 
