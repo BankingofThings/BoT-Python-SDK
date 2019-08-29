@@ -81,11 +81,11 @@ class ActionService:
             QUEUE_ID: self.key_generator.generate_uuid()
         }
         if alternative_id is not None:
-            data[ALTERNATIVE_ID] = str(alternative_id)   
+            data[ALTERNATIVE_ID] = alternative_id
         if value is not None:
-            data[VALUE] = str(value)
+            data[VALUE] = value
         if queue_id is not None:
-            data[QUEUE_ID] = str(queue_id)
+            data[QUEUE_ID] = queue_id
         return data
 
     @staticmethod
