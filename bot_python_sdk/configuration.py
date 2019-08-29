@@ -11,14 +11,16 @@ class Configuration:
         self.private_key = ''
         self.initialized = False
         self.aid=''
+        self.bluetooth_enabled=True
 
     def is_initialized(self):
         return self.initialized
     
-    def initialize(self, maker_id, device_id, device_status, aid, public_key, private_key):
+    def initialize(self, maker_id, device_id, device_status, bluetooth_enabled, aid, public_key, private_key):
         self.maker_id = maker_id
         self.device_id = device_id
         self.device_status = device_status
+        self.bluetooth_enabled = bluetooth_enabled
         self.aid = aid
         self.public_key = public_key
         self.private_key = private_key
@@ -49,6 +51,9 @@ class Configuration:
 
     def get_private_key(self):
         return self.private_key
+
+    def is_bluetooth_enabled(self):
+        return self.bluetooth_enabled
 
     def get_device_information(self):
         data = {

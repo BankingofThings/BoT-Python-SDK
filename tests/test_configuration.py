@@ -9,6 +9,7 @@ def resource():
 	m.maker_id = 'maker id'
 	m.device_id = 'device id'
 	m.device_status = DeviceStatus.MULTIPAIR.value
+	m.bluetooth_enabled = True
 	m.aid = 'aid'
 	m.public_key = ''
 	m.private_key = ''
@@ -22,14 +23,14 @@ def test_configuration():
 def test_configuration_initialize(resource):
 	
 	configuration = Configuration()
-	configuration.initialize(resource.maker_id, resource.device_id, resource.device_status,
+	configuration.initialize(resource.maker_id, resource.device_id, resource.device_status, resource.bluetooth_enabled,
 					 resource.aid, resource.public_key, resource.private_key)
 	assert configuration.is_initialized() == True
 
 def test_get_headers(resource):
 	
 	configuration = Configuration()
-	configuration.initialize(resource.maker_id, resource.device_id, resource.device_status,
+	configuration.initialize(resource.maker_id, resource.device_id, resource.device_status, resource.bluetooth_enabled,
 					 resource.aid, resource.public_key, resource.private_key)
 
 	header = {
@@ -43,7 +44,7 @@ def test_get_headers(resource):
 def test_get_device_information(resource):
 
 	configuration = Configuration()
-	configuration.initialize(resource.maker_id, resource.device_id, resource.device_status,
+	configuration.initialize(resource.maker_id, resource.device_id, resource.device_status, resource.bluetooth_enabled,
 					 resource.aid, resource.public_key, resource.private_key)
 
 	device_info = {

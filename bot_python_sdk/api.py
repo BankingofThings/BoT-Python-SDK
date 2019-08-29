@@ -7,8 +7,6 @@ from bot_python_sdk.configuration_store import ConfigurationStore
 from bot_python_sdk.device_status import DeviceStatus
 from bot_python_sdk.logger import Logger
 
-from bot_python_sdk.bluetooth_service import BluetoothService
-
 LOCATION = 'Controller'
 INCOMING_REQUEST = 'Incoming request: '
 
@@ -98,6 +96,9 @@ api.add_route(ACTIVATION_ENDPOINT, ActivationResource())
 
 ConfigurationService().resume_configuration()
 
-#Initialize the Bluetooth service class to process
-#handle BLE specific envents and callbacks
-BluetoothService().initialize()
+if ConfigurationService().configuration.is_bluetooth_enabled():
+    from bot_python_sdk.bluetooth_service import BluetoothService
+
+    #Initialize the Bluetooth service class to process
+    #handle BLE specific envents and callbacks
+    BluetoothService().initialize()
