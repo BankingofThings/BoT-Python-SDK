@@ -18,4 +18,7 @@ if not store.has_configuration():
 if os.name == 'nt':
     subprocess.run(['waitress-serve', '--port=3001', 'bot_python_sdk.api:api'])
 else:
-    subprocess.run(['gunicorn', '-b', '127.0.0.1:3001', 'bot_python_sdk.api:api'])
+    cmd = subprocess.Popen(['hostname', '-I'], stdout=subprocess.PIPE)
+    IPAddr = cmd.communicate()[0].decode('ascii').split(' ')[0] 
+    print("Detected IP Address :" + IPAddr)
+    subprocess.run(['gunicorn', '-b', IPAddr+':3001', 'bot_python_sdk.api:api'])
