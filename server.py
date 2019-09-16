@@ -18,10 +18,7 @@ def isValid(ip):
                 25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(
                 25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)'''
 
-    if(re.search(regex, ip)):
-        return True
-    else:
-        return False
+    return re.search(regex, ip)
 
 
 if not store.has_configuration():
@@ -35,11 +32,11 @@ if os.name == 'nt':
     subprocess.run(['waitress-serve', '--port=3001', 'bot_python_sdk.api:api'])
 else:
     cmd = subprocess.Popen(['hostname', '-I'], stdout=subprocess.PIPE)
-    IPAddr = cmd.communicate()[0].decode('ascii').split(' ')[0]
-    if isValid(IPAddr):
-        Logger.info(LOCATION, "Detected IP Address :" +IPAddr)
+    ip = cmd.communicate()[0].decode('ascii').split(' ')[0]
+    if isValid(ip):
+        Logger.info(LOCATION, "Detected IP Address :" +ip)
     else:
         Logger.info(LOCATION, "Failed in detecting valid IP Address, using loop back address: 127.0.0.1")
-        IPAddr='127.0.0.1'
-    Logger.info(LOCATION, "Starting Webserver at URL: http://"+IPAddr+':3001/')
-    subprocess.run(['gunicorn', '-b', IPAddr+':3001', 'bot_python_sdk.api:api'])
+        ip='127.0.0.1'
+    Logger.info(LOCATION, "Starting Webserver at URL: http://"+ip+':3001/')
+    subprocess.run(['gunicorn', '-b', ip+':3001', 'bot_python_sdk.api:api'])
