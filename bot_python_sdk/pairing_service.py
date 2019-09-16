@@ -46,7 +46,6 @@ class PairingService:
             response = self.bot_service.get(RESOURCE)
             Logger.info(LOCATION, 'Pairing Response: ' + str(response))
         except:
-            Logger.info(LOCATION, 'Pairing Response: ' + str(response))
             Logger.error(LOCATION, 'Failed pairing attempt.')
             return False
         if response['status'] is True:
