@@ -1,9 +1,12 @@
 import falcon
 import subprocess
 import json
+import os
+import platform
 from bot_python_sdk.action_service import ActionService
 from bot_python_sdk.configuration_service import ConfigurationService
 from bot_python_sdk.configuration_store import ConfigurationStore
+from bot_python_sdk.pairing_service import PairingService
 from bot_python_sdk.device_status import DeviceStatus
 from bot_python_sdk.logger import Logger
 
@@ -23,7 +26,9 @@ METHOD_POST = 'POST'
 ACTIONS_ENDPOINT = '/actions'
 PAIRING_ENDPOINT = '/pairing'
 ACTIVATION_ENDPOINT = '/activation'
+QRCODE_ENDPOINT = '/qrcode'
 
+QRCODE_IMG_PATH = 'storage/qr.png'
 
 class ActionsResource:
     def __init__(self):
@@ -84,21 +89,55 @@ class PairingResource:
 class ActivationResource:
     def __init__(self):
         self.configuration_service = ConfigurationService()
+        self.configuration_store = ConfigurationStore()
 
-    def on_get(self):
-        self.configuration_service.resume_configuration()
-        
-        
+    def on_get(self, request, response):
+        Logger.info(LOCATION, "Serving Activation Request...")
+        configuration = self.configuration_store.get()
+        if configuration.get_device_status() is DeviceStatus.ACTIVE:
+            response.media = {'message': 'Device is already Active'}
+        else:
+            self.configuration_service.resume_configuration()
+
+
+class QRCodeResource(object):
+    def __init__(self):
+        pass
+
+    def on_get(self, request, response):
+        Logger.info(LOCATION, "Serving QRCode Request...")
+        stream = open(QRCODE_IMG_PATH, 'rb')
+        content_length = os.path.getsize(QRCODE_IMG_PATH)
+        response.content_type = "image/png"
+        response.stream, response.content_length = stream, content_length
+
+def check_and_resume_configuration():
+    configuration = ConfigurationStore().get();
+    device_status = configuration.get_device_status()
+    systemPlatform = platform.system()
+    Logger.info(LOCATION, "Detected Platform System: "+systemPlatform)
+    if device_status is DeviceStatus.ACTIVE:
+        Logger.info(LOCATION,"Device is already active, no need to further configure")
+        Logger.info(LOCATION,"Server is waiting for requests to serve...")
+    elif device_status is DeviceStatus.PAIRED:
+        Logger.info(LOCATION, "Device state is PAIRED, resuming the configuration")
+        ConfigurationService().resume_configuration()
+    elif device_status is DeviceStatus.MULTIPAIR and PairingService().pair():
+        Logger.info(LOCATION, "Device is paired as MULTIPAIR, Server is waiting for requests to serve...")
+    else:
+        Logger.info(LOCATION, "Pair the device either using QRCode or Bluetooth Service through FINN Mobile App")
+        if systemPlatform != 'Darwin' and configuration.is_bluetooth_enabled():
+            from bot_python_sdk.bluetooth_service import BluetoothService
+            #Handle BLE specific events and callbacks
+            BluetoothService().initialize()
+            ConfigurationService().resume_configuration()
+
+#Start Webserver and add supported endpoint resources
 api = application = falcon.API()
 api.add_route(ACTIONS_ENDPOINT, ActionsResource())
 api.add_route(PAIRING_ENDPOINT, PairingResource())
 api.add_route(ACTIVATION_ENDPOINT, ActivationResource())
+api.add_route(QRCODE_ENDPOINT, QRCodeResource())
 
-ConfigurationService().resume_configuration()
-
-if ConfigurationService().configuration.is_bluetooth_enabled():
-    from bot_python_sdk.bluetooth_service import BluetoothService
-
-    #Initialize the Bluetooth service class to process
-    #handle BLE specific envents and callbacks
-    BluetoothService().initialize()
+#Check and Configure the device
+check_and_resume_configuration()
