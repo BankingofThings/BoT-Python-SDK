@@ -159,10 +159,10 @@ Slack is our main feedback channel for the SDK and documentation. Join our [Slac
 
 ## Meetups
 We also organize meetups, e.g. demo or hands-on workshops. Keep an eye on our meetup group for any events coming up soon. Here you will be able to see the FINN software in action and meet the team.<br/>
-[Meetup/Amsterdam-ING-Banking-of-Things](meetup.com/Amsterdam-ING-Banking-of-Things/).
+[Meetup/Amsterdam-ING-Banking-of-Things](https://meetup.com/Amsterdam-ING-Banking-of-Things/).
  
 # About FINN
 After winning the ING Innovation Bootcamp in 2017, FINN is now part of the ING Accelerator Program. Our aim is to become the new Internet of Things (IoT) payment standard that enables service-led business models. FINN offers safe, autonomous transactions for smart devices.
 We believe our software offers tremendous business opportunities. However, at heart, we are enthusiasts. Every member of our team has a passion for innovation. That’s why we love working on FINN.
-[makethingsfinn.com](makethingsfinn.com)
+[makethingsfinn.com](https://www.makethingsfinn.com)
  
