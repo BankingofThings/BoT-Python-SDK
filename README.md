@@ -64,10 +64,11 @@ make test
 
 # Configuration
 Sign in to the [Maker Portal](https://maker.bankingofthings.io/) and get the makerID from your account.
-On your first run, replace YOUR_MAKER_ID with the makerID from your Maker portal, section Account, and run:
+On your first run, replace YOUR_ID with the productID or the makerID from your Maker portal, and run:
 ```bash
-make server makerID=YOUR_MAKER_ID
+make server makerID=YOUR_ID
 ```
+Note: You can also use a productID from your product page in the Maker portal, like this: `makerID=PRODUCT_ID`
 
 # Running the server
 To run the server normally after you've configured it, simply run in your venv:
