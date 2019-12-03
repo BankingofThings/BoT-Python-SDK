@@ -39,8 +39,8 @@ class DeviceNetworkCharacteristic(Characteristic):
                 if not iface.startswith('lo'):    
                     try:
                         # Filter only ipv4 address
-                        ipv4Address = addrs[netifaces.AF_INET]
-                        for ipv4 in ipv4Address:
+                        ipv4_address_list = addrs[netifaces.AF_INET]
+                        for ipv4 in ipv4_address_list:
                             address = ipv4['addr']
                             interface_name = iface        
                     except Exception as exception:

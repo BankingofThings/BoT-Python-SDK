@@ -1,5 +1,5 @@
 from bot_python_sdk.device_status import DeviceStatus
-import json
+
 
 class Configuration:
 
@@ -10,12 +10,12 @@ class Configuration:
         self.public_key = ''
         self.private_key = ''
         self.initialized = False
-        self.aid=''
-        self.bluetooth_enabled=True
+        self.aid = ''
+        self.bluetooth_enabled = True
 
     def is_initialized(self):
         return self.initialized
-    
+
     def initialize(self, maker_id, device_id, device_status, bluetooth_enabled, aid, public_key, private_key):
         self.maker_id = maker_id
         self.device_id = device_id
@@ -25,7 +25,7 @@ class Configuration:
         self.public_key = public_key
         self.private_key = private_key
         self.initialized = True
-    
+
     # Get the alternative ID
     def get_alternative_id(self):
         return self.aid
@@ -60,9 +60,9 @@ class Configuration:
             'deviceID': self.device_id,
             'makerID': self.maker_id,
             'publicKey': self.get_stripped_public_key()
-		}
-        #Check if its multipairing mode and initialize the necessary data stuctures
-        if(self.device_status == DeviceStatus.MULTIPAIR.value or self.device_status == DeviceStatus.MULTIPAIR):
+        }
+        # Check if its multipairing mode and initialize the necessary data stuctures
+        if self.device_status == DeviceStatus.MULTIPAIR.value or self.device_status == DeviceStatus.MULTIPAIR:
             data['multipair'] = 1
             data['aid'] = self.aid
         return data
