@@ -32,6 +32,7 @@ class ActivationService:
             self.bot_service.post(RESOURCE, {DEVICE_ID: self.device_id})
             Logger.success(LOCATION, 'Device successfully activated. Triggering actions enabled.')
             return True
+        # TODO : Make exception more specific
         except:
             Logger.error(LOCATION, 'Failed to activate device.')
             return False

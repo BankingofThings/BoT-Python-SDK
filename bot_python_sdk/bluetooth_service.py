@@ -5,9 +5,9 @@ from bot_python_sdk.logger import Logger
 from bot_python_sdk.bleno.bleno_service import BlenoService
 
 LOCATION = 'Bluetooth Service'
-#bleno service object
+# bleno service object
 blenoService = BlenoService()
-#bleno object creation
+# bleno object creation
 bleno = Bleno()
 
 '''
@@ -15,47 +15,51 @@ Bluetooth service class responsible for start/stop advertising, handling
 state chanegs, initialize the pybleno, register the necessay callbacks
 with pybleno to process the events from BLE stack.
 '''
+
+
 class BluetoothService:
-    
-    #register event handlers with pybleno and start the bleno service
+
+    # register event handlers with pybleno and start the bleno service
     def initialize(self):
-        bleno.on('stateChange',self.onStateChange)
-        bleno.on('advertisingStart', self.onAdvertisingStart)        
+        bleno.on('stateChange', self.on_state_change)
+        bleno.on('advertisingStart', self.on_advertising_start)
         bleno.start()
 
-    #start advertising depending on ble state (powered on/off)
-    def startAdvertising(self):
-        if (bleno.state == 'poweredOn'):            
+    # start advertising depending on ble state (powered on/off)
+    def start_advertising(self):
+        if (bleno.state == 'poweredOn'):
             bleno.startAdvertising(socket.gethostname(), [blenoService.uuid])
 
-    #stop advertising
-    def stopAdvertising(self):
+    # stop advertising
+    def stop_advertising(self):
         bleno.stopAdvertising()
         if platform.system() == 'darwin':
             bleno.disconnect()
 
-    #handle state change events from BLE stack
-    def onStateChange(self,state):
+    # handle state change events from BLE stack
+    def on_state_change(self, state):
         if state == 'poweredOn':
             Logger.info(LOCATION, 'Bluetooth powered on. Starting advertising...')
-            BluetoothService.startAdvertising(self)
+            BluetoothService.start_advertising(self)
         else:
             Logger.info(LOCATION, 'Bluetooth is powered off. Stopping advertising...')
-            BluetoothService.stopAdvertising(self)
-    
+            BluetoothService.stop_advertising(self)
+
     '''
     handle advertising start notification from the BLE stack. On successful advertisement 
     set the custom bleno service and register the event handler.
     '''
-    def onAdvertisingStart(self,error):
+
+    def on_advertising_start(self, error):
         if error:
-            Logger.error(LOCATION,'Failed to start advertising.')
+            Logger.error(LOCATION, 'Failed to start advertising.')
         else:
             Logger.info(LOCATION, 'Successfully started advertising.')
-        if not error:            
-            def on_setServiceError(error):
-                if error:
-                    Logger.error(LOCATION, 'setServices: ' , error)
-                else:
-                    Logger.info(LOCATION, 'Successfully set services.')                
-            bleno.setServices([blenoService], on_setServiceError)
+        if not error:
+            bleno.setServices([blenoService], self.on_set_services)
+
+    def on_set_services(self, error):
+        if error:
+            Logger.error(LOCATION, 'setServices: ' + error)
+        else:
+            Logger.info(LOCATION, 'Successfully set services.')

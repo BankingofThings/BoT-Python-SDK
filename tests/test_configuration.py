@@ -3,57 +3,65 @@ from bot_python_sdk.device_status import DeviceStatus
 from unittest import mock
 import pytest
 
+
 @pytest.fixture()
 def resource():
-	m = mock.Mock()
-	m.maker_id = 'maker id'
-	m.device_id = 'device id'
-	m.device_status = DeviceStatus.MULTIPAIR.value
-	m.bluetooth_enabled = True
-	m.aid = 'aid'
-	m.public_key = ''
-	m.private_key = ''
-	return m
-    
+    resource = mock.Mock()
+    resource.maker_id = 'maker id'
+    resource.device_id = 'device id'
+    resource.device_status = DeviceStatus.MULTIPAIR.value
+    resource.bluetooth_enabled = True
+    resource.aid = 'aid'
+    resource.public_key = ''
+    resource.private_key = ''
+    return resource
+
+
 def test_configuration():
-	configuration = Configuration()
-	assert configuration.is_initialized() == False
-	
+    configuration = Configuration()
+    assert not configuration.is_initialized()
+
 
 def test_configuration_initialize(resource):
-	
-	configuration = Configuration()
-	configuration.initialize(resource.maker_id, resource.device_id, resource.device_status, resource.bluetooth_enabled,
-					 resource.aid, resource.public_key, resource.private_key)
-	assert configuration.is_initialized() == True
+    configuration = _initialize(resource)
+    assert configuration.is_initialized()
+
 
 def test_get_headers(resource):
-	
-	configuration = Configuration()
-	configuration.initialize(resource.maker_id, resource.device_id, resource.device_status, resource.bluetooth_enabled,
-					 resource.aid, resource.public_key, resource.private_key)
+    configuration = _initialize(resource)
 
-	header = {
-		'Content-Type': 'application/json',
+    header = {
+        'Content-Type': 'application/json',
         'makerID': resource.maker_id,
         'deviceID': resource.device_id
-	}
+    }
 
-	assert configuration.get_headers() == header
+    assert configuration.get_headers() == header
+
 
 def test_get_device_information(resource):
+    configuration = _initialize(resource)
 
-	configuration = Configuration()
-	configuration.initialize(resource.maker_id, resource.device_id, resource.device_status, resource.bluetooth_enabled,
-					 resource.aid, resource.public_key, resource.private_key)
+    device_info = {
+        'deviceID': resource.device_id,
+        'makerID': resource.maker_id,
+        'publicKey': resource.public_key,
+        'multipair': 1,
+        'aid': resource.aid
+    }
 
-	device_info = {
-            'deviceID': resource.device_id,
-            'makerID': resource.maker_id,
-            'publicKey': resource.public_key,
-			'multipair': 1,
-            'aid': resource.aid
-		}
+    assert configuration.get_device_information() == device_info
 
-	assert configuration.get_device_information() == device_info
 
+def _initialize(resource):
+    configuration = Configuration()
+    configuration.initialize(
+        resource.maker_id,
+        resource.device_id,
+        resource.device_status,
+        resource.bluetooth_enabled,
+        resource.aid,
+        resource.public_key,
+        resource.private_key
+    )
+    return configuration

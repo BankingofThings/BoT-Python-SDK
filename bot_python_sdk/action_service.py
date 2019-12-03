@@ -10,13 +10,13 @@ from bot_python_sdk.store import Store
 
 LOCATION = 'Action Service'
 ACTIONS_ENDPOINT = 'actions'
-
 ACTION_ID = 'actionID'
 DEVICE_ID = 'deviceID'
 QUEUE_ID = 'queueID'
 FREQUENCY = 'frequency'
 VALUE = 'value'
 ALTERNATIVE_ID = 'alternativeID'
+
 
 class ActionService:
 
@@ -44,12 +44,13 @@ class ActionService:
         action = self._get_action(action_id)
         self._validate_frequency(action)
         Logger.success(LOCATION, 'Action valid')
-        data = self.create_trigger_body(action_id, value, alternative_id)
+        data = self._create_trigger_body(action_id, value, alternative_id)
         try:
             self.bot_service.post(ACTIONS_ENDPOINT, data)
             Logger.success(LOCATION, 'Successfully triggered action: ' + action_id)
             self.store.set_last_triggered(action_id, time.time())
             return True
+        # TODO : Make exception more specific
         except:
             Logger.error(LOCATION, 'Unable to trigger action: ' + action_id)
             return False
@@ -74,14 +75,14 @@ class ActionService:
         Logger.error(LOCATION, 'Action not found')
         raise falcon.HTTPBadRequest(description='Action not found')
 
-    def create_trigger_body(self, action_id, value, alternative_id):
+    def _create_trigger_body(self, action_id, value, alternative_id):
         data = {
             ACTION_ID: action_id,
             DEVICE_ID: self.configuration.get_device_id(),
             QUEUE_ID: self.key_generator.generate_uuid()
         }
         if alternative_id is not None:
-            data[ALTERNATIVE_ID] = str(alternative_id)   
+            data[ALTERNATIVE_ID] = str(alternative_id)
         if value is not None:
             data[VALUE] = str(value)
         return data

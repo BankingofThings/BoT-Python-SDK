@@ -74,6 +74,7 @@ class BoTService:
     def _decode(token):
         try:
             data = jwt.decode(token, Store.get_bot_public_key(), algorithms=['RS256'])
+        # TODO : Make exception more specific
         except:
             Logger.error(LOCATION, 'Could not decode message from BoT.')
             raise falcon.HTTPInternalServerError

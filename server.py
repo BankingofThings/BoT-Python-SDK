@@ -11,8 +11,9 @@ configuration_service = ConfigurationService()
 store = Store()
 LOCATION = 'Server'
 
-#Function to validate the given IP Address
-def isValid(ip):
+
+# Function to validate the given IP Address
+def is_valid(ip):
     regex = '''^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(
                 25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(
                 25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(
@@ -33,10 +34,10 @@ if os.name == 'nt':
 else:
     cmd = subprocess.Popen(['hostname', '-I'], stdout=subprocess.PIPE)
     ip = cmd.communicate()[0].decode('ascii').split(' ')[0]
-    if isValid(ip):
-        Logger.info(LOCATION, "Detected IP Address :" +ip)
+    if is_valid(ip):
+        Logger.info(LOCATION, "Detected IP Address :" + ip)
     else:
         Logger.info(LOCATION, "Failed in detecting valid IP Address, using loop back address: 127.0.0.1")
-        ip='127.0.0.1'
-    Logger.info(LOCATION, "Starting Webserver at URL: http://"+ip+':3001/')
-    subprocess.run(['gunicorn', '-b', ip+':3001', 'bot_python_sdk.api:api'])
+        ip = '127.0.0.1'
+    Logger.info(LOCATION, "Starting Webserver at URL: http://" + ip + ':3001/')
+    subprocess.run(['gunicorn', '-b', ip + ':3001', 'bot_python_sdk.api:api'])
