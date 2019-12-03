@@ -4,7 +4,6 @@ from bot_python_sdk.bot_service import BoTService
 from bot_python_sdk.device_status import DeviceStatus
 from bot_python_sdk.configuration_store import ConfigurationStore
 from bot_python_sdk.logger import Logger
-import json
 
 LOCATION = 'Pairing Service'
 RESOURCE = 'pair'
@@ -22,9 +21,9 @@ class PairingService:
         self.bot_service = BoTService()
 
     def run(self):
-        if not self.isPairable:
+        if not self.can_pair:
             return
-        if(self.device_status ==  DeviceStatus.MULTIPAIR):
+        if self.device_status == DeviceStatus.MULTIPAIR:
             Logger.info(LOCATION, 'Multipair mode, no need to poll or delete keys...')
             return
         Logger.info(LOCATION, 'Starting to pair device...')
@@ -35,16 +34,14 @@ class PairingService:
             time.sleep(POLLING_INTERVAL_IN_SECONDS)
         return False
 
-    #check if the device is in right state to pair
-    def isPairable(self):
-        if(self.device_status ==  DeviceStatus.MULTIPAIR):
-            return True
-        return self.device_status == DeviceStatus.NEW
+    def can_pair(self):
+        return self.device_status == DeviceStatus.MULTIPAIR or self.device_status == DeviceStatus.NEW
 
     def pair(self):
         try:
             response = self.bot_service.get(RESOURCE)
             Logger.info(LOCATION, 'Pairing Response: ' + str(response))
+        # TODO : Make exception more specific
         except:
             Logger.error(LOCATION, 'Failed pairing attempt.')
             return False

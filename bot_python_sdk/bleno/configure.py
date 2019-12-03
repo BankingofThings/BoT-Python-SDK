@@ -31,7 +31,7 @@ class ConfigureCharacteristic(Characteristic):
     onWriteRequest is called when a client wants to configure/update the Wifi Settings.
     Once the configuration is done, the device is reboot automatically
     '''
-    def onWriteRequest(self, data, offset, withoutResponse, callback):
+    def onWriteRequest(self, data, offset, without_response, callback):
         if offset:
             callback(Characteristic.RESULT_ATTR_NOT_LONG)
         else:
@@ -44,21 +44,21 @@ class ConfigureCharacteristic(Characteristic):
             #decode the byte sequence sent from the client and prepare a JSON structure
             details = json.loads(data.decode())
             #skip wifi configuration
-            skipWifiConfig = False;
+            skip_wifi_config = False;
             try:
-                skipWifiConfig = details['Skip']
+                skip_wifi_config = details['Skip']
             except:
                 Logger.info(LOCATION, 'Wifi Configuration is available ..' )           
             #wifi configuration is enabled from the client
-            if  skipWifiConfig == True:
+            if  skip_wifi_config == True:
                 Logger.info(LOCATION, 'Connected device skipped Wifi setup. ' +
                 'Initializing pairing process...')
                 PairingService().run()
             else:
-                wifiDetails = ''
+                wifi_details = ''
                 #if valid SSID provided then create the wpa supplicant configuration.
                 if details['SSID'] != '':
-                    wifiDetails = 'ctrl_interface=DIR=/var/run/wpa_supplicant' + \
+                    wifi_details = 'ctrl_interface=DIR=/var/run/wpa_supplicant' + \
                                   ' GROUP=netdev\r\n update_config=1\r\n country=GB \r\n'+ \
                                   'network={ \r\n        ssid="' + details['SSID'] + \
                                   '" \r\n' + \
@@ -68,7 +68,7 @@ class ConfigureCharacteristic(Characteristic):
                 Logger.info(LOCATION, 'Wifi setup complete. Initializing pairing process...')
                 PairingService().run()
                 time.sleep(3)
-                subprocess.run(['sudo echo \'' + wifiDetails + '\' > ./wpa_supplicant.conf'],shell=True)
+                subprocess.run(['sudo echo \'' + wifi_details + '\' > ./wpa_supplicant.conf'],shell=True)
                 subprocess.run(["sudo", "cp", "./wpa_supplicant.conf", "/etc/wpa_supplicant/"])
                 Logger.info(LOCATION, 'Wifi configuration done! Device reboot in progress')
                 # run the necessary command to update the wpa supplicant file with in /etc/

@@ -37,7 +37,7 @@ class DeviceInfoCharacteristic(Characteristic):
             Logger.info(LOCATION, 'Device Info being read by connected device.')
             total_memory = virtual_memory()
             endian = sys.byteorder           
-            sysData = {
+            system_data = {
                 'platform':platform.system(),
                 'release':platform.release(),
                 'type': platform.uname().system,
@@ -48,9 +48,9 @@ class DeviceInfoCharacteristic(Characteristic):
             }
             # Mapping endian value to match with node sdk
             if endian == 'little':
-                sysData['endianness'] = 'LE'
+                system_data['endianness'] = 'LE'
             else:
-                sysData['endianness'] = 'BE'
-            self.deviceInfoData.extend(map(ord, json.dumps(sysData)))
+                system_data['endianness'] = 'BE'
+            self.deviceInfoData.extend(map(ord, json.dumps(system_data)))
         #Return the necessary data through the call back
         callback(Characteristic.RESULT_SUCCESS, self.deviceInfoData[offset:])
