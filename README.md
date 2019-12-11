@@ -117,6 +117,8 @@ After this you can restart the server again with:
 ```bash
 make server
 ```
+# Reset Configuration
+To reset the device configuration, run the command `make reset` from the BoT-Python-SDK directory. This makes device as new device.
 
 # Troubleshooting
 If you've paired your device with the QR code that was generated in the root (`qr.png`), it might not have been paired 
