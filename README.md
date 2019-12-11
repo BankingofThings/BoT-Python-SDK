@@ -12,10 +12,19 @@ The main steps are:
 - Setting up your device (e.g. a Raspberry Pi)
 - Installing the SDK
 - Defining Actions on the [Maker Portal](https://maker.bankingofthings.io/)
-- Pairing the device with your phone
+- Pairing the device with the [Finn Mobile Application](https://docs.bankingofthings.io/mobile-app)
 - Trigger actions on your device
 - Check results in the [Maker Portal > Dashboard](https://maker.bankingofthings.io/)
 
+# Supported Features
+   | Sl. No        | SDK Feature                                | Status      | Remarks |
+   | :-----------: |:-------------------------------------------| :-----------| :-------|
+   |        1      | Pairing through Bluetooth Low Energy (BLE) | :thumbsup: | Supported with Android Mobile Application |
+   |        2      | Pairing through QR Code                    | :thumbsup: | Supported only in Webserver mode using end point /qrcode to get generated QRCode for device to be paired for both iOS and Android Mobile Applications|
+   |        3      | Secured HTTP with BoT Service              | :thumbsup: | Supported for all interactions with backend server |
+   |        4      | Logging                                    | :thumbsup: | Console Logging is implemented|
+   |        5      | Offline Actions                            | :thumbsdown: | Helps to persist the autonomous payments on the device when there is no internet connectivity available. The saved offline actions get completed when the next action trigger happens and internet connectivity is available. This feature is in plan for implementation.|
+   
 # Installation
 Clone the repository on your device and enter the folder:
 ```bash
@@ -68,6 +77,8 @@ On your first run, replace YOUR_ID with the productID or the makerID from your M
 ```bash
 make server makerID=YOUR_ID
 ```
+Webserver supports endpoint `/qrcode` to retrieve the generated Qrcode for the device to pair with the [Finn Mobile Application](https://docs.bankingofthings.io/mobile-app). Make a note of webserver's base url displayed in the above command's output and append `/qrcode`. The Webserver can be accessed remotely from any system connected to same network as that of the device.
+
 Note: You can also use a productID from your product page in the Maker portal, like this: `makerID=PRODUCT_ID`
 
 # Running the server
@@ -75,10 +86,16 @@ To run the server normally after you've configured it, simply run in your venv:
 ```bash
 make server
 ```
-## Pairing and activating action(s)
-Pair your device and activate an action using the companion app with the QR code that was generated in the BoT-Python-SDK/storage/qr.png.
+The Webserver supports below end points to be consumed by remote clients:
+- /qrcode : To retrieve qrcode for device pairing with the [Finn Mobile Application](https://docs.bankingofthings.io/mobile-app)
+- /actions : To retrieve and post autonomous payments to the BoT Service
+- /pairing : To pair the device if it's not get paired within the max interval of pairing time
+- /activate : To enable the devicve for autonomous payments post pairing the device
 
-Display the QR in terminal itself 
+## Pairing and activating action(s)
+Pair your device and activate an action using the companion app either using the BLE Service (Supported only for Android Application) or using the QR code that was generated for the device by accessing the webserver's end point `/qrcode`.
+
+The device QRCode can also be viewed locally on the device by running the `showqr.py` script as shown below:
 
 ```bash
 export LC_ALL=en_US.UTF-8
