@@ -117,51 +117,60 @@ After this you can restart the server again with:
 ```bash
 make server
 ```
-# Reset Configuration
-To reset the device configuration, run the command `make reset` from the BoT-Python-SDK directory. This makes device as new device.
-
 # Troubleshooting
 If you've paired your device with the QR code that was generated in the root (`qr.png`), it might not have been paired 
 and/or activated. There are a couple of solutions to fix this. 
 
+* Hit the Webserver endpoint `/pairing` to pair and activate the device for autonomous payments
 * You can stop and start your server. Simply `CTRL C` to stop and `make server` to start again.
 * You can manually call either `make configuration`, `make pair` or `make activate` in your venv to start the specific process. 
  
-This will start polling the API 3 times every 5 seconds to pair or activate the device. 
+This will start polling the API 10 times every 10 seconds to pair or activate the device. 
 
 It will only work if you've successfully paired your device with your phone, using the `/pairing` endpoint, 
 or the generated QR code `qr.png`. 
 
+# Reset Configuration
+To reset the device configuration, run the command `make reset` from the BoT-Python-SDK directory. This makes device as new device.
 
 # Using the SDK
 The following commands can be run outside of your virtual environment.
 
-## Pairing your device
+## Pairing and Activating the device
 To get the device information you need to pair the device (usually done with the BoT Companion App)
-```bash
-curl localhost:3001/pairing
-```
+* From the terminal of the local device:  Run `curl localhost:3001/pairing`
+* From the remote system connected to same network as that of the device:
+  - Use one of the ReST Client programs OR browsers to hit the `/pairing` end point using the IP Address of the device.  
+     - Suppose the IP address of device reported while starting the server is `192.168.2.21`, we can use the URL as `http://192.168.2.21:3001/pairing`
 
 ## Retrieving actions
-To get a list of the actions from the maker that are published & enabled for this specific device:
-```bash
-curl localhost:3001/actions
-```
+* From the terminal of the local device:  Run `curl localhost:3001/actions`
+* From the remote system connected to same network as that of the device:
+  - Use one of the ReST Client programs OR browsers to hit the `/actions` end point using the IP Address of the device.  
+     - Suppose the IP address of device reported while starting the server is `192.168.2.21`, we can use the URL as `http://192.168.2.21:3001/actions`
 
 ## Triggering actions
 To create actions you need to go to the [Maker Portal](https://maker.bankingofthings.io/). 
 Follow the steps on the screen to create the action. You will get an actionID at the end.
 
-To trigger an action (e.g. send a push notification):
+* To trigger an action (e.g. send a push notification) from terminal of local device:
 ```bash
 curl -d '{"actionID":"YOUR_ACTION_ID"}' -H "Content-Type: application/json" -X POST http://localhost:3001/actions
 ```
-
-###
-If you get an error in which your device is not paired or activated, you can call the following endpoint to continue this process:
+* To trigger an action (e.g. send a push notification) from terminal of remote system connected to same network as that of the device:
+  - Suppose the IP address of device reported while starting the server is `192.168.2.21`, we can use the URL as `http://192.168.2.21:3001/actions`
+  
 ```bash
-curl localhost:3001/activation
+curl -d '{"actionID":"YOUR_ACTION_ID"}' -H "Content-Type: application/json" -X POST http://192.168.2.21:3001/actions
 ```
+
+## Activating the device
+If you get an error in which your device is not paired or activated, we need to activate the device for autonomous payments using the end point `/activate`:
+
+* From the terminal of the local device:  Run `curl localhost:3001/activate`
+* From the remote system connected to same network as that of the device:
+  - Use one of the ReST Client programs OR browsers to hit the `/activate` end point using the IP Address of the device.  
+     - Suppose the IP address of device reported while starting the server is `192.168.2.21`, we can use the URL as `http://192.168.2.21:3001/activate`
 
 # Contributing
 Any improvement to the FINN SDK are very much welcome! Our software is open-source and we believe your input can help create a lively community and the best version of FINN. We’ve already implemented much of the feedback given to us by community members and will continue to do so. Join them by contributing to the SDK or by contributing to the documentation.
