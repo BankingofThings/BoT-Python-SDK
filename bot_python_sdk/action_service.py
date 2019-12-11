@@ -73,7 +73,7 @@ class ActionService:
                 Logger.success(LOCATION, 'Action found')
                 return action
         Logger.error(LOCATION, 'Action not found')
-        raise falcon.HTTPBadRequest(description='Action not found')
+        raise falcon.HTTPNotFound(description='Action not found')
 
     def _create_trigger_body(self, action_id, value, alternative_id):
         data = {
@@ -91,10 +91,10 @@ class ActionService:
     def _handle_unsupported_frequency(frequency):
         error = 'Frequency not supported: ' + frequency
         Logger.error(LOCATION, error)
-        raise falcon.HTTPForbidden(description=error)
+        raise falcon.HTTPBadRequest(description=error)
 
     @staticmethod
     def _handle_maximum_frequency(frequency):
         error = 'Maximum ' + frequency + ' triggers reached'
         Logger.error(LOCATION, error)
-        raise falcon.HTTPForbidden(description=error)
+        raise falcon.HTTPBadRequest(description=error)
