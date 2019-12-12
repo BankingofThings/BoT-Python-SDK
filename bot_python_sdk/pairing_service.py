@@ -7,8 +7,8 @@ from bot_python_sdk.logger import Logger
 
 LOCATION = 'Pairing Service'
 RESOURCE = 'pair'
-POLLING_INTERVAL_IN_SECONDS = 5
-MAXIMUM_TRIES = 3
+POLLING_INTERVAL_IN_SECONDS = 10
+MAXIMUM_TRIES = 10
 
 
 class PairingService:

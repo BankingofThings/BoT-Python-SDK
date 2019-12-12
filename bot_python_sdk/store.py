@@ -7,6 +7,8 @@ _last_triggered_file_path = 'storage/last_triggered.json'
 _qr_image_path = 'storage/qr.png'
 _configuration_file_path = 'storage/configuration.json'
 _bot_public_key = 'storage/public.pem'
+_saved_actions_path = 'storage/actions.json'
+_last_triggered_path = 'storage/last_triggered.json'
 
 LOCATION = 'Store'
 
@@ -96,8 +98,13 @@ class Store:
         try:
             if Store.has_configuration():
                 os.remove(_configuration_file_path)
-                os.remove(_qr_image_path)
-                Logger.success(LOCATION, 'Successfully removed configuration file')
+                if os.path.isfile(_qr_image_path):
+                    os.remove(_qr_image_path)
+                if os.path.isfile(_saved_actions_path):
+                    os.remove(_saved_actions_path)
+                if os.path.isfile(_last_triggered_path):
+                    os.remove(_last_triggered_path)
+                Logger.success(LOCATION, 'Successfully reset device configuration')
             else:
                 Logger.warning(LOCATION, 'Could not reset, no configuration available')
         except IOError as io_error:

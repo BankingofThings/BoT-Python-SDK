@@ -23,13 +23,23 @@ ALTERNATIVE_ID = 'alternativeID'
 
 METHOD_GET = 'GET'
 METHOD_POST = 'POST'
+BASE_ENDPOINT = '/'
 ACTIONS_ENDPOINT = '/actions'
 PAIRING_ENDPOINT = '/pairing'
-ACTIVATION_ENDPOINT = '/activation'
+ACTIVATION_ENDPOINT = '/activate'
 QRCODE_ENDPOINT = '/qrcode'
 
 QRCODE_IMG_PATH = 'storage/qr.png'
 
+# TODO : Separate into file
+class BaseResource(object):
+    def __init__(self):
+        pass
+
+    def on_get(self, request, response):
+        Logger.info(LOCATION, "Serving base endpoint request...")
+        response.body = '{"message": "BoT-Python-SDK Webserver", "endpoints" : "/qrcode    /actions    /pairing    /activate" }'
+        response.status = falcon.HTTP_200
 
 # TODO : Separate into file
 class ActionsResource:
@@ -48,7 +58,7 @@ class ActionsResource:
         if device_status is not DeviceStatus.ACTIVE and device_status is not DeviceStatus.MULTIPAIR:
             error = 'Not allowed to trigger actions when device is not activated.'
             Logger.error(LOCATION, error)
-            raise falcon.HTTPForbidden(description=error)
+            raise falcon.HTTPBadRequest(description=error)
 
         Logger.info(LOCATION, INCOMING_REQUEST + METHOD_POST + ' ' + ACTIONS_ENDPOINT)
         data = request.media
@@ -83,7 +93,7 @@ class PairingResource:
         if configuration.get_device_status() is not DeviceStatus.NEW:
             error = 'Device is already paired.'
             Logger.error(LOCATION, error)
-            raise falcon.HTTPForbidden(description=error)
+            raise falcon.HTTPBadRequest(description=error)
         device_information = configuration.get_device_information()
         response.media = json.dumps(device_information)
         subprocess.Popen(['make', 'pair'])
@@ -99,7 +109,9 @@ class ActivationResource:
         Logger.info(LOCATION, "Serving Activation Request...")
         configuration = self.configuration_store.get()
         if configuration.get_device_status() is DeviceStatus.ACTIVE:
-            response.media = {'message': 'Device is already Active'}
+            error = 'Device is already activated'
+            Logger.error(LOCATION, error)
+            raise falcon.HTTPBadRequest(description=error)
         else:
             self.configuration_service.resume_configuration()
 
@@ -125,6 +137,7 @@ def check_and_resume_configuration():
     if device_status is DeviceStatus.ACTIVE:
         Logger.info(LOCATION, "Device is already active, no need to further configure")
         Logger.info(LOCATION, "Server is waiting for requests to serve...")
+        Logger.info(LOCATION, "Supported Endpoints: /qrcode    /actions    /pairing    /activate")
     elif device_status is DeviceStatus.PAIRED:
         Logger.info(LOCATION, "Device state is PAIRED, resuming the configuration")
         ConfigurationService().resume_configuration()
@@ -141,6 +154,7 @@ def check_and_resume_configuration():
 
 # Start Webserver and add supported endpoint resources
 api = application = falcon.API()
+api.add_route(BASE_ENDPOINT, BaseResource())
 api.add_route(ACTIONS_ENDPOINT, ActionsResource())
 api.add_route(PAIRING_ENDPOINT, PairingResource())
 api.add_route(ACTIVATION_ENDPOINT, ActivationResource())
