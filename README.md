@@ -5,6 +5,16 @@
 FINN enables your IoT devices to perform seamless autonomous payments on your behalf. 
 For more information, visit us at [makethingsfinn.com](https://www.makethingsfinn.com)
 
+# Supported Features
+   | Sl. No        | SDK Feature                                | Status      | Remarks |
+   | :-----------: |:-------------------------------------------| :-----------| :-------|
+   |        1      | Pairing through Bluetooth Low Energy (BLE) | :thumbsup: | Supported with Android Mobile Application |
+   |        2      | Pairing through QR Code                    | :thumbsup: | Supported only in Webserver mode using end point /qrcode to get generated QRCode for device to be paired for both iOS and Android Mobile Applications|
+   |        3      | Secured HTTP with BoT Service              | :thumbsup: | Supported for all interactions with backend server |
+   |        4      | Logging                                    | :thumbsup: | Console Logging is implemented|
+   |        5      | Offline Actions                            | :thumbsdown: | Helps to persist the autonomous payments on the device when there is no internet connectivity available. The saved offline actions get completed when the next action trigger happens and internet connectivity is available. This feature is in plan for implementation.|
+   
+
 # Getting Started
 Visit our [official documentation](http://docs.bankingofthings.io/) for a complete overview. 
 The main steps are:
@@ -16,15 +26,6 @@ The main steps are:
 - Trigger actions on your device
 - Check results in the [Maker Portal > Dashboard](https://maker.bankingofthings.io/)
 
-# Supported Features
-   | Sl. No        | SDK Feature                                | Status      | Remarks |
-   | :-----------: |:-------------------------------------------| :-----------| :-------|
-   |        1      | Pairing through Bluetooth Low Energy (BLE) | :thumbsup: | Supported with Android Mobile Application |
-   |        2      | Pairing through QR Code                    | :thumbsup: | Supported only in Webserver mode using end point /qrcode to get generated QRCode for device to be paired for both iOS and Android Mobile Applications|
-   |        3      | Secured HTTP with BoT Service              | :thumbsup: | Supported for all interactions with backend server |
-   |        4      | Logging                                    | :thumbsup: | Console Logging is implemented|
-   |        5      | Offline Actions                            | :thumbsdown: | Helps to persist the autonomous payments on the device when there is no internet connectivity available. The saved offline actions get completed when the next action trigger happens and internet connectivity is available. This feature is in plan for implementation.|
-   
 # Installation
 Clone the repository on your device and enter the folder:
 ```bash
