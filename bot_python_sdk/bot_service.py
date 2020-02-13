@@ -11,7 +11,7 @@ from bot_python_sdk.store import Store
 
 LOCATION = 'BoT Service'
 API_URL = 'https://iot.bankingofthings.io/'
-SSL_FINGERPRINT = "76:E6:B6:DF:6D:3B:4D:2D:48:D1:B6:32:AD:D6:8E:80:53:3F:5F:88"
+SSL_FINGERPRINT = "3E:18:EE:35:DF:CA:35:D7:4B:FB:4E:AB:9F:A1:B5:7A:2D:91:8D:1F"
 SERVICE_TAG = 'BoT Service: '
 RESPONSE_DATA_KEY = 'bot'
 
