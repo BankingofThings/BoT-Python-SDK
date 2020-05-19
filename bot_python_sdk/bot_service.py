@@ -6,11 +6,12 @@ import requests
 from requests_toolbelt.adapters.fingerprint import FingerprintAdapter
 
 from bot_python_sdk.configuration_store import ConfigurationStore
+from bot_python_sdk.bot_server_error import BotServerError
 from bot_python_sdk.logger import Logger
 from bot_python_sdk.store import Store
 
 LOCATION = 'BoT Service'
-API_URL = 'https://iot.bankingofthings.io/'
+API_URL = 'https://iot-dev.bankingofthings.io/'
 SSL_FINGERPRINT = "3E:18:EE:35:DF:CA:35:D7:4B:FB:4E:AB:9F:A1:B5:7A:2D:91:8D:1F"
 SERVICE_TAG = 'BoT Service: '
 RESPONSE_DATA_KEY = 'bot'
@@ -30,8 +31,12 @@ class BoTService:
                 data=self._create_request_body(data),
                 headers=self.configuration.get_headers()
             )
-            if response.status_code < 200 or response.status_code >= 300:
-                Logger.error(LOCATION, 'status: ' + str(response.status_code) + ', body: ' + response.text)
+            if response.status_code >299:
+                Logger.error(
+                    LOCATION,
+                    'status: ' + str(response.status_code) +
+                    ', body: ' + response.text
+                )
                 raise falcon.HTTPServiceUnavailable
         except requests.exceptions.SSLError:
             self._handle_ssl_exception()
@@ -45,12 +50,13 @@ class BoTService:
         try:
             response = session.get(API_URL + url, headers=self.configuration.get_headers())
             data = self._decode(response.text)
-            if response.status_code < 200 or response.status_code >= 300:
+            if response.status_code >299:
                 Logger.error(
                     LOCATION,
-                    'status: ' + str(response.status_code) + ', body: ' + json.dumps(data)
+                    'statusCode: ' + str(response.status_code) +
+                    ', body: ' + json.dumps(data)
                 )
-                raise falcon.HTTPServiceUnavailable
+                raise BotServerError(response.status_code, response.text, json.dumps(data))
             return self._get_response(data)
         except requests.exceptions.SSLError:
             self._handle_ssl_exception()
