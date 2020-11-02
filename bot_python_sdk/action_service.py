@@ -27,7 +27,7 @@ class ActionService:
         self.store = Store()
 
     def get_actions(self):
-        Logger.info(LOCATION, 'Retrieving actions...')
+        Logger.info(LOCATION, 'Retrieving actions....')
         try:
             actions = self.bot_service.get(ACTIONS_ENDPOINT)
             Logger.success(LOCATION, 'Successfully retrieved ' + str(len(actions)) + ' action(s) from server')
