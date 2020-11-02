@@ -43,7 +43,7 @@ class PairingService:
     def pair(self):
         try:
             response = self.bot_service.get(RESOURCE)
-            Logger.info(LOCATION, 'Pairing Response: 1' + str(response))
+            Logger.info(LOCATION, 'Pairing Response: ' + str(response))
         # TODO : Make exception more specific
         except:
             Logger.error(LOCATION, 'Failed pairing attempt.')
