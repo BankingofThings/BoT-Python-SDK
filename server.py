@@ -35,7 +35,7 @@ else:
     cmd = subprocess.Popen(['hostname', '-I'], stdout=subprocess.PIPE)
     ip = cmd.communicate()[0].decode('ascii').split(' ')[0]
     if is_valid(ip):
-        Logger.info(LOCATION, "Detected IP Address :" + ip)
+        Logger.info(LOCATION, "STErcan Detected IP Address :" + ip)
     else:
         Logger.info(LOCATION, "Failed in detecting valid IP Address, using loop back address: 127.0.0.1")
         ip = '127.0.0.1'
