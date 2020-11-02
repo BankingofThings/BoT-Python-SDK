@@ -130,7 +130,7 @@ class QRCodeResource(object):
 
 
 def check_and_resume_configuration():
-    configuration = ConfigurationStore().get()
+    configuration = ConfigurationStore().get();
     device_status = configuration.get_device_status()
     system_platform = platform.system()
     Logger.info(LOCATION, "Detected Platform System: " + system_platform)
