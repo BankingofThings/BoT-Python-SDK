@@ -23,12 +23,9 @@ class PairingService:
     def run(self):
         if not self.can_pair:
             return
-
-        # Multipair device also needs at least one device to start.
-        # if self.device_status == DeviceStatus.MULTIPAIR:
-        #     Logger.info(LOCATION, 'Multipair mode, no need to poll or delete keys...')
-        #     return
-
+        if self.device_status == DeviceStatus.MULTIPAIR:
+            Logger.info(LOCATION, 'Multipair mode, no need to poll or delete keys...')
+            return
         Logger.info(LOCATION, 'Starting to pair device...')
         for tries in range(1, MAXIMUM_TRIES + 1):
             Logger.info(LOCATION, 'Pairing device, attempt: ' + str(tries))
@@ -48,10 +45,9 @@ class PairingService:
         except:
             Logger.error(LOCATION, 'Failed pairing attempt.')
             return False
-
         if response['status'] is True:
             Logger.success(LOCATION, 'Device successfully paired.')
             return True
         else:
-            Logger.error(LOCATION, 'No device paired yet...Retrying after ' + POLLING_INTERVAL_IN_SECONDS + ' seconds')
+            Logger.error(LOCATION, 'Failed pairing attempt.')
             return False
