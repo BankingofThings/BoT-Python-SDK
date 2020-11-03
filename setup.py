@@ -1,3 +1,6 @@
+# for pyCharm add live template
+# Logger.info($class$.__class__.__name__, $class$.$function$.__name__)
+
 from io import open
 
 from setuptools import find_packages, setup
