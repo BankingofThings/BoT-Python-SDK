@@ -16,7 +16,7 @@ LOCATION = 'Configuration Service'
 class ConfigurationService:
 
     def __init__(self):
-        Logger.info(self.__name__, "init")
+        Logger.info(ConfigurationService.__name__, ConfigurationService.__init__.__name__)
         self.configuration_store = ConfigurationStore()
         self.configuration = self.configuration_store.get()
         self.key_generator = KeyGenerator()

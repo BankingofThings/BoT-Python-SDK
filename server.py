@@ -8,6 +8,7 @@ from bot_python_sdk.store import Store
 from bot_python_sdk.logger import Logger
 
 store = Store()
+c = ConfigurationService()
 
 if not store.has_configuration():
     if len(sys.argv) != 2 and len(sys.argv[1]) == 46:
