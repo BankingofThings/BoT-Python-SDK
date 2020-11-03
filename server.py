@@ -26,10 +26,6 @@ if not store.has_configuration():
         exit('Please add your productID to configure the SDK: "make server productID=YOUR_PRODUCT_ID"')
     # argv is ProductID from console input
     ConfigurationService().initialize_configuration(sys.argv[1])
-elif len(sys.argv) == 2 and sys.argv[1] == 'reset':
-    ConfigurationService().reset()
-    # argv is ProductID from console input
-    ConfigurationService().initialize_configuration(sys.argv[2])
 
 
 # If OS is windows based, it doesn't support gunicorn so we run waitress
