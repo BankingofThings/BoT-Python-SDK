@@ -12,7 +12,7 @@ c = ConfigurationService()
 
 if not store.has_configuration():
     if len(sys.argv) != 4:
-        exit('Please add your productID to configure the SDK: "make server productID=YOUR_PRODUCT_ID"')
+        exit('Please add your productID to configure the SDK: "make server productID=YOUR_PRODUCT_ID"'.join(sys.argv))
     elif len(sys.argv) == 4 and len(sys.argv[4]) != 46:
         exit('Please enter a VALID productID to configure the SDK: "make server productID=YOUR_PRODUCT_ID" (' + sys.argv[1] + len(sys.argv[1]) +')')
     else:
@@ -21,11 +21,11 @@ if not store.has_configuration():
     # argv is the console input
     ConfigurationService().initialize_configuration(sys.argv[1])
 
-
 # If OS is windows based, it doesn't support gunicorn so we run waitress
 if os.name == 'nt':
     subprocess.run(['waitress-serve', '--port=3001', 'bot_python_sdk.api:api'])
 else:
+    Logger.info("ercan", ''.join(sys.argv))
     cmd = subprocess.Popen(['hostname', '-I'], stdout=subprocess.PIPE)
 
     ip = cmd.communicate()[0].decode('ascii').split(' ')[0]
