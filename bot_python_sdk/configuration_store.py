@@ -47,4 +47,4 @@ class ConfigurationStore:
 
     # Clear configuration
     def clear(self):
-        self.save(self, Configuration())
+        self.save(Configuration())
