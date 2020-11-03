@@ -10,31 +10,31 @@ from bot_python_sdk.logger import Logger
 store = Store()
 c = ConfigurationService()
 
-if not store.has_configuration():
-    if len(sys.argv) == 0:
-        exit('Please add your productID to configure the SDK: "make server productID=YOUR_PRODUCT_ID"')
-    elif len(sys.argv) == 1:
-        exit('Please enter a VALID productID to configure the SDK: "make server productID=YOUR_PRODUCT_ID"')
-    else:
-        Logger.info('Server', len(sys.argv).__str__())
-        # argv is the console input
-        productID = sys.argv[1]
-        Logger.info('Server', "starting with configuration... " + productID)
-        ConfigurationService().initialize_configuration(productID)
-
 # If OS is windows based, it doesn't support gunicorn so we run waitress
 if os.name == 'nt':
     subprocess.run(['waitress-serve', '--port=3001', 'bot_python_sdk.api:api'])
 else:
-    cmd = subprocess.Popen(['hostname', '-I'], stdout=subprocess.PIPE)
+    if not store.has_configuration():
+        if len(sys.argv) != 2:
+            exit('Please add your productID to configure the SDK: "make server productID=YOUR_PRODUCT_ID"')
+        else:
+            # argv is the console input
+            productID = sys.argv[1]
+            if len(productID) != 36:
+                exit('Please enter a valid productID')
+            else:
+                Logger.info('Server', "starting with configuration... " + productID)
+                ConfigurationService().initialize_configuration(productID)
 
-    ip = cmd.communicate()[0].decode('ascii').split(' ')[0]
-    if Utils.is_valid(ip):
-        Logger.info('Server', "Detected IP Address :" + ip)
-    else:
-        Logger.info('Server', "Failed in detecting valid IP Address, using loop back address: 127.0.0.1")
-        ip = '127.0.0.1'
+                cmd = subprocess.Popen(['hostname', '-I'], stdout=subprocess.PIPE)
 
-    Logger.info('Server', "Starting Webserver at URL: http://" + ip + ':3001/')
-    subprocess.run(['gunicorn', '-b', ip + ':3001', 'bot_python_sdk.api:api'])
-    Logger.info('Server', 'Webserver is running')
+                ip = cmd.communicate()[0].decode('ascii').split(' ')[0]
+                if Utils.is_valid(ip):
+                    Logger.info('Server', "Detected IP Address :" + ip)
+                else:
+                    Logger.info('Server', "Failed in detecting valid IP Address, using loop back address: 127.0.0.1")
+                    ip = '127.0.0.1'
+
+                Logger.info('Server', "Starting Webserver at URL: http://" + ip + ':3001/')
+                subprocess.run(['gunicorn', '-b', ip + ':3001', 'bot_python_sdk.api:api'])
+                Logger.info('Server', 'Webserver is running')
