@@ -21,18 +21,24 @@ class PairingService:
         self.bot_service = BoTService()
 
     def run(self):
+        Logger.info(LOCATION, 'run')
+
+        success = False
         if not self.can_pair:
-            return
-        if self.device_status == DeviceStatus.MULTIPAIR:
+            Logger.info(LOCATION, 'cant pair')
+        elif self.device_status == DeviceStatus.MULTIPAIR:
             Logger.info(LOCATION, 'Multipair mode, no need to poll or delete keys...')
-            return
-        Logger.info(LOCATION, 'Starting to pair device...')
-        for tries in range(1, MAXIMUM_TRIES + 1):
-            Logger.info(LOCATION, 'Pairing device, attempt: ' + str(tries))
-            if self.pair():
-                return True
-            time.sleep(POLLING_INTERVAL_IN_SECONDS)
-        return False
+        else:
+            Logger.info(LOCATION, 'Starting to pair device...')
+            for tries in range(1, MAXIMUM_TRIES + 1):
+                Logger.info(LOCATION, 'Pairing device, attempt: ' + str(tries))
+                if self.pair():
+                    success = True
+                    break
+                else:
+                    time.sleep(POLLING_INTERVAL_IN_SECONDS)
+
+        return success
 
     def can_pair(self):
         return self.device_status == DeviceStatus.MULTIPAIR or self.device_status == DeviceStatus.NEW
