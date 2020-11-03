@@ -25,7 +25,7 @@ if not store.has_configuration():
     Logger.info('Server', "sys.argv[0] = " + sys.argv[0])
     Logger.info('Server', "sys.argv[1] = " + sys.argv[1])
 
-    if len(sys.argv) <= 1:
+    if len(sys.argv) != 2:
         exit('Please add your productID to configure the SDK: "make server productID=YOUR_PRODUCT_ID"')
     # argv is ProductID from console input
     ConfigurationService().initialize_configuration(sys.argv[1])
