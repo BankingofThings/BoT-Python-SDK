@@ -11,6 +11,7 @@ ALTERNATIVE_ID = 'alternativeId'
 BLUETOOTH_ENABLED = 'bluetoothEnabled'
 
 
+# Store and fetch Configuration
 class ConfigurationStore:
 
     def __init__(self):

@@ -6,9 +6,9 @@ import platform
 from bot_python_sdk.action_service import ActionService
 from bot_python_sdk.configuration_service import ConfigurationService
 from bot_python_sdk.configuration_store import ConfigurationStore
-from bot_python_sdk.pairing_service import PairingService
 from bot_python_sdk.device_status import DeviceStatus
 from bot_python_sdk.logger import Logger
+from bot_python_sdk.bluetooth_service import BluetoothService
 
 LOCATION = 'Controller'
 INCOMING_REQUEST = 'Incoming request: '
@@ -31,6 +31,7 @@ QRCODE_ENDPOINT = '/qrcode'
 
 QRCODE_IMG_PATH = 'storage/qr.png'
 
+
 # TODO : Separate into file
 class BaseResource(object):
     def __init__(self):
@@ -40,6 +41,7 @@ class BaseResource(object):
         Logger.info(LOCATION, "Serving base endpoint request...")
         response.body = '{"message": "BoT-Python-SDK Webserver", "endpoints" : "/qrcode    /actions    /pairing    /activate" }'
         response.status = falcon.HTTP_200
+
 
 # TODO : Separate into file
 class ActionsResource:
@@ -128,9 +130,10 @@ class QRCodeResource(object):
         response.content_type = "image/png"
         response.stream, response.content_length = stream, content_length
 
+
 # KICKSTART
 def check_and_resume_configuration():
-    configuration = ConfigurationStore().get();
+    configuration = ConfigurationStore().get()
     device_status = configuration.get_device_status()
 
     system_platform = platform.system()
@@ -147,7 +150,6 @@ def check_and_resume_configuration():
     else:
         Logger.info(LOCATION, "Pair the device either using QRCode or Bluetooth Service through FINN Mobile App")
         if system_platform != 'Darwin' and configuration.is_bluetooth_enabled():
-            from bot_python_sdk.bluetooth_service import BluetoothService
             # Handle BLE specific events and callbacks
             BluetoothService().initialize()
             ConfigurationService().resume_configuration()
