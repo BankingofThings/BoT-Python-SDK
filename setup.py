@@ -1,5 +1,6 @@
-# for pyCharm add live template
-# Logger.info($class$.__class__.__name__, $class$.$function$.__name__)
+# For preventing log variables in classes, for pyCharm add live template
+# Logger.info($class$.__name__, $class$.$function$.__name__)
+# Also prevent logging any unnecessary code
 
 from io import open
 

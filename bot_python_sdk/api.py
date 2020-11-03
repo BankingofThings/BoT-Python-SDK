@@ -163,6 +163,7 @@ api.add_route(PAIRING_ENDPOINT, PairingResource())
 api.add_route(ACTIVATION_ENDPOINT, ActivationResource())
 api.add_route(QRCODE_ENDPOINT, QRCodeResource())
 
+Logger.info("api", "kickstarted")
 # KICKSTART !!!
 # Check and Configure the device
 check_and_resume_configuration()

@@ -1,33 +1,21 @@
 import os
 import subprocess
 import sys
-import re
 
+from bot_python_sdk.Utils import Utils
 from bot_python_sdk.configuration_service import ConfigurationService
 from bot_python_sdk.store import Store
 from bot_python_sdk.logger import Logger
 
 store = Store()
 
-
-# Function to validate the given IP Address
-def is_valid(ip):
-    regex = '''^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(
-                25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(
-                25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(
-                25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)'''
-
-    return re.search(regex, ip)
-
-
 if not store.has_configuration():
-    Logger.info('Server', "checking configuration...")
-    Logger.info('Server', "sys.argv[0] = " + sys.argv[0])
-    Logger.info('Server', "sys.argv[1] = " + sys.argv[1])
-
     if len(sys.argv) != 2 and len(sys.argv[1]) == 46:
         exit('Please add your productID to configure the SDK: "make server productID=YOUR_PRODUCT_ID"')
-    # argv is ProductID from console input
+    else:
+        Logger.info('Server', "starting with configuration...")
+
+    # argv is the console input
     ConfigurationService().initialize_configuration(sys.argv[1])
 
 
@@ -38,7 +26,7 @@ else:
     cmd = subprocess.Popen(['hostname', '-I'], stdout=subprocess.PIPE)
 
     ip = cmd.communicate()[0].decode('ascii').split(' ')[0]
-    if is_valid(ip):
+    if Utils.is_valid(ip):
         Logger.info('Server', "Detected IP Address :" + ip)
     else:
         Logger.info('Server', "Failed in detecting valid IP Address, using loop back address: 127.0.0.1")
@@ -46,3 +34,4 @@ else:
 
     Logger.info('Server', "Starting Webserver at URL: http://" + ip + ':3001/')
     subprocess.run(['gunicorn', '-b', ip + ':3001', 'bot_python_sdk.api:api'])
+    Logger.info('Server', 'Webserver is running')

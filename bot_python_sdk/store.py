@@ -16,7 +16,7 @@ class Store:
         
     @staticmethod
     def set_actions(actions):
-        Logger.info(Store.__class__.__name__, Store.set_actions.__name__)
+        Logger.info(Store.__name__, Store.set_actions.__name__)
 
         try:
             with open(_actions_file_path, 'w') as actions_file:
@@ -27,7 +27,7 @@ class Store:
 
     @staticmethod
     def get_actions():
-        Logger.info(Store.__class__.__name__, Store.get_actions.__name__)
+        Logger.info(Store.__name__, Store.get_actions.__name__)
 
         if not os.path.isfile(_actions_file_path):
             return []
@@ -41,7 +41,7 @@ class Store:
 
     @staticmethod
     def get_last_triggered(action_id):
-        Logger.info(Store.__class__.__name__, Store.get_last_triggered.__name__)
+        Logger.info(Store.__name__, Store.get_last_triggered.__name__)
 
         if not os.path.isfile(_last_triggered_file_path):
             return None
@@ -55,7 +55,7 @@ class Store:
 
     @staticmethod
     def set_last_triggered(action_id, time):
-        Logger.info(Store.__class__.__name__, Store.set_last_triggered.__name__)
+        Logger.info(Store.__name__, Store.set_last_triggered.__name__)
 
         data = {}
         if os.path.isfile(_last_triggered_file_path):
@@ -71,7 +71,7 @@ class Store:
 
     @staticmethod
     def save_qrcode(image):
-        Logger.info(Store.__class__.__name__, Store.save_qrcode.__name__)
+        Logger.info(Store.__name__, Store.save_qrcode.__name__)
 
         try:
             with open(_qr_image_path, 'wb') as qr_image:
@@ -82,7 +82,7 @@ class Store:
 
     @staticmethod
     def get_configuration():
-        Logger.info(Store.__class__.__name__, Store.get_configuration.__name__)
+        Logger.info(Store.__name__, Store.get_configuration.__name__)
 
         try:
             with open(_configuration_file_path, 'r') as configuration_file:
@@ -94,7 +94,7 @@ class Store:
 
     @staticmethod
     def set_configuration(configuration):
-        Logger.info(Store.__class__.__name__, Store.set_configuration.__name__)
+        Logger.info(Store.__name__, Store.set_configuration.__name__)
 
         try:
             with open(_configuration_file_path, 'w') as configuration_file:
@@ -105,13 +105,13 @@ class Store:
 
     @staticmethod
     def has_configuration():
-        Logger.info(Store.__class__.__name__, Store.has_configuration.__name__)
+        Logger.info(Store.__name__, Store.has_configuration.__name__)
 
         return os.path.isfile(_configuration_file_path)
 
     @staticmethod
     def remove_configuration():
-        Logger.info(Store.__class__.__name__, Store.remove_configuration.__name__)
+        Logger.info(Store.__name__, Store.remove_configuration.__name__)
 
         try:
             if Store.has_configuration():
@@ -131,7 +131,7 @@ class Store:
 
     @staticmethod
     def get_bot_public_key():
-        Logger.info(Store.__class__.__name__, Store.get_bot_public_key.__name__)
+        Logger.info(Store.__name__, Store.get_bot_public_key.__name__)
 
         try:
             with open(_bot_public_key) as bot_file:
