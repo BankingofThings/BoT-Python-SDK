@@ -20,10 +20,15 @@ class ConfigurationService:
         self.configuration = self.configuration_store.get()
         self.key_generator = KeyGenerator()
 
+    def reset(self):
+        self.configuration_store.clear()
+
     def initialize_configuration(self, maker_id):
         Logger.info(LOCATION, 'Initializing configuration...')
         public_key, private_key = KeyGenerator().generate_key()
         device_id = self.key_generator.generate_uuid()
+        Logger.info(LOCATION, 'device_id = ' + device_id)
+
         # initialize the alternative id.
         aid = 0
         # Option for Multi pairing

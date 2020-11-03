@@ -44,3 +44,7 @@ class ConfigurationStore:
             ALTERNATIVE_ID: configuration.get_alternative_id(),
             BLUETOOTH_ENABLED: configuration.is_bluetooth_enabled()
         })
+
+    # Clear configuration
+    def clear(self):
+        self.save(self, Configuration())
