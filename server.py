@@ -11,8 +11,10 @@ store = Store()
 c = ConfigurationService()
 
 if not store.has_configuration():
-    if len(sys.argv) != 2 and len(sys.argv[1]) == 46:
+    if len(sys.argv) != 2:
         exit('Please add your productID to configure the SDK: "make server productID=YOUR_PRODUCT_ID"')
+    elif len(sys.argv) == 2 and len(sys.argv[1]) != 46:
+        exit('Please enter a VALID productID to configure the SDK: "make server productID=YOUR_PRODUCT_ID"')
     else:
         Logger.info('Server', "starting with configuration...")
 
