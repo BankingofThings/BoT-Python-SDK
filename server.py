@@ -14,7 +14,7 @@ if not store.has_configuration():
     if len(sys.argv) == 0:
         exit('Please add your productID to configure the SDK: "make server productID=YOUR_PRODUCT_ID"')
     elif len(sys.argv) == 1:
-        exit('Please enter a VALID productID to configure the SDK: "make server productID=YOUR_PRODUCT_ID" (' + sys.argv[1] + len(sys.argv[1]) +')')
+        exit('Please enter a VALID productID to configure the SDK: "make server productID=YOUR_PRODUCT_ID"')
     else:
         Logger.info('Server', len(sys.argv[1]).__str__())
         Logger.info('Server', "starting with configuration...")
