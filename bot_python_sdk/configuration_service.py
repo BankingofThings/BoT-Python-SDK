@@ -16,6 +16,7 @@ LOCATION = 'Configuration Service'
 class ConfigurationService:
 
     def __init__(self):
+        Logger.info(self.__str__(), "init")
         self.configuration_store = ConfigurationStore()
         self.configuration = self.configuration_store.get()
         self.key_generator = KeyGenerator()
@@ -23,6 +24,7 @@ class ConfigurationService:
     def reset(self):
         self.configuration_store.clear()
 
+    # Do only one-time
     def initialize_configuration(self, maker_id):
         Logger.info(LOCATION, 'Initializing configuration...')
         public_key, private_key = KeyGenerator().generate_key()
@@ -30,7 +32,7 @@ class ConfigurationService:
         Logger.info(LOCATION, 'device_id = ' + device_id)
 
         # initialize the alternative id.
-        aid = 0
+        aid = ''
         # Option for Multi pairing
         # If the option is yes, then alternative id needed
         print('Enable Multi pair(yes/no)')
@@ -50,7 +52,12 @@ class ConfigurationService:
             bluetooth_enabled = True
 
         # Added alternative id as an argument to initializing the configuration
-        self.configuration.initialize(maker_id, device_id, device_status, bluetooth_enabled, aid, public_key,
+        self.configuration.initialize(maker_id,
+                                      device_id,
+                                      device_status,
+                                      bluetooth_enabled,
+                                      aid,
+                                      public_key,
                                       private_key)
         self.configuration_store.save(self.configuration)
         self.generate_qr_code()

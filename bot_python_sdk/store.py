@@ -13,6 +13,7 @@ _last_triggered_path = 'storage/last_triggered.json'
 LOCATION = 'Store'
 
 
+# Storage manager
 class Store:
     @staticmethod
     def set_actions(actions):
