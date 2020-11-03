@@ -8,7 +8,6 @@ from bot_python_sdk.store import Store
 from bot_python_sdk.logger import Logger
 
 store = Store()
-c = ConfigurationService()
 
 # If OS is windows based, it doesn't support gunicorn so we run waitress
 if os.name == 'nt':

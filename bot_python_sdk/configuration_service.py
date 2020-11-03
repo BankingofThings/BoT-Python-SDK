@@ -21,15 +21,13 @@ class ConfigurationService:
         self.configuration = self.configuration_store.get()
         self.key_generator = KeyGenerator()
 
-    def reset(self):
-        self.configuration_store.clear()
-
     # Do only one-time
     def initialize_configuration(self, maker_id):
-        Logger.info(LOCATION, 'Initializing configuration...')
+        Logger.info(ConfigurationService.__name__, ConfigurationService.initialize_configuration.__name__)
+
         public_key, private_key = KeyGenerator().generate_key()
         device_id = self.key_generator.generate_uuid()
-        Logger.info(LOCATION, 'device_id = ' + device_id)
+        Logger.info(ConfigurationService.__name__, ConfigurationService.initialize_configuration.__name__ + ' device_id = ' + device_id)
 
         # initialize the alternative id.
         aid = ''
