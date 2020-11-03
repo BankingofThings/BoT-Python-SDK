@@ -10,7 +10,7 @@ from bot_python_sdk.logger import Logger
 store = Store()
 c = ConfigurationService()
 
-if store.has_configuration():
+if not store.has_configuration():
     if len(sys.argv) == 0:
         exit('Please add your productID to configure the SDK: "make server productID=YOUR_PRODUCT_ID"')
     elif len(sys.argv) == 1:
