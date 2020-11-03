@@ -17,9 +17,10 @@ if not store.has_configuration():
         exit('Please enter a VALID productID to configure the SDK: "make server productID=YOUR_PRODUCT_ID"')
     else:
         Logger.info('Server', len(sys.argv).__str__())
-        Logger.info('Server', "starting with configuration...")
         # argv is the console input
-        ConfigurationService().initialize_configuration(sys.argv[1])
+        productID = sys.argv[1]
+        Logger.info('Server', "starting with configuration... " + productID)
+        ConfigurationService().initialize_configuration(productID)
 
 # If OS is windows based, it doesn't support gunicorn so we run waitress
 if os.name == 'nt':
