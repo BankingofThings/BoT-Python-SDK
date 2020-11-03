@@ -53,7 +53,9 @@ class ConfigurationService:
 
     def resume_configuration(self):
         device_status = self.configuration.get_device_status()
+
         Logger.info(LOCATION, 'DeviceStatus = ' + device_status.value)
+
         if device_status == DeviceStatus.NEW:
             self.pair()
         if device_status == DeviceStatus.PAIRED:

@@ -17,19 +17,24 @@ class ConfigurationStore:
         self.store = Store()
 
     def get(self):
-        configuration = Configuration()
-        if not self.store.has_configuration():
+        if self.store.has_configuration():
+            dictionary = self.store.get_configuration()
+            configuration = Configuration()
+            configuration.initialize(
+                dictionary[MAKER_ID],
+                dictionary[DEVICE_ID],
+                DeviceStatus[dictionary[DEVICE_STATUS]],
+                dictionary[BLUETOOTH_ENABLED],
+                dictionary[ALTERNATIVE_ID],
+                dictionary[PUBLIC_KEY],
+                dictionary[PRIVATE_KEY]
+            )
             return configuration
-        dictionary = self.store.get_configuration()
-        return self._to_configuration(dictionary)
+        else:
+            return Configuration()
 
     def save(self, configuration):
-        dictionary = self._to_dictionary(configuration)
-        self.store.set_configuration(dictionary)
-
-    @staticmethod
-    def _to_dictionary(configuration):
-        return {
+        self.store.set_configuration({
             MAKER_ID: configuration.get_maker_id(),
             DEVICE_ID: configuration.get_device_id(),
             DEVICE_STATUS: configuration.get_device_status(),
@@ -37,18 +42,4 @@ class ConfigurationStore:
             PRIVATE_KEY: configuration.get_private_key(),
             ALTERNATIVE_ID: configuration.get_alternative_id(),
             BLUETOOTH_ENABLED: configuration.is_bluetooth_enabled()
-        }
-
-    @staticmethod
-    def _to_configuration(dictionary):
-        configuration = Configuration()
-        configuration.initialize(
-            dictionary[MAKER_ID],
-            dictionary[DEVICE_ID],
-            DeviceStatus[dictionary[DEVICE_STATUS]],
-            dictionary[BLUETOOTH_ENABLED],
-            dictionary[ALTERNATIVE_ID],
-            dictionary[PUBLIC_KEY],
-            dictionary[PRIVATE_KEY]
-        )
-        return configuration
+        })

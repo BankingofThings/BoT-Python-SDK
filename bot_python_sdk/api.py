@@ -128,12 +128,15 @@ class QRCodeResource(object):
         response.content_type = "image/png"
         response.stream, response.content_length = stream, content_length
 
-
+# KICKSTART
 def check_and_resume_configuration():
     configuration = ConfigurationStore().get();
     device_status = configuration.get_device_status()
+
     system_platform = platform.system()
+
     Logger.info(LOCATION, "Detected Platform System: " + system_platform)
+
     if device_status is DeviceStatus.ACTIVE:
         Logger.info(LOCATION, "Device is already active, no need to further configure")
         Logger.info(LOCATION, "Server is waiting for requests to serve...")
@@ -141,8 +144,6 @@ def check_and_resume_configuration():
     elif device_status is DeviceStatus.PAIRED:
         Logger.info(LOCATION, "Device state is PAIRED, resuming the configuration")
         ConfigurationService().resume_configuration()
-    elif device_status is DeviceStatus.MULTIPAIR and PairingService().pair():
-        Logger.info(LOCATION, "Device is paired as MULTIPAIR, Server is waiting for requests to serve...")
     else:
         Logger.info(LOCATION, "Pair the device either using QRCode or Bluetooth Service through FINN Mobile App")
         if system_platform != 'Darwin' and configuration.is_bluetooth_enabled():
@@ -160,5 +161,6 @@ api.add_route(PAIRING_ENDPOINT, PairingResource())
 api.add_route(ACTIVATION_ENDPOINT, ActivationResource())
 api.add_route(QRCODE_ENDPOINT, QRCodeResource())
 
+# KICKSTART !!!
 # Check and Configure the device
 check_and_resume_configuration()
