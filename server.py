@@ -12,6 +12,9 @@ store = Store()
 # If OS is windows based, it doesn't support gunicorn so we run waitress
 # TODO doesn't work with pyCharm
 if os.name == 'nt':
+    ip = Utils.getIpAddress()
+    Logger.info('Server', "starting with configuration... IP" + ip)
+
     subprocess.run(['waitress-serve', '--port=3001', 'bot_python_sdk.api:api'])
 else:
     if not store.has_configuration():
@@ -23,12 +26,11 @@ else:
             # argv is the console input
             productID = sys.argv[1]
 
-            Logger.info('Server', "starting with configuration... " + productID)
+            Logger.info('Server', "starting with configuration. ProductID " + productID)
             ConfigurationService().initialize_configuration(productID)
 
-            cmd = subprocess.Popen(['hostname', '-I'], stdout=subprocess.PIPE)
-
-            ip = cmd.communicate()[0].decode('ascii').split(' ')[0]
+            ip = Utils.getIpAddress()
+            Logger.info('Server', "starting with configuration... IP" + ip)
             if Utils.is_valid(ip):
                 Logger.info('Server', "Detected IP Address :" + ip)
             else:
