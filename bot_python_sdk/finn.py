@@ -12,6 +12,7 @@ from bot_python_sdk.logger import Logger
 
 class Finn:
     def __init__(self):
+        Logger.info(Finn.__name__, Finn.__init__.__name__)
         store = Store()
         if not store.has_configuration():
             if len(sys.argv) != 2:
