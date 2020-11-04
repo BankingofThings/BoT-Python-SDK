@@ -4,8 +4,6 @@ import json
 import os
 import platform
 
-from waitress import serve
-
 from bot_python_sdk.action_service import ActionService
 from bot_python_sdk.configuration_service import ConfigurationService
 from bot_python_sdk.configuration_store import ConfigurationStore
