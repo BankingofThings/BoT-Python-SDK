@@ -8,7 +8,7 @@ from bot_python_sdk.logger import Logger
 
 class ActivationResource:
     def __init__(self):
-        Logger.info(ActivationResource.__name__, ActivationResource.__init__.__name__)
+        Logger.info('ActivationResource', 'ActivationResource.__init__')
         self.configuration_service = ConfigurationService()
         self.configuration_store = ConfigurationStore()
 

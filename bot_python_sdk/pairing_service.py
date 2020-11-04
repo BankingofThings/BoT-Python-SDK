@@ -1,16 +1,10 @@
 import time
 
 from bot_python_sdk.bot_service import BoTService
-from bot_python_sdk.device_status import DeviceStatus
 from bot_python_sdk.configuration_store import ConfigurationStore
 from bot_python_sdk.logger import Logger
 
-LOCATION = 'Pairing Service'
-RESOURCE = 'pair'
-POLLING_INTERVAL_IN_SECONDS = 10
-MAXIMUM_TRIES = 10
-
-
+# PairingService.run() will start infinite loop with checking pair status at CORE
 class PairingService:
 
     def __init__(self):
@@ -20,32 +14,32 @@ class PairingService:
         self.device_status = configuration.get_device_status()
         self.bot_service = BoTService()
 
-    def start_check_paired_loop(self):
-        if self.get_remote_paired_status():
+    def run(self):
+        Logger.info('PairingService', 'PairingService.run')
+
+        return self.__start_check_paired_loop()
+
+    def __start_check_paired_loop(self):
+        if self.__get_remote_paired_status():
             return True
         else:
-            time.sleep(POLLING_INTERVAL_IN_SECONDS)
+            time.sleep(10)
             # restart after fail
-            self.start_check_paired_loop()
+            self.__start_check_paired_loop()
 
-    def run(self):
-        Logger.info(LOCATION, 'run()')
-
-        return self.start_check_paired_loop()
-
-    def get_remote_paired_status(self):
-        Logger.info(PairingService.__name__, PairingService.get_remote_paired_status.__name__)
+    def __get_remote_paired_status(self):
+        Logger.info('PairingService', 'PairingService.get_remote_paired_status')
 
         try:
-            response = self.bot_service.get(RESOURCE)
-            Logger.info(LOCATION, 'Pairing Response: ' + str(response))
+            response = self.bot_service.get("pair")
+            Logger.info('PairingService', '__get_remote_paired_status response = ' + str(response))
             if response['status'] is True:
-                Logger.success(LOCATION, 'Device successfully paired.')
+                Logger.info('PairingService', '__get_remote_paired_status Device successfully paired.')
                 return True
             else:
-                Logger.error(LOCATION, 'Failed pairing attempt.')
+                Logger.info('PairingService', '__get_remote_paired_status Failed pairing attempt.')
                 return False
         # TODO : Make exception more specific
         except:
-            Logger.error(LOCATION, 'Failed pairing attempt.')
+            Logger.info('PairingService', '__get_remote_paired_status')
             return False

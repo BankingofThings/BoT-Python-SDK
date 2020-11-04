@@ -16,17 +16,17 @@ LOCATION = 'Configuration Service'
 class ConfigurationService:
 
     def __init__(self):
-        Logger.info(ConfigurationService.__name__, ConfigurationService.__init__.__name__)
+        Logger.info('ConfigurationService', '__init__')
         self.configuration_store = ConfigurationStore()
         self.configuration = self.configuration_store.get()
 
     # Do only one-time
     def initialize_configuration(self, maker_id):
-        Logger.info(ConfigurationService.__name__, ConfigurationService.initialize_configuration.__name__)
+        Logger.info('ConfigurationService', 'initialize_configuration')
 
         public_key, private_key = KeyGenerator().generate_key()
         device_id = KeyGenerator().generate_uuid()
-        Logger.info(ConfigurationService.__name__, ConfigurationService.initialize_configuration.__name__ + ' device_id = ' + device_id)
+        Logger.info('ConfigurationService', 'initialize_configuration' + ' device_id = ' + device_id)
 
         # initialize the alternative id.
         aid = ''
@@ -62,7 +62,7 @@ class ConfigurationService:
 
     # TODO remove this function
     def resume_configuration(self):
-        Logger.info(ConfigurationService.__name__, ConfigurationService.resume_configuration.__name__)
+        Logger.info('ConfigurationService', 'resume_configuration')
         device_status = self.configuration.get_device_status()
 
         Logger.info(LOCATION, 'DeviceStatus = ' + device_status.value)
