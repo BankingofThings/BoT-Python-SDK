@@ -45,7 +45,7 @@ class Finn:
             Logger.info('Server', "Failed in detecting valid IP Address, using loop back address: " + ip_address)
 
         Logger.info('Server', "Starting server at URL: http://" + ip_address + ':3001/')
-        out = subprocess.run(['gunicorn', '-b', ip_address + ':3001', 'bot_python_sdk.api:api'])
+        out = subprocess.run(['gunicorn', '-b', ip_address + ':3001'])
         Logger.info('Server', 'Server is running' + out)
 
         self.__on_server_start_done()
