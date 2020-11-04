@@ -134,6 +134,7 @@ class QRCodeResource(object):
 
 # KICKSTART
 def check_and_resume_configuration():
+    Logger.info('api', 'check_and_resume_configuration')
     configuration = ConfigurationStore().get()
     device_status = configuration.get_device_status()
 
