@@ -8,6 +8,7 @@ from bot_python_sdk.action_service import ActionService
 from bot_python_sdk.configuration_service import ConfigurationService
 from bot_python_sdk.configuration_store import ConfigurationStore
 from bot_python_sdk.device_status import DeviceStatus
+from bot_python_sdk.finn import Finn
 from bot_python_sdk.logger import Logger
 
 INCOMING_REQUEST = 'Incoming request: '
@@ -139,3 +140,5 @@ api.add_route(ACTIVATION_ENDPOINT, ActivationResource())
 api.add_route(QRCODE_ENDPOINT, QRCodeResource())
 
 Logger.info('api', 'init done')
+
+Finn().on_server_start_done()
