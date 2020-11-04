@@ -1,5 +1,6 @@
 import sys
 
+from bot_python_sdk.base_resource import BaseResource
 from bot_python_sdk.bluetooth_service import BluetoothService
 from bot_python_sdk.configuration_service import ConfigurationService
 from bot_python_sdk.configuration_store import ConfigurationStore
@@ -9,8 +10,11 @@ from bot_python_sdk.store import Store
 
 
 class Finn:
-    def __init__(self):
+    def __init__(self, api):
         Logger.info(Finn.__name__, Finn.__init__.__name__)
+
+        BASE_ENDPOINT = '/'
+        api.add_route(BASE_ENDPOINT, BaseResource())
 
         self.__configuration_service = ConfigurationService()
         self.__configuration_store = ConfigurationStore()
