@@ -11,6 +11,20 @@ store = Store()
 
 # If OS is windows based, it doesn't support gunicorn so we run waitress
 # TODO doesn't work with pyCharm
+def startWebServer():
+    ip = Utils.getIpAddress()
+    Logger.info('Server', "starting with configuration... IP" + ip)
+    if Utils.is_valid(ip):
+        Logger.info('Server', "Detected IP Address :" + ip)
+    else:
+        Logger.info('Server', "Failed in detecting valid IP Address, using loop back address: 127.0.0.1")
+        ip = '127.0.0.1'
+
+    Logger.info('Server', "Starting Webserver at URL: http://" + ip + ':3001/')
+    subprocess.run(['gunicorn', '-b', ip + ':3001', 'bot_python_sdk.api:api'])
+    Logger.info('Server', 'Webserver is running')
+
+
 if os.name == 'nt':
     ip = Utils.getIpAddress()
     Logger.info('Server', "starting with configuration... IP" + ip)
@@ -29,14 +43,5 @@ else:
             Logger.info('Server', "starting with configuration. ProductID " + productID)
             ConfigurationService().initialize_configuration(productID)
 
-            ip = Utils.getIpAddress()
-            Logger.info('Server', "starting with configuration... IP" + ip)
-            if Utils.is_valid(ip):
-                Logger.info('Server', "Detected IP Address :" + ip)
-            else:
-                Logger.info('Server', "Failed in detecting valid IP Address, using loop back address: 127.0.0.1")
-                ip = '127.0.0.1'
-
-            Logger.info('Server', "Starting Webserver at URL: http://" + ip + ':3001/')
-            subprocess.run(['gunicorn', '-b', ip + ':3001', 'bot_python_sdk.api:api'])
-            Logger.info('Server', 'Webserver is running')
+            startWebServer()
+    else: startWebServer()
