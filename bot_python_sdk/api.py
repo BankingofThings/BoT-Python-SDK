@@ -36,7 +36,7 @@ Logger.info('api', 'init start')
 # TODO : Separate into file
 class BaseResource(object):
     def __init__(self):
-        pass
+        Logger.info(BaseResource.__name__, BaseResource.__init__.__name__)
 
     def on_get(self, request, response):
         Logger.info('api', "Serving base endpoint request...")
@@ -47,6 +47,7 @@ class BaseResource(object):
 # TODO : Separate into file
 class ActionsResource:
     def __init__(self):
+        Logger.info(ActionsResource.__name__, ActionsResource.__init__.__name__)
         self.action_service = ActionService()
         self.configuration_store = ConfigurationStore()
 
@@ -87,6 +88,7 @@ class ActionsResource:
 # TODO : Separate into file
 class PairingResource:
     def __init__(self):
+        Logger.info(PairingResource.__name__, PairingResource.__init__.__name__)
         self.configuration_store = ConfigurationStore()
 
     def on_get(self, request, response):
@@ -104,6 +106,7 @@ class PairingResource:
 # TODO : Separate into file
 class ActivationResource:
     def __init__(self):
+        Logger.info(ActivationResource.__name__, ActivationResource.__init__.__name__)
         self.configuration_service = ConfigurationService()
         self.configuration_store = ConfigurationStore()
 
@@ -121,7 +124,7 @@ class ActivationResource:
 # TODO : Separate into file
 class QRCodeResource(object):
     def __init__(self):
-        pass
+        Logger.info(QRCodeResource.__name__, QRCodeResource.__init__.__name__)
 
     def on_get(self, request, response):
         Logger.info('api', "Serving QRCode Request...")
@@ -141,5 +144,3 @@ api.add_route(ACTIVATION_ENDPOINT, ActivationResource())
 api.add_route(QRCODE_ENDPOINT, QRCodeResource())
 
 Logger.info('api', 'init done')
-
-Finn().on_server_start_done()
