@@ -4,6 +4,7 @@ import subprocess
 import falcon
 
 from bot_python_sdk.action_service import ActionService
+from bot_python_sdk.base_resource import BaseResource
 from bot_python_sdk.configuration_service import ConfigurationService
 from bot_python_sdk.configuration_store import ConfigurationStore
 from bot_python_sdk.device_status import DeviceStatus
@@ -29,17 +30,6 @@ ACTIVATION_ENDPOINT = '/activate'
 QRCODE_ENDPOINT = '/qrcode'
 
 QRCODE_IMG_PATH = 'storage/qr.png'
-
-
-# TODO : Separate into file
-class BaseResource(object):
-    def __init__(self):
-        Logger.info(BaseResource.__name__, BaseResource.__init__.__name__)
-
-    def on_get(self, request, response):
-        Logger.info('api', "Serving base endpoint request...")
-        response.body = '{"message": "BoT-Python-SDK Webserver", "endpoints" : "/qrcode    /actions    /pairing    /activate" }'
-        response.status = falcon.HTTP_200
 
 
 # TODO : Separate into file

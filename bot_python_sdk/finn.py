@@ -7,6 +7,7 @@ from bot_python_sdk.device_status import DeviceStatus
 from bot_python_sdk.logger import Logger
 from bot_python_sdk.store import Store
 
+
 class Finn:
     def __init__(self):
         Logger.info(Finn.__name__, Finn.__init__.__name__)
@@ -26,13 +27,8 @@ class Finn:
                 # argv is the console input
                 __productID = sys.argv[1]
 
-                Logger.info('Server', "starting with configuration. ProductID " + __productID)
+                Logger.info(Finn.__name__, Finn.__init__.__name__ + "starting with configuration. ProductID " + __productID)
                 self.__configuration_service.initialize_configuration(__productID)
-
-        self.__on_server_start_done()
-
-    def __on_server_start_done(self):
-        Logger.info(Finn.__name__, Finn.__on_server_start_done.__name__)
 
         configuration = ConfigurationStore().get()
         device_status = configuration.get_device_status()
@@ -40,24 +36,24 @@ class Finn:
         import platform
         system_platform = platform.system()
 
-        Logger.info(Finn.__name__, Finn.__on_server_start_done.__name__ + ' system_platform = ' + system_platform)
+        Logger.info(Finn.__name__, Finn.__init__.__name__ + ' system_platform = ' + system_platform)
 
         if device_status is DeviceStatus.ACTIVE:
-            Logger.info(Finn.__name__, Finn.__on_server_start_done.__name__ + ' Device is already active, no need to further configure')
-            Logger.info(Finn.__name__, Finn.__on_server_start_done.__name__ + ' Server is waiting for requests to serve...')
-            Logger.info(Finn.__name__, Finn.__on_server_start_done.__name__ + ' Supported Endpoints: /qrcode    /actions    /pairing    /activate')
+            Logger.info(Finn.__name__, Finn.__init__.__name__ + ' Device is already active, no need to further configure')
+            Logger.info(Finn.__name__, Finn.__init__.__name__ + ' Server is waiting for requests to serve...')
+            Logger.info(Finn.__name__, Finn.__init__.__name__ + ' Supported Endpoints: /qrcode    /actions    /pairing    /activate')
         elif device_status is DeviceStatus.PAIRED:
-            Logger.info(Finn.__name__, Finn.__on_server_start_done.__name__ + ' Device state is PAIRED, resuming the configuration')
+            Logger.info(Finn.__name__, Finn.__init__.__name__ + ' Device state is PAIRED, resuming the configuration')
             self.__configuration_service.resume_configuration()
         else:
-            Logger.info(Finn.__name__, Finn.__on_server_start_done.__name__ + ' Pair the device either using QRCode or Bluetooth Service through FINN Mobile App')
+            Logger.info(Finn.__name__, Finn.__init__.__name__ + ' Pair the device either using QRCode or Bluetooth Service through FINN Mobile App')
             if system_platform != 'Darwin' and configuration.is_bluetooth_enabled():
                 # Handle BLE specific events and callbacks
                 BluetoothService().initialize()
 
                 device_status = self.__configuration.get_device_status()
 
-                Logger.info(Finn.__name__, Finn.__on_server_start_done.__name__ + ' device_status.value = ' + device_status.value)
+                Logger.info(Finn.__name__, Finn.__init__.__name__ + ' device_status.value = ' + device_status.value)
 
                 if device_status == DeviceStatus.NEW:
                     self.__configuration_service.pair()

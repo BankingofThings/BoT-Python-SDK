@@ -2,9 +2,12 @@ import subprocess
 
 from bot_python_sdk.Utils import Utils
 
-# Start application
 from bot_python_sdk.logger import Logger
 
+# Start application
+# 1. this file
+# 2. gunicorn starts file api.py
+# 3. api.py starts instance of Finn
 __ip_address = subprocess.Popen(['hostname', '-I'], stdout=subprocess.PIPE).communicate()[0].decode('ascii').split(' ')[0]
 
 Logger.info('Server', "starting with configuration... IP" + __ip_address)
