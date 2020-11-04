@@ -29,6 +29,8 @@ class Finn:
                 Logger.info('Server', "starting with configuration. ProductID " + __productID)
                 self.__configuration_service.initialize_configuration(__productID)
 
+        self.__on_server_start_done()
+
     def __on_server_start_done(self):
         Logger.info(Finn.__name__, Finn.__on_server_start_done.__name__)
 
