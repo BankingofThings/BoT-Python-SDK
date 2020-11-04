@@ -1,6 +1,5 @@
 import sys
 
-from bot_python_sdk.api import BaseResource, ActionsResource, PairingResource, ActivationResource, QRCodeResource
 from bot_python_sdk.bluetooth_service import BluetoothService
 from bot_python_sdk.configuration_service import ConfigurationService
 from bot_python_sdk.configuration_store import ConfigurationStore
@@ -8,22 +7,9 @@ from bot_python_sdk.device_status import DeviceStatus
 from bot_python_sdk.logger import Logger
 from bot_python_sdk.store import Store
 
-BASE_ENDPOINT = '/'
-ACTIONS_ENDPOINT = '/actions'
-PAIRING_ENDPOINT = '/pairing'
-ACTIVATION_ENDPOINT = '/activate'
-QRCODE_ENDPOINT = '/qrcode'
-
-
 class Finn:
-    def __init__(self, api):
+    def __init__(self):
         Logger.info(Finn.__name__, Finn.__init__.__name__)
-
-        api.add_route(BASE_ENDPOINT, BaseResource())
-        api.add_route(ACTIONS_ENDPOINT, ActionsResource())
-        api.add_route(PAIRING_ENDPOINT, PairingResource())
-        api.add_route(ACTIVATION_ENDPOINT, ActivationResource())
-        api.add_route(QRCODE_ENDPOINT, QRCodeResource())
 
         self.__configuration_service = ConfigurationService()
         self.__configuration_store = ConfigurationStore()
