@@ -1,7 +1,6 @@
 import json
 import os
 import subprocess
-
 import falcon
 
 from bot_python_sdk.action_service import ActionService
@@ -30,8 +29,6 @@ ACTIVATION_ENDPOINT = '/activate'
 QRCODE_ENDPOINT = '/qrcode'
 
 QRCODE_IMG_PATH = 'storage/qr.png'
-
-Logger.info('api', 'init start')
 
 # TODO : Separate into file
 class BaseResource(object):
@@ -137,10 +134,8 @@ class QRCodeResource(object):
 # Triggered by gunicorn
 # Start Webserver and add supported endpoint resources
 api = application = falcon.API()
-api.add_route(BASE_ENDPOINT, BaseResource())
-api.add_route(ACTIONS_ENDPOINT, ActionsResource())
-api.add_route(PAIRING_ENDPOINT, PairingResource())
-api.add_route(ACTIVATION_ENDPOINT, ActivationResource())
-api.add_route(QRCODE_ENDPOINT, QRCodeResource())
+
 
 Logger.info('api', 'init done')
+# Start finn
+Finn(api)

@@ -1,18 +1,24 @@
-import subprocess
 import sys
 
-from bot_python_sdk.Utils import Utils
+from bot_python_sdk.api import *
 from bot_python_sdk.bluetooth_service import BluetoothService
 from bot_python_sdk.configuration_service import ConfigurationService
 from bot_python_sdk.configuration_store import ConfigurationStore
 from bot_python_sdk.device_status import DeviceStatus
-from bot_python_sdk.store import Store
 from bot_python_sdk.logger import Logger
+from bot_python_sdk.store import Store
 
 
 class Finn:
-    def __init__(self):
+    def __init__(self, __api):
         Logger.info(Finn.__name__, Finn.__init__.__name__)
+
+        __api.add_route(BASE_ENDPOINT, BaseResource())
+        __api.add_route(ACTIONS_ENDPOINT, ActionsResource())
+        __api.add_route(PAIRING_ENDPOINT, PairingResource())
+        __api.add_route(ACTIVATION_ENDPOINT, ActivationResource())
+        __api.add_route(QRCODE_ENDPOINT, QRCodeResource())
+
         self.__configuration_service = ConfigurationService()
         self.__configuration_store = ConfigurationStore()
         self.__configuration = self.__configuration_store.get()
@@ -30,24 +36,6 @@ class Finn:
 
                 Logger.info('Server', "starting with configuration. ProductID " + __productID)
                 self.__configuration_service.initialize_configuration(__productID)
-
-        self.__start_server()
-
-    def __start_server(self):
-        ip_address = self.__get_ip()
-
-        Logger.info('Server', "starting with configuration... IP" + ip_address)
-
-        if Utils.is_valid(ip_address):
-            Logger.info('Server', "Detected IP Address :" + ip_address)
-        else:
-            ip_address = '127.0.0.1'
-            Logger.info('Server', "Failed in detecting valid IP Address, using loop back address: " + ip_address)
-
-        Logger.info('Server', "Starting server at URL: http://" + ip_address + ':3001/')
-        subprocess.run(['gunicorn', '-b', ip_address + ':3001'])
-
-        self.__on_server_start_done()
 
     def __on_server_start_done(self):
         Logger.info(Finn.__name__, Finn.__on_server_start_done.__name__)
@@ -81,6 +69,3 @@ class Finn:
                     self.__configuration_service.pair()
                 if device_status == DeviceStatus.PAIRED:
                     self.__configuration_service.activate()
-
-    def __get_ip(self):
-        return subprocess.Popen(['hostname', '-I'], stdout=subprocess.PIPE).communicate()[0].decode('ascii').split(' ')[0]
