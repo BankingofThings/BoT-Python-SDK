@@ -105,9 +105,9 @@ class Store:
 
     @staticmethod
     def has_configuration():
-        Logger.info(Store.__name__, Store.has_configuration.__name__)
-
-        return os.path.isfile(_configuration_file_path)
+        value = os.path.isfile(_configuration_file_path)
+        Logger.info(Store.__name__, Store.has_configuration.__name__ + ' value = ' + value)
+        return value
 
     @staticmethod
     def remove_configuration():

@@ -1,17 +1,15 @@
-import falcon
-import subprocess
 import json
 import os
-import platform
+import subprocess
+
+import falcon
 
 from bot_python_sdk.action_service import ActionService
 from bot_python_sdk.configuration_service import ConfigurationService
 from bot_python_sdk.configuration_store import ConfigurationStore
 from bot_python_sdk.device_status import DeviceStatus
 from bot_python_sdk.logger import Logger
-from bot_python_sdk.bluetooth_service import BluetoothService
 
-LOCATION = 'Controller'
 INCOMING_REQUEST = 'Incoming request: '
 
 DEVICE_ID_KEY = 'deviceId'
@@ -39,7 +37,7 @@ class BaseResource(object):
         pass
 
     def on_get(self, request, response):
-        Logger.info(LOCATION, "Serving base endpoint request...")
+        Logger.info('api', "Serving base endpoint request...")
         response.body = '{"message": "BoT-Python-SDK Webserver", "endpoints" : "/qrcode    /actions    /pairing    /activate" }'
         response.status = falcon.HTTP_200
 
@@ -51,7 +49,7 @@ class ActionsResource:
         self.configuration_store = ConfigurationStore()
 
     def on_get(self, request, response):
-        Logger.info(LOCATION, INCOMING_REQUEST + METHOD_GET + ' ' + ACTIONS_ENDPOINT)
+        Logger.info('api', INCOMING_REQUEST + METHOD_GET + ' ' + ACTIONS_ENDPOINT)
         response.media = self.action_service.get_actions()
 
     def on_post(self, request, response):
@@ -60,18 +58,17 @@ class ActionsResource:
 
         if device_status is not DeviceStatus.ACTIVE and device_status is not DeviceStatus.MULTIPAIR:
             error = 'Not allowed to trigger actions when device is not activated.'
-            Logger.error(LOCATION, error)
+            Logger.error('api', error)
             raise falcon.HTTPBadRequest(description=error)
 
-        Logger.info(LOCATION, INCOMING_REQUEST + METHOD_POST + ' ' + ACTIONS_ENDPOINT)
+        Logger.info('api', INCOMING_REQUEST + METHOD_POST + ' ' + ACTIONS_ENDPOINT)
         data = request.media
         if ACTION_ID not in data.keys():
-            Logger.error(LOCATION, 'Missing parameter `' + ACTION_ID + '` for ' + METHOD_POST + ' ' + ACTIONS_ENDPOINT)
+            Logger.error('api', 'Missing parameter `' + ACTION_ID + '` for ' + METHOD_POST + ' ' + ACTIONS_ENDPOINT)
             raise falcon.HTTPBadRequest
 
         if device_status is DeviceStatus.MULTIPAIR and ALTERNATIVE_ID not in data.keys():
-            Logger.error(LOCATION,
-                         'Missing parameter `' + ALTERNATIVE_ID + '` for ' + METHOD_POST + ' ' + ACTIONS_ENDPOINT)
+            Logger.error('api', 'Missing parameter `' + ALTERNATIVE_ID + '` for ' + METHOD_POST + ' ' + ACTIONS_ENDPOINT)
             raise falcon.HTTPBadRequest
 
         action_id = data[ACTION_ID]
@@ -91,11 +88,11 @@ class PairingResource:
         self.configuration_store = ConfigurationStore()
 
     def on_get(self, request, response):
-        Logger.info(LOCATION, INCOMING_REQUEST + METHOD_GET + ' ' + PAIRING_ENDPOINT)
+        Logger.info('api', INCOMING_REQUEST + METHOD_GET + ' ' + PAIRING_ENDPOINT)
         configuration = self.configuration_store.get()
         if configuration.get_device_status() is not DeviceStatus.NEW:
             error = 'Device is already paired.'
-            Logger.error(LOCATION, error)
+            Logger.error('api', error)
             raise falcon.HTTPBadRequest(description=error)
         device_information = configuration.get_device_information()
         response.media = json.dumps(device_information)
@@ -109,11 +106,11 @@ class ActivationResource:
         self.configuration_store = ConfigurationStore()
 
     def on_get(self, request, response):
-        Logger.info(LOCATION, "Serving Activation Request...")
+        Logger.info('api', "Serving Activation Request...")
         configuration = self.configuration_store.get()
         if configuration.get_device_status() is DeviceStatus.ACTIVE:
             error = 'Device is already activated'
-            Logger.error(LOCATION, error)
+            Logger.error('api', error)
             raise falcon.HTTPBadRequest(description=error)
         else:
             self.configuration_service.resume_configuration()
@@ -125,11 +122,12 @@ class QRCodeResource(object):
         pass
 
     def on_get(self, request, response):
-        Logger.info(LOCATION, "Serving QRCode Request...")
+        Logger.info('api', "Serving QRCode Request...")
         stream = open(QRCODE_IMG_PATH, 'rb')
         content_length = os.path.getsize(QRCODE_IMG_PATH)
         response.content_type = "image/png"
         response.stream, response.content_length = stream, content_length
+
 
 # Triggered by gunicorn
 # Start Webserver and add supported endpoint resources
@@ -139,3 +137,5 @@ api.add_route(ACTIONS_ENDPOINT, ActionsResource())
 api.add_route(PAIRING_ENDPOINT, PairingResource())
 api.add_route(ACTIVATION_ENDPOINT, ActivationResource())
 api.add_route(QRCODE_ENDPOINT, QRCodeResource())
+
+Logger.info('api', 'init done')
