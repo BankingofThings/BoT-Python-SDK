@@ -13,6 +13,7 @@ from bot_python_sdk.logger import Logger
 class Finn:
     def __init__(self):
         Logger.info(Finn.__name__, Finn.__init__.__name__)
+        self.__configuration_service = ConfigurationService()
 
         store = Store()
 
@@ -26,14 +27,14 @@ class Finn:
                 productID = sys.argv[1]
 
                 Logger.info('Server', "starting with configuration. ProductID " + productID)
-                ConfigurationService().initialize_configuration(productID)
+                self.__configuration_service.initialize_configuration(productID)
 
         self.__start_server()
 
     @staticmethod
     def on_server_start_done():
         Logger.info(Finn.__name__, Finn.on_server_start_done.__name__)
-        
+
         configuration = ConfigurationStore().get()
         device_status = configuration.get_device_status()
 
@@ -54,7 +55,15 @@ class Finn:
             if system_platform != 'Darwin' and configuration.is_bluetooth_enabled():
                 # Handle BLE specific events and callbacks
                 BluetoothService().initialize()
-                ConfigurationService().resume_configuration()
+
+                device_status = self.configuration.get_device_status()
+
+                Logger.info(LOCATION, 'DeviceStatus = ' + device_status.value)
+
+                if device_status == DeviceStatus.NEW:
+                    self.pair()
+                if device_status == DeviceStatus.PAIRED:
+                    self.activate()
 
     def __start_server(self):
         ip_address = self.__get_ip()

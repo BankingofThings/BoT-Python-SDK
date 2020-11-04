@@ -31,6 +31,7 @@ QRCODE_ENDPOINT = '/qrcode'
 
 QRCODE_IMG_PATH = 'storage/qr.png'
 
+Logger.info('api', 'init start')
 
 # TODO : Separate into file
 class BaseResource(object):

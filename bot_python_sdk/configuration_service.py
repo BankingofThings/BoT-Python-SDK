@@ -60,7 +60,9 @@ class ConfigurationService:
         self.generate_qr_code()
         Logger.success(LOCATION, 'Configuration successfully initialized.')
 
+    # TODO remove this function
     def resume_configuration(self):
+        Logger.info(ConfigurationService.__name__, ConfigurationService.resume_configuration.__name__)
         device_status = self.configuration.get_device_status()
 
         Logger.info(LOCATION, 'DeviceStatus = ' + device_status.value)
