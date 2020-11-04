@@ -9,9 +9,10 @@ from bot_python_sdk.logger import Logger
 
 store = Store()
 
+
 # If OS is windows based, it doesn't support gunicorn so we run waitress
 # TODO doesn't work with pyCharm
-def startWebServer():
+def start_server():
     ip = Utils.getIpAddress()
     Logger.info('Server', "starting with configuration... IP" + ip)
     if Utils.is_valid(ip):
@@ -43,5 +44,4 @@ else:
             Logger.info('Server', "starting with configuration. ProductID " + productID)
             ConfigurationService().initialize_configuration(productID)
 
-            startWebServer()
-    else: startWebServer()
+    start_server()

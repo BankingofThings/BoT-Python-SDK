@@ -20,38 +20,32 @@ class PairingService:
         self.device_status = configuration.get_device_status()
         self.bot_service = BoTService()
 
+    def start_check_paired_loop(self):
+        if self.get_remote_paired_status():
+            return True
+        else:
+            time.sleep(POLLING_INTERVAL_IN_SECONDS)
+            # restart after fail
+            self.start_check_paired_loop()
+
     def run(self):
         Logger.info(LOCATION, 'run()')
 
-        success = False
-        if self.device_status != DeviceStatus.NEW:
-            Logger.info(LOCATION, 'device status not new')
-        elif self.device_status == DeviceStatus.MULTIPAIR:
-            Logger.info(LOCATION, 'Multipair mode, no need to poll or delete keys...')
-        else:
-            Logger.info(LOCATION, 'Starting to pair device...')
-            for tries in range(1, MAXIMUM_TRIES + 1):
-                Logger.info(LOCATION, 'Pairing device, attempt: ' + str(tries))
-                if self.pair():
-                    success = True
-                    break
-                else:
-                    time.sleep(POLLING_INTERVAL_IN_SECONDS)
+        return self.start_check_paired_loop()
 
-        return success
+    def get_remote_paired_status(self):
+        Logger.info(PairingService.__name__, PairingService.get_remote_paired_status.__name__)
 
-    def pair(self):
-        Logger.info(LOCATION, 'pair()')
         try:
             response = self.bot_service.get(RESOURCE)
             Logger.info(LOCATION, 'Pairing Response: ' + str(response))
+            if response['status'] is True:
+                Logger.success(LOCATION, 'Device successfully paired.')
+                return True
+            else:
+                Logger.error(LOCATION, 'Failed pairing attempt.')
+                return False
         # TODO : Make exception more specific
         except:
-            Logger.error(LOCATION, 'Failed pairing attempt.')
-            return False
-        if response['status'] is True:
-            Logger.success(LOCATION, 'Device successfully paired.')
-            return True
-        else:
             Logger.error(LOCATION, 'Failed pairing attempt.')
             return False
