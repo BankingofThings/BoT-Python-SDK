@@ -22,11 +22,6 @@ ALTERNATIVE_ID = 'alternativeID'
 
 METHOD_GET = 'GET'
 METHOD_POST = 'POST'
-BASE_ENDPOINT = '/'
-ACTIONS_ENDPOINT = '/actions'
-PAIRING_ENDPOINT = '/pairing'
-ACTIVATION_ENDPOINT = '/activate'
-QRCODE_ENDPOINT = '/qrcode'
 
 QRCODE_IMG_PATH = 'storage/qr.png'
 

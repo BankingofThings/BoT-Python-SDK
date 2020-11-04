@@ -1,12 +1,18 @@
 import sys
 
-from bot_python_sdk.api import BASE_ENDPOINT, ACTIONS_ENDPOINT, PAIRING_ENDPOINT, ACTIVATION_ENDPOINT, QRCODE_ENDPOINT, BaseResource, ActionsResource, PairingResource, ActivationResource, QRCodeResource
+from bot_python_sdk.api import BaseResource, ActionsResource, PairingResource, ActivationResource, QRCodeResource
 from bot_python_sdk.bluetooth_service import BluetoothService
 from bot_python_sdk.configuration_service import ConfigurationService
 from bot_python_sdk.configuration_store import ConfigurationStore
 from bot_python_sdk.device_status import DeviceStatus
 from bot_python_sdk.logger import Logger
 from bot_python_sdk.store import Store
+
+BASE_ENDPOINT = '/'
+ACTIONS_ENDPOINT = '/actions'
+PAIRING_ENDPOINT = '/pairing'
+ACTIVATION_ENDPOINT = '/activate'
+QRCODE_ENDPOINT = '/qrcode'
 
 
 class Finn:
