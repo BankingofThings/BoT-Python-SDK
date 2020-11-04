@@ -1,5 +1,7 @@
 import sys
 
+from bot_python_sdk.action_resource import ActionsResource
+from bot_python_sdk.action_service import ActionService
 from bot_python_sdk.base_resource import BaseResource
 from bot_python_sdk.bluetooth_service import BluetoothService
 from bot_python_sdk.configuration_service import ConfigurationService
@@ -11,14 +13,18 @@ from bot_python_sdk.store import Store
 
 class Finn:
     def __init__(self, api):
+        self.__configuration_service = ConfigurationService()
+        self.__configuration_store = ConfigurationStore()
+        self.__configuration = self.__configuration_store.get()
+        __action_service = ActionService()
+
         Logger.info(Finn.__name__, Finn.__init__.__name__)
 
         BASE_ENDPOINT = '/'
         api.add_route(BASE_ENDPOINT, BaseResource())
+        ACTIONS_ENDPOINT = '/actions'
+        api.add_route(ACTIONS_ENDPOINT, ActionsResource(__action_service, self.__configuration_store))
 
-        self.__configuration_service = ConfigurationService()
-        self.__configuration_store = ConfigurationStore()
-        self.__configuration = self.__configuration_store.get()
 
         __store = Store()
 
