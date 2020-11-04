@@ -1,5 +1,7 @@
 import sys
 
+from bot_python_sdk.ActivationResource import ActivationResource
+from bot_python_sdk.PairingResource import PairingResource
 from bot_python_sdk.action_resource import ActionsResource
 from bot_python_sdk.action_service import ActionService
 from bot_python_sdk.base_resource import BaseResource
@@ -8,6 +10,7 @@ from bot_python_sdk.configuration_service import ConfigurationService
 from bot_python_sdk.configuration_store import ConfigurationStore
 from bot_python_sdk.device_status import DeviceStatus
 from bot_python_sdk.logger import Logger
+from bot_python_sdk.qr_code_resource import QRCodeResource
 from bot_python_sdk.store import Store
 
 
@@ -20,11 +23,11 @@ class Finn:
 
         Logger.info(Finn.__name__, Finn.__init__.__name__)
 
-        BASE_ENDPOINT = '/'
-        api.add_route(BASE_ENDPOINT, BaseResource())
-        ACTIONS_ENDPOINT = '/actions'
-        api.add_route(ACTIONS_ENDPOINT, ActionsResource(__action_service, self.__configuration_store))
-
+        api.add_route('/', BaseResource())
+        api.add_route('/actions', ActionsResource(__action_service, self.__configuration_store))
+        api.add_route('/pairing', PairingResource(self.__configuration_store))
+        api.add_route('/activate', ActivationResource())
+        api.add_route('/qrcode', QRCodeResource())
 
         __store = Store()
 

@@ -3,11 +3,6 @@ import falcon
 from bot_python_sdk.device_status import DeviceStatus
 from bot_python_sdk.logger import Logger
 
-ACTION_ID = 'actionID'
-METHOD_POST = 'POST'
-ALTERNATIVE_ID = 'alternativeID'
-ACTIONS_ENDPOINT = '/actions'
-VALUE_KEY = 'value'
 
 class ActionsResource:
 
@@ -28,17 +23,17 @@ class ActionsResource:
             raise falcon.HTTPBadRequest(description=error)
 
         data = request.media
-        if ACTION_ID not in data.keys():
-            Logger.error('api', 'Missing parameter `' + ACTION_ID + '` for ' + METHOD_POST + ' ' + ACTIONS_ENDPOINT)
+        if 'actionID' not in data.keys():
+            Logger.error('api', 'Missing parameter `' + 'actionID' + '` for ' + 'POST' + ' ' + '/actions')
             raise falcon.HTTPBadRequest
 
-        if device_status is DeviceStatus.MULTIPAIR and ALTERNATIVE_ID not in data.keys():
-            Logger.error('api', 'Missing parameter `' + ALTERNATIVE_ID + '` for ' + METHOD_POST + ' ' + ACTIONS_ENDPOINT)
+        if device_status is DeviceStatus.MULTIPAIR and 'alternativeID' not in data.keys():
+            Logger.error('api', 'Missing parameter `' + 'alternativeID' + '` for ' + 'POST' + ' ' + '/actions')
             raise falcon.HTTPBadRequest
 
-        action_id = data[ACTION_ID]
-        value = data[VALUE_KEY] if VALUE_KEY in data.keys() else None
-        alternative_id = data[ALTERNATIVE_ID] if ALTERNATIVE_ID in data.keys() else None
+        action_id = data['actionID']
+        value = data['value'] if 'value' in data.keys() else None
+        alternative_id = data['alternativeID'] if 'alternativeID' in data.keys() else None
 
         success = self.action_service.trigger(action_id, value, alternative_id)
         if success:
