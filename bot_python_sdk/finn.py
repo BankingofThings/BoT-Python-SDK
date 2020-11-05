@@ -36,7 +36,7 @@ class Finn:
                                             public_key,
                                             private_key)
             self.__configuration_store.save(self.__configuration)
-            self.__configuration.generate_qr_code()
+            self.__configuration_service.generate_qr_code()
 
             self.__start_server()
         else:
