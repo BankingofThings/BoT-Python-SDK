@@ -32,17 +32,17 @@ class Finn:
 
         __store = Store()
 
-        if not __store.has_configuration():
-            if len(sys.argv) != 2:
-                exit('Please add your productID to configure the SDK: "make server productID=YOUR_PRODUCT_ID"')
-            elif len(sys.argv[1]) != 36:
-                exit('Please enter a valid productID')
-            else:
-                # argv is the console input
-                __productID = sys.argv[1]
-
-                Logger.info('Finn', '__init__' + "starting with configuration. ProductID " + __productID)
-                self.__configuration_service.initialize_configuration(__productID)
+        # if not __store.has_configuration():
+        #     if len(sys.argv) != 2:
+        #         exit('Please add your productID to configure the SDK: "make server productID=YOUR_PRODUCT_ID"')
+        #     elif len(sys.argv[1]) != 36:
+        #         exit('Please enter a valid productID')
+        #     else:
+        #         # argv is the console input
+        #         __productID = sys.argv[1]
+        #
+        #         Logger.info('Finn', '__init__' + "starting with configuration. ProductID " + __productID)
+        #         self.__configuration_service.initialize_configuration(__productID)
 
         # device_status = self.__configuration.get_device_status()
         #
