@@ -29,7 +29,7 @@ def initialize_configuration(product_id):
         bluetooth_enabled = True
 
     Logger.info('Server', 'initialize_configuration done')
-    Finn(product_id, device_status, aid, bluetooth_enabled)
+    Finn(product_id, device_status, aid, bluetooth_enabled, False)
 
 
 # Resume Finn or generate configuration
