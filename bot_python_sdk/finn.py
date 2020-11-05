@@ -2,6 +2,8 @@ import platform
 import subprocess
 import sys
 
+import falcon
+
 from bot_python_sdk.action_resource import ActionsResource
 from bot_python_sdk.action_service import ActionService
 from bot_python_sdk.activation_resource import ActivationResource
@@ -77,30 +79,38 @@ class Finn:
 
         Logger.info('Finn', '__start_server' + ' proc.returncode = ' + str(proc.returncode))
 
-    def on_api_ready(self, api):
-        device_status = self.__configuration.get_device_status()
+    @staticmethod
+    def on_api_ready():
+        Logger.info('Finn', 'on_api_ready static')
+        Finn.get_instance().on_api_ready()
 
-        system_platform = platform.system()
 
-        api.add_route('/', BaseResource())
-        api.add_route('/actions', ActionsResource(self.__action_service, self.__configuration_store))
-        api.add_route('/pairing', PairingResource(self.__configuration_store))
-        api.add_route('/activate', ActivationResource())
-        api.add_route('/qrcode', QRCodeResource())
+def on_api_ready(self):
+    Logger.info('Finn', 'on_api_ready')
+    device_status = self.__configuration.get_device_status()
 
-        if device_status is DeviceStatus.ACTIVE:
-            Logger.info('Finn', '__init__' + ' Device is already active, no need to further configure')
-            Logger.info('Finn', '__init__' + ' Server is waiting for requests to serve...')
-            Logger.info('Finn', '__init__' + ' Supported Endpoints: /qrcode    /actions    /pairing    /activate')
-        elif device_status is DeviceStatus.PAIRED:
-            Logger.info('Finn', '__init__' + ' Device state is PAIRED, resuming the configuration')
-            self.__configuration_service.activate()
-        else:
-            Logger.info('Finn', '__init__' + ' Device not paired yet. productID = ' + self.__configuration.maker_id + ', deviceID = ' + self.__configuration.device_id + ', publickKey = ' + self.__configuration.public_key)
-            if system_platform != 'Darwin' and self.__configuration.is_bluetooth_enabled():
-                # Handle BLE specific events and callbacks
-                BluetoothService().initialize()
+    system_platform = platform.system()
 
-            self.__configuration_service.initialize_configuration(self.__productID)
+    api = falcon.API()
+    api.add_route('/', BaseResource())
+    api.add_route('/actions', ActionsResource(self.__action_service, self.__configuration_store))
+    api.add_route('/pairing', PairingResource(self.__configuration_store))
+    api.add_route('/activate', ActivationResource())
+    api.add_route('/qrcode', QRCodeResource())
 
-            self.__configuration_service.pair()
+    if device_status is DeviceStatus.ACTIVE:
+        Logger.info('Finn', '__init__' + ' Device is already active, no need to further configure')
+        Logger.info('Finn', '__init__' + ' Server is waiting for requests to serve...')
+        Logger.info('Finn', '__init__' + ' Supported Endpoints: /qrcode    /actions    /pairing    /activate')
+    elif device_status is DeviceStatus.PAIRED:
+        Logger.info('Finn', '__init__' + ' Device state is PAIRED, resuming the configuration')
+        self.__configuration_service.activate()
+    else:
+        Logger.info('Finn', '__init__' + ' Device not paired yet. productID = ' + self.__configuration.maker_id + ', deviceID = ' + self.__configuration.device_id + ', publickKey = ' + self.__configuration.public_key)
+        if system_platform != 'Darwin' and self.__configuration.is_bluetooth_enabled():
+            # Handle BLE specific events and callbacks
+            BluetoothService().initialize()
+
+        self.__configuration_service.initialize_configuration(self.__productID)
+
+        self.__configuration_service.pair()
