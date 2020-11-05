@@ -76,6 +76,7 @@ class Finn:
                 self.__configuration_service.pair()
 
     def __start_server(self):
+        Logger.info('Finn', '__start_server')
         # Start application
         # 1. this file
         # 2. gunicorn starts file api.py
@@ -95,8 +96,8 @@ class Finn:
         # Executes api.py and indirectly finn.py
         subprocess.run(['gunicorn', '-b', __ip_address + ':3001', 'bot_python_sdk.api:api'])
 
-
     def on_server_ready(self):
+        Logger.info('Finn', 'on_server_ready')
         api = application = falcon.API()
         api.add_route('/', BaseResource())
         api.add_route('/actions', ActionsResource(self.__action_service, self.__configuration_store))
