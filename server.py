@@ -1,3 +1,4 @@
+import atexit
 import os
 import signal
 import subprocess
@@ -25,4 +26,9 @@ Logger.info('Server', "Starting server at URL: http://" + __ip_address + ':3001/
 # Executes api.py and indirectly finn.py
 process = subprocess.Popen(['gunicorn', '-b', __ip_address + ':3001', 'bot_python_sdk.api:api'])
 
-os.killpg(os.getpgid(process.pid), signal.SIGTERM)
+
+def __stop_gunicorn():
+    os.kill(process.pid, signal.SIGTERM)
+
+
+atexit.register(__stop_gunicorn)
