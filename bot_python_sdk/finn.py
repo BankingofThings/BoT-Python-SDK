@@ -29,20 +29,19 @@ class Finn:
 
         self.__start_server()
 
-        public_key, private_key = KeyGenerator().generate_key()
-        device_id = KeyGenerator().generate_uuid()
-        # Added alternative id as an argument to initializing the configuration
-        self.__configuration.initialize(product_id,
-                                      device_id,
-                                      device_status,
-                                      bluetooth_enabled,
-                                      aid,
-                                      public_key,
-                                      private_key)
-        self.__configuration_store.save(self.__configuration)
-        self.__configuration.generate_qr_code()
-
-        device_status = self.__configuration.get_device_status()
+        if product_id is not None:
+            public_key, private_key = KeyGenerator().generate_key()
+            device_id = KeyGenerator().generate_uuid()
+            # Added alternative id as an argument to initializing the configuration
+            self.__configuration.initialize(product_id,
+                                          device_id,
+                                          device_status,
+                                          bluetooth_enabled,
+                                          aid,
+                                          public_key,
+                                          private_key)
+            self.__configuration_store.save(self.__configuration)
+            self.__configuration.generate_qr_code()
 
         import platform
         system_platform = platform.system()

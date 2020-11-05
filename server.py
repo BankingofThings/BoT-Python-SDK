@@ -27,7 +27,10 @@ def initialize_configuration(product_id):
     Finn(product_id, device_status, aid, bluetooth_enabled)
 
 
-if not Store.has_configuration():
+# Resume Finn or generate configuration
+if Store.has_configuration():
+    Finn(None, None, None, None)
+else:
     if len(sys.argv) != 2:
         exit('Please add your productID to configure the SDK: "make server productID=YOUR_PRODUCT_ID"')
     elif len(sys.argv[1]) != 36:
