@@ -60,7 +60,7 @@ class Finn:
             Logger.info('Finn', '__init__' + ' Device state is PAIRED, resuming the configuration')
             self.__configuration_service.activate()
         else:
-            Logger.info('Finn', '__init__' + ' Device not paired yet. productID = ' + self.__configuration.maker_id + ', deviceID = ' + self.__configuration.device_id)
+            Logger.info('Finn', '__init__' + ' Device not paired yet. productID = ' + self.__configuration.maker_id + ', deviceID = ' + self.__configuration.device_id + ', publickKey = ' + self.__configuration.public_key)
             if system_platform != 'Darwin' and self.__configuration.is_bluetooth_enabled():
                 # Handle BLE specific events and callbacks
                 BluetoothService().initialize()
