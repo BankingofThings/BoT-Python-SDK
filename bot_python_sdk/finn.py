@@ -35,10 +35,10 @@ class Finn:
         if not __store.has_configuration():
             if len(sys.argv) != 2:
                 Logger.info('Finn', '__init__ 1')
-                # exit('Please add your productID to configure the SDK: "make server productID=YOUR_PRODUCT_ID"')
+                exit('Please add your productID to configure the SDK: "make server productID=YOUR_PRODUCT_ID"')
             elif len(sys.argv[1]) != 36:
                 Logger.info('Finn', '__init__ 2')
-                # exit('Please enter a valid productID')
+                exit('Please enter a valid productID')
             else:
                 # argv is the console input
                 __productID = sys.argv[1]
