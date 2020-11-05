@@ -23,6 +23,7 @@ class Finn:
 
     @staticmethod
     def get_instance():
+        Logger.info('Finn', 'get_instance' + str(Finn.__instance__))
         return Finn.__instance__
 
     def __init__(self):
