@@ -48,7 +48,7 @@ class Finn:
 
         system_platform = platform.system()
 
-        Logger.info('Finn', '__init__ deviceStatus = ' + device_status + ', system_platform = ' + system_platform)
+        Logger.info('Finn', '__init__ deviceStatus = ' + str(device_status) + ', system_platform = ' + system_platform)
 
         if device_status is DeviceStatus.ACTIVE:
             Logger.info('Finn', '__init__' + ' Device is already active, no need to further configure')
