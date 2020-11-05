@@ -7,4 +7,4 @@ from bot_python_sdk.finn import Finn
 api = application = falcon.API()
 
 # Start finn
-Finn.instance().on_api_ready(api)
+Finn.get_instance().on_api_ready(api)

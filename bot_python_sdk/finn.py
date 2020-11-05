@@ -2,8 +2,6 @@ import platform
 import subprocess
 import sys
 
-from singleton.singleton import Singleton
-
 from bot_python_sdk.action_resource import ActionsResource
 from bot_python_sdk.action_service import ActionService
 from bot_python_sdk.activation_resource import ActivationResource
@@ -19,9 +17,20 @@ from bot_python_sdk.store import Store
 from bot_python_sdk.utils import Utils
 
 
-class Finn(metaclass=Singleton):
+class Finn:
+    __instance__ = None
+
+    @staticmethod
+    def get_instance():
+        return Finn.__instance__
+
     def __init__(self):
         Logger.info('Finn', '__init__')
+
+        if Finn.__instance__ is None:
+            Finn.__instance__ = self
+        else:
+            raise Exception("Should only be initialized once")
 
         self.__configuration_service = ConfigurationService()
         self.__configuration_store = ConfigurationStore()
