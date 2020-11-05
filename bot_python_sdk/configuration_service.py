@@ -73,6 +73,7 @@ class ConfigurationService:
             self.activate()
 
     def pair(self):
+        Logger.info('ConfigurationService', 'pair')
         success = PairingService().run()
         if success:
             self.configuration.set_device_status(DeviceStatus.PAIRED.value)

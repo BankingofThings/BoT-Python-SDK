@@ -1,6 +1,6 @@
 import subprocess
 
-from bot_python_sdk.Utils import Utils
+from bot_python_sdk.utils import Utils
 
 from bot_python_sdk.logger import Logger
 

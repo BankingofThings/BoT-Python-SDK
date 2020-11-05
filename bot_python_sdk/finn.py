@@ -1,7 +1,7 @@
 import sys
 
-from bot_python_sdk.ActivationResource import ActivationResource
-from bot_python_sdk.PairingResource import PairingResource
+from bot_python_sdk.activation_resource import ActivationResource
+from bot_python_sdk.pairing_resource import PairingResource
 from bot_python_sdk.action_resource import ActionsResource
 from bot_python_sdk.action_service import ActionService
 from bot_python_sdk.base_resource import BaseResource
