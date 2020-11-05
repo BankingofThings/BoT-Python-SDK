@@ -30,7 +30,7 @@ Logger.info('Server', "Starting server at URL: http://" + __ip_address + ':3001/
 # Finn(api)
 
 # Executes api.py and indirectly finn.py
-subprocess.run(['gunicorn', '-b', __ip_address + ':3001', 'bot_python_sdk.api:api'])
+subprocess.Popen(['gunicorn', '-b', __ip_address + ':3001', 'bot_python_sdk.api:api'])
 #
 # def __stop_gunicorn():
 #     Logger.info('Server', '__stop_gunicorn')
