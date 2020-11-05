@@ -26,7 +26,7 @@ class Finn:
         return Finn.__instance__
 
     def __init__(self):
-        __instance__ = self
+        Finn.__instance__ = self
 
         self.__configuration_service = ConfigurationService()
         self.__configuration_store = ConfigurationStore()
