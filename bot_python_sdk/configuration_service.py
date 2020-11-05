@@ -16,7 +16,7 @@ class ConfigurationService:
 
     def __init__(self):
         Logger.info('ConfigurationService', '__init__')
-        self.configuration = self.configuration_store.get()
+        self.configuration = Store.get_configuration_object()
 
     # TODO remove this function
     def resume_configuration(self):

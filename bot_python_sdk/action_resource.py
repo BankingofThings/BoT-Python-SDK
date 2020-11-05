@@ -2,6 +2,7 @@ import falcon
 
 from bot_python_sdk.device_status import DeviceStatus
 from bot_python_sdk.logger import Logger
+from bot_python_sdk.store import Store
 
 
 class ActionsResource:
@@ -14,7 +15,7 @@ class ActionsResource:
         response.media = self.action_service.get_actions()
 
     def on_post(self, request, response):
-        configuration = self.configuration_store.get()
+        configuration = Store.get_configuration_object()
         device_status = configuration.get_device_status()
 
         if device_status is not DeviceStatus.ACTIVE and device_status is not DeviceStatus.MULTIPAIR:
