@@ -34,7 +34,7 @@ def initialize_configuration(product_id):
 
 # Resume Finn or generate configuration
 if Store.has_configuration():
-    Finn(None, None, None, None)
+    Finn(None, None, None, None, False)
 else:
     if len(sys.argv) != 2:
         exit('Please add your productID to configure the SDK: "make server productID=YOUR_PRODUCT_ID"')

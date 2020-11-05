@@ -10,4 +10,4 @@ api = application = falcon.API()
 
 Logger.info('api', 'init done')
 
-Finn.finn_instance.init_api(api)
+Finn(None, None, None, None, True)

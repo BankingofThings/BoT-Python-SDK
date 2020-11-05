@@ -16,20 +16,15 @@ from bot_python_sdk.qr_code_resource import QRCodeResource
 
 
 class Finn:
-    finn_instance = None
-
-    def __init__(self, product_id, device_status, aid, bluetooth_enabled):
+    def __init__(self, product_id, device_status, aid, bluetooth_enabled, from_api):
         Logger.info('Finn', '__init__' + str(self))
-        Finn.finn_instance = self
 
         self.__configuration_service = ConfigurationService()
         self.__configuration_store = ConfigurationStore()
         self.__configuration = self.__configuration_store.get()
         self.__action_service = ActionService()
 
-        self.__start_server()
-
-        if product_id is not None:
+        if not from_api:
             public_key, private_key = KeyGenerator().generate_key()
             device_id = KeyGenerator().generate_uuid()
             # Added alternative id as an argument to initializing the configuration
@@ -43,10 +38,17 @@ class Finn:
             self.__configuration_store.save(self.__configuration)
             self.__configuration.generate_qr_code()
 
+            self.__start_server()
+        else:
+            self.init()
+
+    def init(self):
         import platform
         system_platform = platform.system()
 
-        Logger.info('Finn', '__init__' + ' system_platform = ' + system_platform)
+        Logger.info('Finn', 'init' + ' system_platform = ' + system_platform)
+
+        device_status = self.__configuration.device_status
 
         if device_status is DeviceStatus.ACTIVE:
             Logger.info('Finn', '__init__' + ' Device is already active, no need to further configure')
