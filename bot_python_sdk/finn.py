@@ -63,6 +63,4 @@ class Finn:
                 # Handle BLE specific events and callbacks
                 BluetoothService().initialize()
 
-                Logger.info('Finn', '__init__' + ' device_status.value = ' + device_status.value)
-
-                self.__configuration_service.pair()
+            self.__configuration_service.pair()
