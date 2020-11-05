@@ -6,6 +6,11 @@ from bot_python_sdk.logger import Logger
 from bot_python_sdk.store import Store
 
 
+###
+# Class Server
+# Started with 'make server' user input
+##
+
 # Request user input
 def initialize_configuration(product_id):
     Logger.info('Server', 'initialize_configuration product_id = ' + product_id)
