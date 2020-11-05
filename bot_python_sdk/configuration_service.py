@@ -32,18 +32,13 @@ class ConfigurationService:
         aid = ''
         # Option for Multi pairing
         # If the option is yes, then alternative id needed
-        print('Enable Multi pair(yes/no)')
-        status = input()
-        if status == 'yes':
+        if input('Enable Multi pair(yes/no)') == 'yes':
             device_status = DeviceStatus.MULTIPAIR.value
-            print('Enter your alternativeID:')
-            aid = input()
+            aid = input('Enter your alternativeID:')
         else:
             device_status = DeviceStatus.NEW.value
 
-        print('Enable Bluetooth (yes/no; default is yes)')
-        bluetooth = input()
-        if bluetooth == 'no':
+        if input('Enable Bluetooth (yes/no; default is yes)') == 'no':
             bluetooth_enabled = False
         else:
             bluetooth_enabled = True
