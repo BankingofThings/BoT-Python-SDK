@@ -84,12 +84,7 @@ class Finn:
         Logger.info('Server', "Starting server at URL: http://" + __ip_address + ':3001/')
 
         # Executes api.py and indirectly finn.py
-        process = subprocess.Popen(['gunicorn', '-b', __ip_address + ':3001', 'bot_python_sdk.api:api'])
-
-    @staticmethod
-    def on_server_ready(api):
-        Logger.info('Finn', 'on_server_ready')
-        Finn.finn_instance.init_api(api)
+        subprocess.run(['gunicorn', '-b', __ip_address + ':3001', 'bot_python_sdk.api:api'])
 
     def init_api(self, api):
         Logger.info('Finn', 'init_api')
