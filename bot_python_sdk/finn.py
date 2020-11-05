@@ -100,17 +100,16 @@ class Finn:
         # Executes api.py and indirectly finn.py
         subprocess.run(['gunicorn', '-b', __ip_address + ':3001', 'bot_python_sdk.finn:on_server_ready'])
 
-    def on_server_ready(self, api):
+    @staticmethod
+    def on_server_ready(api):
         Logger.info('Finn', 'on_server_ready')
+        Finn.get_instance().init_api(api)
+
+    def init_api(self, api):
+        Logger.info('Finn', 'init_api')
 
         api.add_route('/', BaseResource())
         api.add_route('/actions', ActionsResource(self.__action_service, self.__configuration_store))
         api.add_route('/pairing', PairingResource(self.__configuration_store))
         api.add_route('/activate', ActivationResource())
         api.add_route('/qrcode', QRCodeResource())
-
-
-def on_server_ready():
-    Logger.info('FinnRoot', 'on_server_ready')
-    api = application = falcon.API()
-    Finn.get_instance().on_server_ready(api)
