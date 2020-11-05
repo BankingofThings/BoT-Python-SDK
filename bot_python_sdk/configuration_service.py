@@ -20,45 +20,7 @@ class ConfigurationService:
         self.configuration_store = ConfigurationStore()
         self.configuration = self.configuration_store.get()
 
-    # Do only one-time
-    def initialize_configuration(self, maker_id):
-        Logger.info('ConfigurationService', 'initialize_configuration')
 
-        public_key, private_key = KeyGenerator().generate_key()
-        device_id = KeyGenerator().generate_uuid()
-        Logger.info('ConfigurationService', 'initialize_configuration' + ' device_id = ' + device_id)
-
-        # initialize the alternative id.
-        aid = ''
-        # Option for Multi pairing
-        # If the option is yes, then alternative id needed
-        print('Enable Multi pair(yes/no)')
-        status = input()
-        if status == 'yes':
-            device_status = DeviceStatus.MULTIPAIR.value
-            print('Enter your alternativeID:')
-            aid = input()
-        else:
-            device_status = DeviceStatus.NEW.value
-
-        print('Enable Bluetooth (yes/no; default is yes)')
-        bluetooth = input()
-        if bluetooth == 'no':
-            bluetooth_enabled = False
-        else:
-            bluetooth_enabled = True
-
-        # Added alternative id as an argument to initializing the configuration
-        self.configuration.initialize(maker_id,
-                                      device_id,
-                                      device_status,
-                                      bluetooth_enabled,
-                                      aid,
-                                      public_key,
-                                      private_key)
-        self.configuration_store.save(self.configuration)
-        self.generate_qr_code()
-        Logger.success(LOCATION, 'Configuration successfully initialized.')
 
     # TODO remove this function
     def resume_configuration(self):

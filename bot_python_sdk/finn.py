@@ -1,7 +1,4 @@
 import subprocess
-import sys
-
-import falcon
 
 from bot_python_sdk.ActivationResource import ActivationResource
 from bot_python_sdk.PairingResource import PairingResource
@@ -13,20 +10,13 @@ from bot_python_sdk.bluetooth_service import BluetoothService
 from bot_python_sdk.configuration_service import ConfigurationService
 from bot_python_sdk.configuration_store import ConfigurationStore
 from bot_python_sdk.device_status import DeviceStatus
+from bot_python_sdk.key_generator import KeyGenerator
 from bot_python_sdk.logger import Logger
 from bot_python_sdk.qr_code_resource import QRCodeResource
-from bot_python_sdk.store import Store
 
 
 class Finn:
-    __instance__ = None
-
-    @staticmethod
-    def get_instance():
-        Logger.info('Finn', 'get_instance' + str(Finn.__instance__))
-        return Finn.__instance__
-
-    def __init__(self):
+    def __init__(self, product_id, device_status, aid, bluetooth_enabled):
         Finn.__instance__ = self
         Logger.info('Finn', '__init__' + str(Finn.__instance__))
 
@@ -37,23 +27,20 @@ class Finn:
 
         Logger.info('Finn', '__init__')
 
-        __store = Store()
-
-        if not __store.has_configuration():
-            if len(sys.argv) != 2:
-                exit('Please add your productID to configure the SDK: "make server productID=YOUR_PRODUCT_ID"')
-            elif len(sys.argv[1]) != 36:
-                exit('Please enter a valid productID')
-            else:
-                # argv is the console input
-                __productID = sys.argv[1]
-
-                Logger.info('Finn', '__init__' + "starting with configuration. ProductID " + __productID)
-                self.__configuration_service.initialize_configuration(__productID)
-
         self.__start_server()
 
-        self.on_server_ready()
+        public_key, private_key = KeyGenerator().generate_key()
+        device_id = KeyGenerator().generate_uuid()
+        # Added alternative id as an argument to initializing the configuration
+        self.__configuration.initialize(product_id,
+                                      device_id,
+                                      device_status,
+                                      bluetooth_enabled,
+                                      aid,
+                                      public_key,
+                                      private_key)
+        self.__configuration_store.save(self.__configuration)
+        self.__configuration.generate_qr_code()
 
         device_status = self.__configuration.get_device_status()
 
