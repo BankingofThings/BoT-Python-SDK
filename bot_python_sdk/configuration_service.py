@@ -38,14 +38,14 @@ class ConfigurationService:
         success = PairingService().run()
         if success:
             self.configuration.set_device_status(DeviceStatus.PAIRED.value)
-            self.configuration_store.save(self.configuration)
+            Store.save_configuration_object(self.configuration)
             self.activate()
 
     def activate(self):
         success = ActivationService().run()
         if success:
             self.configuration.set_device_status(DeviceStatus.ACTIVE.value)
-            self.configuration_store.save(self.configuration)
+            Store.save_configuration_object(self.configuration)
 
     def generate_qr_code(self):
         try:

@@ -8,20 +8,19 @@ from bot_python_sdk.action_service import ActionService
 from bot_python_sdk.base_resource import BaseResource
 from bot_python_sdk.bluetooth_service import BluetoothService
 from bot_python_sdk.configuration_service import ConfigurationService
-from bot_python_sdk.configuration_store import ConfigurationStore
 from bot_python_sdk.device_status import DeviceStatus
 from bot_python_sdk.key_generator import KeyGenerator
 from bot_python_sdk.logger import Logger
 from bot_python_sdk.qr_code_resource import QRCodeResource
+from bot_python_sdk.store import Store
 
 
 class Finn:
     def __init__(self, product_id, device_status, aid, bluetooth_enabled, from_api):
-        Logger.info('Finn', '__init__' + str(self))
+        Logger.info('Finn', '__init__')
 
         self.__configuration_service = ConfigurationService()
-        self.__configuration_store = ConfigurationStore()
-        self.__configuration = self.__configuration_store.get()
+        self.__configuration = Store.get_configuration_object()
         self.__action_service = ActionService()
 
         if not from_api:
@@ -35,14 +34,14 @@ class Finn:
                                             aid,
                                             public_key,
                                             private_key)
-            self.__configuration_store.save(self.__configuration)
+            Store.save_configuration_object(self.__configuration)
             self.__configuration_service.generate_qr_code()
 
             self.__start_server()
         else:
-            self.init()
+            self.__init()
 
-    def init(self):
+    def __init(self):
         import platform
         system_platform = platform.system()
 

@@ -1,5 +1,8 @@
 import json
 import os
+
+from bot_python_sdk.configuration import Configuration
+from bot_python_sdk.device_status import DeviceStatus
 from bot_python_sdk.logger import Logger
 
 _actions_file_path = 'storage/actions.json'
@@ -13,7 +16,7 @@ _last_triggered_path = 'storage/last_triggered.json'
 
 # Storage manager
 class Store:
-        
+
     @staticmethod
     def set_actions(actions):
         Logger.info('Store', 'set_actions')
@@ -140,3 +143,33 @@ class Store:
         except IOError as io_error:
             Logger.error('Store', io_error.message)
             raise io_error
+
+    @staticmethod
+    def get_configuration_object():
+        if Store.has_configuration():
+            dictionary = Store.get_configuration()
+            configuration = Configuration()
+            configuration.initialize(
+                dictionary['makerId'],
+                dictionary['deviceId'],
+                DeviceStatus[dictionary['deviceStatus']],
+                dictionary['bluetoothEnabled'],
+                dictionary['alternativeId'],
+                dictionary['publicKey'],
+                dictionary['privateKey']
+            )
+            return configuration
+        else:
+            return Configuration()
+
+    @staticmethod
+    def save_configuration_object(configuration):
+        Store.set_configuration({
+            'makerId': configuration.get_maker_id(),
+            'deviceId': configuration.get_device_id(),
+            'deviceStatus': configuration.get_device_status(),
+            'publicKey': configuration.get_public_key(),
+            'privateKey': configuration.get_private_key(),
+            'alternativeId': configuration.get_alternative_id(),
+            'bluetoothEnabled': configuration.is_bluetooth_enabled()
+        })
