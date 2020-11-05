@@ -1,4 +1,5 @@
 import sys
+import platform
 
 from bot_python_sdk.activation_resource import ActivationResource
 from bot_python_sdk.pairing_resource import PairingResource
@@ -45,10 +46,9 @@ class Finn:
 
         device_status = self.__configuration.get_device_status()
 
-        import platform
         system_platform = platform.system()
 
-        Logger.info('Finn', '__init__' + ' system_platform = ' + system_platform)
+        Logger.info('Finn', '__init__ deviceStatus = ' + device_status + ', system_platform = ' + system_platform)
 
         if device_status is DeviceStatus.ACTIVE:
             Logger.info('Finn', '__init__' + ' Device is already active, no need to further configure')
