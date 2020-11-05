@@ -103,7 +103,7 @@ class Finn:
     @staticmethod
     def on_server_ready(api):
         Logger.info('Finn', 'on_server_ready')
-        Finn.get_instance().init_api(api)
+        Finn.get_instance().init_api(Finn.get_instance(), api)
 
     def init_api(self, api):
         Logger.info('Finn', 'init_api')
