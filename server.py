@@ -1,3 +1,5 @@
+import os
+import signal
 import subprocess
 
 from bot_python_sdk.utils import Utils
@@ -21,4 +23,6 @@ else:
 Logger.info('Server', "Starting server at URL: http://" + __ip_address + ':3001/')
 
 # Executes api.py and indirectly finn.py
-subprocess.Popen(['gunicorn', '-b', __ip_address + ':3001', 'bot_python_sdk.api:api'])
+process = subprocess.Popen(['gunicorn', '-b', __ip_address + ':3001', 'bot_python_sdk.api:api'])
+
+os.killpg(os.getpgid(process.pid), signal.SIGTERM)
