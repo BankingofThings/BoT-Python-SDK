@@ -16,16 +16,16 @@ from bot_python_sdk.qr_code_resource import QRCodeResource
 
 
 class Finn:
+    finn_instance = None
+
     def __init__(self, product_id, device_status, aid, bluetooth_enabled):
-        Finn.__instance__ = self
-        Logger.info('Finn', '__init__' + str(Finn.__instance__))
+        Logger.info('Finn', '__init__' + str(self))
+        Finn.finn_instance = self
 
         self.__configuration_service = ConfigurationService()
         self.__configuration_store = ConfigurationStore()
         self.__configuration = self.__configuration_store.get()
         self.__action_service = ActionService()
-
-        Logger.info('Finn', '__init__')
 
         self.__start_server()
 
@@ -34,12 +34,12 @@ class Finn:
             device_id = KeyGenerator().generate_uuid()
             # Added alternative id as an argument to initializing the configuration
             self.__configuration.initialize(product_id,
-                                          device_id,
-                                          device_status,
-                                          bluetooth_enabled,
-                                          aid,
-                                          public_key,
-                                          private_key)
+                                            device_id,
+                                            device_status,
+                                            bluetooth_enabled,
+                                            aid,
+                                            public_key,
+                                            private_key)
             self.__configuration_store.save(self.__configuration)
             self.__configuration.generate_qr_code()
 
@@ -89,7 +89,7 @@ class Finn:
     @staticmethod
     def on_server_ready(api):
         Logger.info('Finn', 'on_server_ready')
-        Finn.get_instance().init_api(Finn.get_instance(), api)
+        Finn.finn_instance.init_api(api)
 
     def init_api(self, api):
         Logger.info('Finn', 'init_api')
