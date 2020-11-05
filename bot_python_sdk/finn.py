@@ -33,6 +33,7 @@ class Finn:
         __store = Store()
 
         if not __store.has_configuration():
+            Logger.info('Finn', '__init__' + str(sys.argv))
             if len(sys.argv) != 2:
                 Logger.info('Finn', '__init__ 1')
                 exit('Please add your productID to configure the SDK: "make server productID=YOUR_PRODUCT_ID"')
