@@ -28,7 +28,6 @@ process = subprocess.Popen(['gunicorn', '-b', __ip_address + ':3001', 'bot_pytho
 
 
 def __stop_gunicorn():
-    Logger.info('Server', '__stop_gunicorn')
     os.kill(process.pid, signal.SIGTERM)
 
 
