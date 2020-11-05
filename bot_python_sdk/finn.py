@@ -27,7 +27,7 @@ class Finn:
 
     def __init__(self):
         Finn.__instance__ = self
-        Logger.info('Finn', '__init__' + Finn.__instance__)
+        Logger.info('Finn', '__init__' + str(Finn.__instance__))
 
         self.__configuration_service = ConfigurationService()
         self.__configuration_store = ConfigurationStore()
