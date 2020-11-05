@@ -53,6 +53,8 @@ class Finn:
 
         self.__start_server()
 
+        self.on_server_ready()
+
         device_status = self.__configuration.get_device_status()
 
         import platform
