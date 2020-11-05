@@ -18,7 +18,7 @@ RESPONSE_DATA_KEY = 'bot'
 class BoTService:
 
     def __init__(self):
-        self.configuration = ConfigurationStore().get()
+        self.configuration = Store.get_configuration_object()
 
     def post(self, url, data):
         session = requests.Session()

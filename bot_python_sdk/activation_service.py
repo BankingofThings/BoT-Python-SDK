@@ -2,6 +2,7 @@ import time
 
 from bot_python_sdk.bot_service import BoTService
 from bot_python_sdk.logger import Logger
+from bot_python_sdk.store import Store
 
 LOCATION = 'Activation Service'
 RESOURCE = 'status'
@@ -13,8 +14,7 @@ MAXIMUM_TRIES = 3
 class ActivationService:
 
     def __init__(self):
-        configuration = ConfigurationStore().get()
-        self.device_id = configuration.get_device_id()
+        self.device_id = Store.get_configuration_object().get_device_id()
         self.bot_service = BoTService()
 
     def run(self):
