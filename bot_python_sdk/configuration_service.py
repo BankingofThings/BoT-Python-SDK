@@ -1,11 +1,10 @@
 import json
+
 import qrcode
 from qrcode.image.pure import PymagingImage
 
 from bot_python_sdk.activation_service import ActivationService
-from bot_python_sdk.configuration_store import ConfigurationStore
 from bot_python_sdk.device_status import DeviceStatus
-from bot_python_sdk.key_generator import KeyGenerator
 from bot_python_sdk.logger import Logger
 from bot_python_sdk.pairing_service import PairingService
 from bot_python_sdk.store import Store
@@ -17,10 +16,7 @@ class ConfigurationService:
 
     def __init__(self):
         Logger.info('ConfigurationService', '__init__')
-        self.configuration_store = ConfigurationStore()
         self.configuration = self.configuration_store.get()
-
-
 
     # TODO remove this function
     def resume_configuration(self):

@@ -5,7 +5,6 @@ import requests
 
 from requests_toolbelt.adapters.fingerprint import FingerprintAdapter
 
-from bot_python_sdk.configuration_store import ConfigurationStore
 from bot_python_sdk.logger import Logger
 from bot_python_sdk.store import Store
 

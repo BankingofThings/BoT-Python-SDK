@@ -2,8 +2,8 @@ from pybleno import *
 import socket
 import json
 from bot_python_sdk.logger import Logger
-from bot_python_sdk.configuration_store import ConfigurationStore
 from bot_python_sdk.device_status import DeviceStatus
+from bot_python_sdk.store import Store
 
 LOCATION = 'Bluetooth Service'
 #Device characteristics uuid
@@ -22,8 +22,7 @@ class DeviceCharacteristic(Characteristic):
         })
         # define/create a store for data bytes
         self.deviceData = bytearray()
-        self.configuration_store = ConfigurationStore() 
-    
+
     '''
     OnReadRequest is trigged when device specific data are required. As per the offset
     the data is prepared and sent back via the callback. On first request the offset 
@@ -33,7 +32,7 @@ class DeviceCharacteristic(Characteristic):
     '''
     def onReadRequest(self, offset, callback):        
         if not offset:
-            configuration = self.configuration_store.get()
+            configuration = Store.get_configuration_object()
             Logger.info(LOCATION, 'Device data being read by connected device.')
             device_status = configuration.get_device_status()
             device_information = configuration.get_device_information()

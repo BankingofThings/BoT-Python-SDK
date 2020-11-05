@@ -1,14 +1,16 @@
 import time
 
 from bot_python_sdk.bot_service import BoTService
-from bot_python_sdk.configuration_store import ConfigurationStore
 from bot_python_sdk.logger import Logger
 
 # PairingService.run() will start infinite loop with checking pair status at CORE
+from bot_python_sdk.store import Store
+
+
 class PairingService:
 
     def __init__(self):
-        configuration = ConfigurationStore().get()
+        configuration = Store.get_configuration_object()
         self.maker_id = configuration.get_maker_id()
         self.device_id = configuration.get_device_id()
         self.device_status = configuration.get_device_status()

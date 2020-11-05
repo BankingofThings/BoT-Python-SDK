@@ -1,7 +1,6 @@
 import time
 
 from bot_python_sdk.bot_service import BoTService
-from bot_python_sdk.configuration_store import ConfigurationStore
 from bot_python_sdk.logger import Logger
 
 LOCATION = 'Activation Service'
