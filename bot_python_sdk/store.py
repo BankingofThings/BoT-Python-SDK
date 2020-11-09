@@ -18,6 +18,15 @@ _last_triggered_path = 'storage/last_triggered.json'
 class Store:
 
     @staticmethod
+    def create_windows_folder():
+        try:
+            if not os.path.exists('storage'):
+                os.mkdir('storage')
+        except IOError as e:
+            Logger.info('Store', 'create_windows_folder error:' + str(e))
+            raise e
+
+    @staticmethod
     def set_actions(actions):
         Logger.info('Store', 'set_actions')
 
@@ -83,27 +92,25 @@ class Store:
             Logger.error('Store', io_error.message)
             raise io_error
 
+    # Fetch storage data
     @staticmethod
-    def get_configuration():
+    def __get_configuration():
         Logger.info('Store', 'get_configuration')
 
         try:
-            with open(_configuration_file_path, 'r') as configuration_file:
-                configuration = configuration_file.read()
-                return json.loads(configuration)
-        except IOError as io_error:
-            Logger.error('Store', io_error.message)
-            raise io_error
+            return json.loads(open(_configuration_file_path, 'r').read())
+        except IOError as e:
+            Logger.error('Store', '__get_configuration error:' + e.message)
+            raise e
 
     @staticmethod
-    def set_configuration(configuration):
+    def __set_configuration(configuration):
         Logger.info('Store', 'set_configuration')
 
         try:
-            with open(_configuration_file_path, 'w') as configuration_file:
-                configuration_file.write(json.dumps(configuration))
+            open(_configuration_file_path, 'w').write(json.dumps(configuration))
         except IOError as io_error:
-            Logger.error('Store', io_error.message)
+            Logger.error('Store', '__set_configuration:' + io_error.message)
             raise io_error
 
     @staticmethod
@@ -117,17 +124,13 @@ class Store:
         Logger.info('Store', 'remove_configuration')
 
         try:
-            if Store.has_configuration():
-                os.remove(_configuration_file_path)
-                if os.path.isfile(_qr_image_path):
-                    os.remove(_qr_image_path)
-                if os.path.isfile(_saved_actions_path):
-                    os.remove(_saved_actions_path)
-                if os.path.isfile(_last_triggered_path):
-                    os.remove(_last_triggered_path)
-                Logger.success('Store', 'Successfully reset device configuration')
-            else:
-                Logger.warning('Store', 'Could not reset, no configuration available')
+            os.remove(_configuration_file_path)
+            if os.path.isfile(_qr_image_path):
+                os.remove(_qr_image_path)
+            if os.path.isfile(_saved_actions_path):
+                os.remove(_saved_actions_path)
+            if os.path.isfile(_last_triggered_path):
+                os.remove(_last_triggered_path)
         except IOError as io_error:
             Logger.error('Store', io_error.message)
             raise io_error
@@ -146,25 +149,22 @@ class Store:
 
     @staticmethod
     def get_configuration_object():
-        if Store.has_configuration():
-            dictionary = Store.get_configuration()
-            configuration = Configuration()
-            configuration.initialize(
-                dictionary['makerId'],
-                dictionary['deviceId'],
-                DeviceStatus[dictionary['deviceStatus']],
-                dictionary['bluetoothEnabled'],
-                dictionary['alternativeId'],
-                dictionary['publicKey'],
-                dictionary['privateKey']
-            )
-            return configuration
-        else:
-            return Configuration()
+        __dictionary = Store.__get_configuration()
+        __configuration = Configuration()
+        __configuration.initialize(
+            __dictionary['makerId'],
+            __dictionary['deviceId'],
+            DeviceStatus[__dictionary['deviceStatus']],
+            __dictionary['bluetoothEnabled'],
+            __dictionary['alternativeId'],
+            __dictionary['publicKey'],
+            __dictionary['privateKey']
+        )
+        return __configuration
 
     @staticmethod
     def save_configuration_object(configuration):
-        Store.set_configuration({
+        __dictionary = {
             'makerId': configuration.get_maker_id(),
             'deviceId': configuration.get_device_id(),
             'deviceStatus': configuration.get_device_status(),
@@ -172,4 +172,5 @@ class Store:
             'privateKey': configuration.get_private_key(),
             'alternativeId': configuration.get_alternative_id(),
             'bluetoothEnabled': configuration.is_bluetooth_enabled()
-        })
+        }
+        Store.__set_configuration(__dictionary)
