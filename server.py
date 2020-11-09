@@ -15,16 +15,15 @@ from bot_python_sdk.store import Store
 def initialize_configuration(product_id):
     Logger.info('Server', 'initialize_configuration product_id = ' + product_id)
 
-    device_status = DeviceStatus.NEW.value
-    aid = ''
-    bluetooth_enabled = False
-
     # Option for Multi pairing
     # If the option is yes, then alternative id needed
+    device_status = DeviceStatus.NEW
+    aid = ''
     if input('Enable Multi pair(yes/no)') == 'yes':
-        device_status = DeviceStatus.MULTIPAIR.value
+        device_status = DeviceStatus.MULTIPAIR
         aid = input('Enter your alternativeID:')
 
+    bluetooth_enabled = False
     if input('Enable Bluetooth (yes/no; default is yes)') == 'yes':
         bluetooth_enabled = True
 
