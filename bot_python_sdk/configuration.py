@@ -1,4 +1,5 @@
 from bot_python_sdk.device_status import DeviceStatus
+from bot_python_sdk.logger import Logger
 
 
 class Configuration:
@@ -37,6 +38,7 @@ class Configuration:
         return self.device_id
 
     def get_device_status(self):
+        Logger.info('Configuration', 'get_device_status' + ' self.device_status = ' + self.device_status.value)
         return self.device_status
 
     def set_device_status(self, device_status):
