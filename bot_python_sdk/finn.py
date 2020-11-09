@@ -84,11 +84,9 @@ class Finn:
         else:
             Logger.info('Finn', '__init__' + ' Pair the device either using QRCode or Bluetooth Service through FINN Mobile App')
             if system_platform != 'Darwin' and self.__configuration.is_bluetooth_enabled():
-                Logger.info('Finn', '__init__' + ' device_status.value = ' + device_status.value)
-
-                self.__pairing_service.start()
-                # Handle BLE specific events and callbacks
                 self.__blue_service = BluetoothService(BlenoService(self.__bluetooth_wifi_config_done))
+
+            self.__pairing_service.start()
 
     def __bluetooth_wifi_config_done(self):
         self.__pairing_service.stop()
