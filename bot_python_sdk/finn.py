@@ -24,10 +24,12 @@ class Finn:
 
         # Server started, just continue with Finn.init
         if from_api:
+            Logger.info('Finn', '__init__ server created')
             self.__configuration = Store.get_configuration_object()
             self.__init()
         # New install, no configuration, just create configuration and start server
         elif product_id is not None:
+            Logger.info('Finn', '__init__ creating config')
             public_key, private_key = KeyGenerator().generate_key()
             device_id = KeyGenerator().generate_uuid()
             # Added alternative id as an argument to initializing the configuration
@@ -45,6 +47,7 @@ class Finn:
             self.__start_server()
         # We have already configuration, just start server
         else:
+            Logger.info('Finn', '__init__ resume device')
             self.__start_server()
 
     def __init(self):
