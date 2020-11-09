@@ -18,6 +18,7 @@ RESPONSE_DATA_KEY = 'bot'
 class BoTService:
 
     def __init__(self, private_key, headers):
+        Logger.info('BoTService', '__init__ ' + API_URL)
         self.__private_key = private_key
         self.__headers = headers
 
