@@ -9,12 +9,9 @@ class Configuration:
         self.device_status = DeviceStatus.NEW
         self.public_key = ''
         self.private_key = ''
-        self.initialized = False
         self.aid = ''
         self.bluetooth_enabled = True
-
-    def is_initialized(self):
-        return self.initialized
+        self.initialized = False
 
     def initialize(self, maker_id, device_id, device_status, bluetooth_enabled, aid, public_key, private_key):
         self.maker_id = maker_id
@@ -25,6 +22,9 @@ class Configuration:
         self.public_key = public_key
         self.private_key = private_key
         self.initialized = True
+
+    def is_initialized(self):
+        return self.initialized
 
     # Get the alternative ID
     def get_alternative_id(self):

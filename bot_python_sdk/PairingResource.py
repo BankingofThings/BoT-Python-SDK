@@ -8,9 +8,8 @@ from bot_python_sdk.store import Store
 
 
 class PairingResource:
-    def __init__(self, configuration_store):
+    def __init__(self):
         Logger.info('PairingResource', '__init__')
-        self.configuration_store = configuration_store
 
     def on_get(self, request, response):
         Logger.info('PairingResource', 'on_get')

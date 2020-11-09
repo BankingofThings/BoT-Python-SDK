@@ -7,9 +7,8 @@ from bot_python_sdk.store import Store
 
 class ActionsResource:
 
-    def __init__(self, action_service, configuration_store):
+    def __init__(self, action_service):
         self.action_service = action_service
-        self.configuration_store = configuration_store
 
     def on_get(self, request, response):
         response.media = self.action_service.get_actions()

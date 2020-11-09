@@ -7,6 +7,7 @@ from bot_python_sdk.action_resource import ActionsResource
 from bot_python_sdk.action_service import ActionService
 from bot_python_sdk.base_resource import BaseResource
 from bot_python_sdk.bluetooth_service import BluetoothService
+from bot_python_sdk.configuration import Configuration
 from bot_python_sdk.configuration_service import ConfigurationService
 from bot_python_sdk.device_status import DeviceStatus
 from bot_python_sdk.key_generator import KeyGenerator
@@ -20,13 +21,18 @@ class Finn:
         Logger.info('Finn', '__init__')
 
         self.__configuration_service = ConfigurationService()
-        self.__configuration = Store.get_configuration_object()
         self.__action_service = ActionService()
 
-        if not from_api:
+        # Server started, just continue with Finn.init
+        if from_api:
+            self.__configuration = Store.get_configuration_object()
+            self.__init()
+        # New install, no configuration, just create configuration and start server
+        elif product_id is not None:
             public_key, private_key = KeyGenerator().generate_key()
             device_id = KeyGenerator().generate_uuid()
             # Added alternative id as an argument to initializing the configuration
+            self.__configuration = Configuration()
             self.__configuration.initialize(product_id,
                                             device_id,
                                             device_status,
@@ -38,8 +44,10 @@ class Finn:
             self.__configuration_service.generate_qr_code()
 
             self.__start_server()
+        # We have already configuration, just start server
         else:
-            self.__init()
+            self.__start_server()
+
 
     def __init(self):
         import platform
@@ -91,7 +99,7 @@ class Finn:
         Logger.info('Finn', 'init_api')
 
         api.add_route('/', BaseResource())
-        api.add_route('/actions', ActionsResource(self.__action_service, self.__configuration_store))
-        api.add_route('/pairing', PairingResource(self.__configuration_store))
+        api.add_route('/actions', ActionsResource(self.__action_service))
+        api.add_route('/pairing', PairingResource())
         api.add_route('/activate', ActivationResource())
         api.add_route('/qrcode', QRCodeResource())
