@@ -20,12 +20,12 @@ class Finn:
     def __init__(self, product_id, device_status, aid, bluetooth_enabled, from_api):
         Logger.info('Finn', '__init__')
 
-        self.__action_service = ActionService()
 
         # Server started, just continue with Finn.init
         if from_api:
             Logger.info('Finn', '__init__ server created')
             self.__configuration = Store.get_configuration_object()
+            self.__action_service = ActionService(self.__configuration)
             self.__init()
         # New install, no configuration, just create configuration and start server
         elif product_id is not None:

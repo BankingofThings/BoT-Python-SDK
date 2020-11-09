@@ -10,8 +10,8 @@ from bot_python_sdk.store import Store
 
 class ActionService:
 
-    def __init__(self):
-        self.configuration = Store.get_configuration_object()
+    def __init__(self, configuration):
+        self.configuration = configuration
         self.bot_service = BoTService()
         self.key_generator = KeyGenerator()
         self.store = Store()

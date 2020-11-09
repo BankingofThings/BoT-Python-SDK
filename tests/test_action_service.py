@@ -1,11 +1,13 @@
 from bot_python_sdk.action_service import ActionService
 from unittest.mock import patch
 
+from bot_python_sdk.configuration import Configuration
+
 
 @patch('bot_python_sdk.configuration.Configuration.get_device_id')
 @patch('bot_python_sdk.key_generator.KeyGenerator.generate_uuid')
 def test_create_trigger_body(generate_uuid, get_device_id):
-    __actionService = ActionService()
+    __actionService = ActionService(Configuration())
 
     action_id = '44'
     device_id = '43'
