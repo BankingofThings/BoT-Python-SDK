@@ -21,14 +21,14 @@ class BluetoothService:
 
     # register event handlers with pybleno and start the bleno service
     def initialize(self):
-        bleno.on('stateChange', self.on_state_change)
-        bleno.on('advertisingStart', self.on_advertising_start)
+        bleno.onAdvertisingStart(self.on_advertising_start)
+        bleno.onStateChange(self.on_state_change)
         bleno.start()
 
     # start advertising depending on ble state (powered on/off)
     def start_advertising(self):
         if (bleno.state == 'poweredOn'):
-            bleno.startAdvertising(socket.gethostname(), [blenoService.uuid])
+            bleno.startAdvertising(socket.gethostname(), ['729BE9C4-3C61-4EFB-884F-B310B6FFFFD1'])
 
     # stop advertising
     def stop_advertising(self):

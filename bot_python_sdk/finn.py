@@ -20,7 +20,6 @@ class Finn:
     def __init__(self, product_id, device_status, aid, bluetooth_enabled, from_api):
         Logger.info('Finn', '__init__')
 
-
         # Server started, just continue with Finn.init
         if from_api:
             Logger.info('Finn', '__init__ server created')
@@ -68,12 +67,12 @@ class Finn:
         else:
             Logger.info('Finn', '__init__' + ' Pair the device either using QRCode or Bluetooth Service through FINN Mobile App')
             if system_platform != 'Darwin' and self.__configuration.is_bluetooth_enabled():
-                # Handle BLE specific events and callbacks
-                BluetoothService().initialize()
-
                 Logger.info('Finn', '__init__' + ' device_status.value = ' + device_status.value)
 
                 ConfigurationService.pair()
+
+                # Handle BLE specific events and callbacks
+                BluetoothService().initialize()
 
     def __start_server(self):
         Logger.info('Finn', '__start_server')
