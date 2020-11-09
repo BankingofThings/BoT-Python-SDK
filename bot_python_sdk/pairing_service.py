@@ -9,20 +9,24 @@ from bot_python_sdk.store import Store
 
 class PairingService:
 
-    def __init__(self):
-        configuration = Store.get_configuration_object()
-        self.maker_id = configuration.get_maker_id()
-        self.device_id = configuration.get_device_id()
-        self.device_status = configuration.get_device_status()
-        self.bot_service = BoTService()
+    def __init__(self, bot_service):
+        self.bot_service = bot_service
+        self.kill_loop = False
 
-    def run(self):
-        Logger.info('PairingService', 'PairingService.run')
+    def start(self):
+        Logger.info('PairingService', 'run')
 
         return self.__start_check_paired_loop()
 
+    def stop(self):
+        Logger.info('PairingService', 'stop')
+
+        self.kill_loop = True
+
     def __start_check_paired_loop(self):
-        if self.__get_remote_paired_status():
+        if self.kill_loop:
+            return False
+        elif self.__get_remote_paired_status():
             return True
         else:
             time.sleep(10)

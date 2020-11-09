@@ -9,7 +9,7 @@ from bot_python_sdk.logger import Logger
 from bot_python_sdk.store import Store
 
 LOCATION = 'BoT Service'
-API_URL = 'https://iot.bankingofthings.io/'
+API_URL = 'https://iot-dev.bankingofthings.io/'
 SSL_FINGERPRINT = "3E:18:EE:35:DF:CA:35:D7:4B:FB:4E:AB:9F:A1:B5:7A:2D:91:8D:1F"
 SERVICE_TAG = 'BoT Service: '
 RESPONSE_DATA_KEY = 'bot'
@@ -17,8 +17,9 @@ RESPONSE_DATA_KEY = 'bot'
 
 class BoTService:
 
-    def __init__(self):
-        self.configuration = Store.get_configuration_object()
+    def __init__(self, private_key, headers):
+        self.__private_key = private_key
+        self.__headers = headers
 
     def post(self, url, data):
         session = requests.Session()
@@ -27,7 +28,7 @@ class BoTService:
             response = session.post(
                 API_URL + url,
                 data=self._create_request_body(data),
-                headers=self.configuration.get_headers()
+                headers=self.__headers
             )
             if response.status_code < 200 or response.status_code >= 300:
                 Logger.error(LOCATION, 'status: ' + str(response.status_code) + ', body: ' + response.text)
@@ -42,7 +43,7 @@ class BoTService:
         session = requests.Session()
         session.mount(API_URL, FingerprintAdapter(SSL_FINGERPRINT))
         try:
-            response = session.get(API_URL + url, headers=self.configuration.get_headers())
+            response = session.get(API_URL + url, headers=self.__headers)
             data = self._decode(response.text)
             if response.status_code < 200 or response.status_code >= 300:
                 Logger.error(
@@ -57,7 +58,7 @@ class BoTService:
     def _create_request_body(self, data):
         jwt_token = jwt.encode(
             {RESPONSE_DATA_KEY: data},
-            self.configuration.get_private_key(),
+            self.__private_key,
             algorithm='RS256'
         ).decode('UTF-8')
         return json.dumps({RESPONSE_DATA_KEY: jwt_token})

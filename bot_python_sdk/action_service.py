@@ -1,7 +1,7 @@
-import falcon
 import time
 
-from bot_python_sdk.bot_service import BoTService
+import falcon
+
 from bot_python_sdk.frequency import FrequenciesInSeconds
 from bot_python_sdk.key_generator import KeyGenerator
 from bot_python_sdk.logger import Logger
@@ -10,9 +10,9 @@ from bot_python_sdk.store import Store
 
 class ActionService:
 
-    def __init__(self, configuration):
+    def __init__(self, configuration, bot_service):
         self.configuration = configuration
-        self.bot_service = BoTService()
+        self.bot_service = bot_service
         self.key_generator = KeyGenerator()
         self.store = Store()
 

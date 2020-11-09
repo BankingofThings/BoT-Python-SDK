@@ -28,12 +28,12 @@ def initialize_configuration(product_id):
         bluetooth_enabled = True
 
     Logger.info('Server', 'initialize_configuration done')
-    Finn(product_id, device_status, aid, bluetooth_enabled, False)
+    Finn(product_id, device_status, aid, bluetooth_enabled, None)
 
 
 # Resume Finn or generate configuration
 if Store.has_configuration():
-    Finn(None, None, None, None, False)
+    Finn(None, None, None, None, None)
 else:
     if len(sys.argv) != 2:
         exit('Please add your productID to configure the SDK: "make server productID=YOUR_PRODUCT_ID"')

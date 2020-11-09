@@ -4,12 +4,6 @@ import socket
 from bot_python_sdk.logger import Logger
 from bot_python_sdk.bleno.bleno_service import BlenoService
 
-LOCATION = 'Bluetooth Service'
-# bleno service object
-blenoService = BlenoService()
-# bleno object creation
-bleno = Bleno()
-
 '''
 Bluetooth service class responsible for start/stop advertising, handling 
 state chanegs, initialize the pybleno, register the necessay callbacks
@@ -20,29 +14,31 @@ with pybleno to process the events from BLE stack.
 class BluetoothService:
 
     # register event handlers with pybleno and start the bleno service
-    def initialize(self):
-        bleno.onAdvertisingStart(self.on_advertising_start)
-        bleno.onStateChange(self.on_state_change)
-        bleno.start()
+    def __init__(self, bleno_service):
+        self.__bleno_service = bleno_service
+        self.__bleno = Bleno()
+        self.__bleno.onAdvertisingStart(self.on_advertising_start)
+        self.__bleno.onStateChange(self.on_state_change)
+        self.__bleno.start()
 
     # start advertising depending on ble state (powered on/off)
     def start_advertising(self):
-        if (bleno.state == 'poweredOn'):
-            bleno.startAdvertising(socket.gethostname(), ['729BE9C4-3C61-4EFB-884F-B310B6FFFFD1'])
+        if self.__bleno.state == 'poweredOn':
+            self.__bleno.startAdvertising(socket.gethostname(), ['729BE9C4-3C61-4EFB-884F-B310B6FFFFD1'])
 
     # stop advertising
     def stop_advertising(self):
-        bleno.stopAdvertising()
+        self.__bleno.stopAdvertising()
         if platform.system() == 'darwin':
-            bleno.disconnect()
+            self.__bleno.disconnect()
 
     # handle state change events from BLE stack
     def on_state_change(self, state):
         if state == 'poweredOn':
-            Logger.info(LOCATION, 'Bluetooth powered on. Starting advertising...')
+            Logger.info('BluetoothService', 'Bluetooth powered on. Starting advertising...')
             BluetoothService.start_advertising(self)
         else:
-            Logger.info(LOCATION, 'Bluetooth is powered off. Stopping advertising...')
+            Logger.info('BluetoothService', 'Bluetooth is powered off. Stopping advertising...')
             BluetoothService.stop_advertising(self)
 
     '''
@@ -52,14 +48,14 @@ class BluetoothService:
 
     def on_advertising_start(self, error):
         if error:
-            Logger.error(LOCATION, 'Failed to start advertising.')
+            Logger.error('BluetoothService', 'Failed to start advertising.')
         else:
-            Logger.info(LOCATION, 'Successfully started advertising.')
+            Logger.info('BluetoothService', 'Successfully started advertising.')
         if not error:
-            bleno.setServices([blenoService], self.on_set_services)
+            self.__bleno.setServices([self.__bleno_service], self.__on_set_services)
 
-    def on_set_services(self, error):
+    def __on_set_services(self, error):
         if error:
-            Logger.error(LOCATION, 'setServices: ' + error)
+            Logger.error('BluetoothService', 'setServices: ' + error)
         else:
-            Logger.info(LOCATION, 'Successfully set services.')
+            Logger.info('BluetoothService', 'Successfully set services.')
