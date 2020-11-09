@@ -91,7 +91,7 @@ class Store:
         try:
             return json.loads(open(_configuration_file_path, 'r').read())
         except IOError as e:
-            Logger.error('Store', '__get_configuration error:' + e.message)
+            Logger.error('Store', '__get_configuration error:' + str(e))
             raise e
 
     @staticmethod
