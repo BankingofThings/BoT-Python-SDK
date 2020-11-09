@@ -18,15 +18,6 @@ _last_triggered_path = 'storage/last_triggered.json'
 class Store:
 
     @staticmethod
-    def create_windows_folder():
-        try:
-            if not os.path.exists('storage'):
-                os.mkdir('storage')
-        except IOError as e:
-            Logger.info('Store', 'create_windows_folder error:' + str(e))
-            raise e
-
-    @staticmethod
     def set_actions(actions):
         Logger.info('Store', 'set_actions')
 
@@ -125,10 +116,25 @@ class Store:
 
         try:
             os.remove(_configuration_file_path)
+        except IOError as io_error:
+            Logger.error('Store', io_error.message)
+            raise io_error
+
+        try:
             if os.path.isfile(_qr_image_path):
                 os.remove(_qr_image_path)
+        except IOError as io_error:
+            Logger.error('Store', io_error.message)
+            raise io_error
+
+        try:
             if os.path.isfile(_saved_actions_path):
                 os.remove(_saved_actions_path)
+        except IOError as io_error:
+            Logger.error('Store', io_error.message)
+            raise io_error
+
+        try:
             if os.path.isfile(_last_triggered_path):
                 os.remove(_last_triggered_path)
         except IOError as io_error:
@@ -167,7 +173,7 @@ class Store:
         __dictionary = {
             'makerId': configuration.get_maker_id(),
             'deviceId': configuration.get_device_id(),
-            'deviceStatus': configuration.get_device_status(),
+            'deviceStatus': configuration.get_device_status().value,
             'publicKey': configuration.get_public_key(),
             'privateKey': configuration.get_private_key(),
             'alternativeId': configuration.get_alternative_id(),
