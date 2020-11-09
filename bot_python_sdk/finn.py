@@ -110,7 +110,7 @@ class Finn:
         Logger.info('Server', "Starting server at URL: http://" + __ip_address + ':3001/')
 
         # Executes api.py and indirectly finn.py
-        subprocess.run(['gunicorn', '-b', '--timeout 9999', __ip_address + ':3001', 'bot_python_sdk.api:api'])
+        subprocess.run(['gunicorn', '-b', __ip_address + ':3001', 'bot_python_sdk.api:api --timeout 9999'])
 
     def __init_api(self, api):
         Logger.info('Finn', 'init_api')
