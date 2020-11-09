@@ -9,47 +9,38 @@ from bot_python_sdk.logger import Logger
 from bot_python_sdk.pairing_service import PairingService
 from bot_python_sdk.store import Store
 
-LOCATION = 'Configuration Service'
-
 
 class ConfigurationService:
 
-    def __init__(self):
-        Logger.info('ConfigurationService', '__init__')
-        self.configuration = Store.get_configuration_object()
+    # TODO Ercan:is this used?
+    @staticmethod
+    def resume_configuration():
+        device_status = Store.get_device_status()
 
-    # TODO remove this function
-    def resume_configuration(self):
-        Logger.info('ConfigurationService', 'resume_configuration')
-        device_status = self.configuration.get_device_status()
-
-        Logger.info(LOCATION, 'DeviceStatus = ' + device_status.value)
+        Logger.info('ConfigurationService', 'resume_configuration' + ' device_status = ' + device_status.value)
 
         if device_status == DeviceStatus.NEW:
-            self.pair()
+            ConfigurationService.pair()
         if device_status == DeviceStatus.PAIRED:
-            self.activate()
+            ConfigurationService.activate()
 
-    def pair(self):
+    @staticmethod
+    def pair():
         success = PairingService().run()
         if success:
-            self.configuration.set_device_status(DeviceStatus.PAIRED.value)
-            Store.save_configuration_object(self.configuration)
-            self.activate()
+            Store.set_device_status(DeviceStatus.PAIRED)
+            ConfigurationService.activate()
 
-    def activate(self):
+    @staticmethod
+    def activate():
         success = ActivationService().run()
         if success:
-            self.configuration.set_device_status(DeviceStatus.ACTIVE.value)
-            Store.save_configuration_object(self.configuration)
+            Store.set_device_status(DeviceStatus.ACTIVE)
 
-    def generate_qr_code(self):
+    @staticmethod
+    def generate_qr_code():
         try:
-            Logger.info(LOCATION, 'Generating QR Code for alternative pairing...')
-            device_information = self.configuration.get_device_information()
-            image = qrcode.make(json.dumps(device_information), image_factory=PymagingImage)
-            Store.save_qrcode(image)
-            Logger.success(LOCATION, 'QR Code successfully generated')
-        except Exception as exception:
-            Logger.error(LOCATION, 'QR Code not generated')
-            raise exception
+            Store.save_qrcode(qrcode.make(json.dumps(Store.get_device_pojo()), image_factory=PymagingImage))
+        except Exception as e:
+            Logger.info('ConfigurationService', 'generate_qr_code error:' + str(e))
+            raise e

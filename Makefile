@@ -2,15 +2,15 @@ install: ; sudo pip3 install --upgrade pip && sudo pip3 install --upgrade setupt
 
 server: ; sudo python3 server.py $(productID)
 
-configuration: ; python3 -c "from bot_python_sdk.configuration_service import ConfigurationService; ConfigurationService().resume_configuration()"
+configuration: ; python3 -c "from bot_python_sdk.configuration_service import ConfigurationService; ConfigurationService.resume_configuration()"
 
-pair: ; python3 -c "from bot_python_sdk.configuration_service import ConfigurationService; ConfigurationService().pair()"
+pair: ; python3 -c "from bot_python_sdk.configuration_service import ConfigurationService; ConfigurationService.pair()"
 
-activate: ; python3 -c "from bot_python_sdk.configuration_service import ConfigurationService; ConfigurationService().activate()"
+activate: ; python3 -c "from bot_python_sdk.configuration_service import ConfigurationService; ConfigurationService.activate()"
 
 reset: ; python3 -c "from bot_python_sdk.store import Store; Store().remove_configuration()"
 
-qr: ;  python3 -c "from bot_python_sdk.configuration_service import ConfigurationService; ConfigurationService().generate_qr_code()"
+qr: ;  python3 -c "from bot_python_sdk.configuration_service import ConfigurationService; ConfigurationService.generate_qr_code()"
 
 test: ; pytest
 

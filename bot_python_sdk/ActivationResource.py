@@ -9,7 +9,6 @@ from bot_python_sdk.store import Store
 class ActivationResource:
     def __init__(self):
         Logger.info('ActivationResource', 'ActivationResource.__init__')
-        self.configuration_service = ConfigurationService()
 
     def on_get(self, request, response):
         Logger.info('api', "Serving Activation Request...")
@@ -19,4 +18,4 @@ class ActivationResource:
             Logger.error('api', error)
             raise falcon.HTTPBadRequest(description=error)
         else:
-            self.configuration_service.resume_configuration()
+            ConfigurationService.resume_configuration()

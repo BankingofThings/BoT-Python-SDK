@@ -20,7 +20,6 @@ class Finn:
     def __init__(self, product_id, device_status, aid, bluetooth_enabled, from_api):
         Logger.info('Finn', '__init__')
 
-        self.__configuration_service = ConfigurationService()
         self.__action_service = ActionService()
 
         # Server started, just continue with Finn.init
@@ -41,13 +40,12 @@ class Finn:
                                             public_key,
                                             private_key)
             Store.save_configuration_object(self.__configuration)
-            self.__configuration_service.generate_qr_code()
+            ConfigurationService.generate_qr_code()
 
             self.__start_server()
         # We have already configuration, just start server
         else:
             self.__start_server()
-
 
     def __init(self):
         import platform
@@ -63,7 +61,7 @@ class Finn:
             Logger.info('Finn', '__init__' + ' Supported Endpoints: /qrcode    /actions    /pairing    /activate')
         elif device_status is DeviceStatus.PAIRED:
             Logger.info('Finn', '__init__' + ' Device state is PAIRED, resuming the configuration')
-            self.__configuration_service.activate()
+            ConfigurationService.activate()
         else:
             Logger.info('Finn', '__init__' + ' Pair the device either using QRCode or Bluetooth Service through FINN Mobile App')
             if system_platform != 'Darwin' and self.__configuration.is_bluetooth_enabled():
@@ -72,7 +70,7 @@ class Finn:
 
                 Logger.info('Finn', '__init__' + ' device_status.value = ' + device_status.value)
 
-                self.__configuration_service.pair()
+                ConfigurationService.pair()
 
     def __start_server(self):
         Logger.info('Finn', '__start_server')

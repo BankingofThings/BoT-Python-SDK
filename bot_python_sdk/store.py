@@ -115,7 +115,8 @@ class Store:
         Logger.info('Store', 'remove_configuration')
 
         try:
-            os.remove(_configuration_file_path)
+            if os.path.isfile(_configuration_file_path):
+                os.remove(_configuration_file_path)
         except IOError as io_error:
             Logger.error('Store', io_error.message)
             raise io_error
@@ -155,18 +156,18 @@ class Store:
 
     @staticmethod
     def get_configuration_object():
-        __dictionary = Store.__get_configuration()
-        __configuration = Configuration()
-        __configuration.initialize(
-            __dictionary['makerId'],
-            __dictionary['deviceId'],
-            DeviceStatus[__dictionary['deviceStatus']],
-            __dictionary['bluetoothEnabled'],
-            __dictionary['alternativeId'],
-            __dictionary['publicKey'],
-            __dictionary['privateKey']
+        dictionary = Store.__get_configuration()
+        configuration = Configuration()
+        configuration.initialize(
+            dictionary['makerId'],
+            dictionary['deviceId'],
+            DeviceStatus[dictionary['deviceStatus']],
+            dictionary['bluetoothEnabled'],
+            dictionary['alternativeId'],
+            dictionary['publicKey'],
+            dictionary['privateKey']
         )
-        return __configuration
+        return configuration
 
     @staticmethod
     def save_configuration_object(configuration):
@@ -180,3 +181,19 @@ class Store:
             'bluetoothEnabled': configuration.is_bluetooth_enabled()
         }
         Store.__set_configuration(__dictionary)
+
+    @staticmethod
+    def get_device_status():
+        Store.get_configuration_object().get_device_status()
+
+    @staticmethod
+    def set_device_status(device_status):
+        configuration = Store.get_configuration_object()
+
+        configuration.set_device_status(device_status.value)
+
+        Store.save_configuration_object(configuration)
+
+    @staticmethod
+    def get_device_pojo():
+        return Store.get_configuration_object().get_device_information()
