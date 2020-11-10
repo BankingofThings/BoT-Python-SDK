@@ -45,6 +45,7 @@ class BoTService:
         session.mount(API_URL, FingerprintAdapter(SSL_FINGERPRINT))
         try:
             response = session.get(API_URL + url, headers=self.__headers)
+            Logger.info('BoTService', 'get response = \n' + str(response))
             data = self._decode(response.text)
             if response.status_code < 200 or response.status_code >= 300:
                 Logger.error(LOCATION, 'status: ' + str(response.status_code) + ', body: ' + json.dumps(data))
