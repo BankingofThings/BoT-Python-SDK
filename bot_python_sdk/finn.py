@@ -1,5 +1,6 @@
 import json
 import subprocess
+import time
 
 import qrcode
 from qrcode.image.pure import PymagingImage
@@ -103,8 +104,16 @@ class Finn:
         return self.__activate_device_service.execute()
 
     def __start_bot_talk(self):
-        response = self.__bot_talk_service.start()
-        Logger.info('Finn', '__start_bot_talk response:' + str(response))
+        response = self.__bot_talk_service.execute()
+
+        if response is not None:
+            Logger.info('Finn', '__start_bot_talk message found')
+            self.__action_service.trigger(response.action_id, None, response.customer_id)
+            self.__start_bot_talk()
+        else:
+            # run infinite with 5 sec delay. Don't increase delay until CORE supports it.
+            time.sleep(5)
+            self.__start_bot_talk()
 
     def __on_bluetooth_wifi_config_done(self):
         self.__pairing_service.stop()

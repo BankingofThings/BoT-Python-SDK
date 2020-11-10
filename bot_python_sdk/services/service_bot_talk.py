@@ -6,7 +6,7 @@ class BotTalkService:
         Logger.info('BotTalkService', '__init__')
         self.__bot_service = bot_service
 
-    def start(self):
+    def execute(self):
         try:
             return self.__bot_service.get('messages')
         except Exception as e:
