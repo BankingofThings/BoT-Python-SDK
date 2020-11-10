@@ -30,7 +30,7 @@ class Finn:
         if api is not None:
             self.__configuration = Store.get_configuration_object()
 
-            Logger.info('Finn', '__init__ server created productID=' + self.__configuration.product_id + ', deviceID = ' + self.__configuration.device_id)
+            Logger.info('Finn', '__init__ server created productID =' + self.__configuration.product_id + ', deviceID = ' + self.__configuration.device_id)
 
             self.__bot_service = BoTService(self.__configuration.private_key, self.__configuration.get_headers())
             self.__action_service = ActionService(self.__configuration, self.__bot_service)
@@ -111,7 +111,7 @@ class Finn:
         Logger.info('Server', "Starting server at URL: http://" + __ip_address + ':3001/')
 
         # Executes api.py and indirectly finn.py
-        subprocess.run(['gunicorn', '-b', __ip_address + ':3001', 'bot_python_sdk.api:api --timeout 9999'])
+        subprocess.run(['gunicorn', '-b', __ip_address + ':3001', 'bot_python_sdk.api:api'])
 
     def __init_api(self, api):
         Logger.info('Finn', 'init_api')
