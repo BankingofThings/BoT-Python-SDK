@@ -64,7 +64,7 @@ class Configuration:
             'publicKey': self.get_stripped_public_key()
         }
         # Check if its multipairing mode and initialize the necessary data stuctures
-        if self.device_status == DeviceStatus.MULTIPAIR.value or self.device_status == DeviceStatus.MULTIPAIR:
+        if self.device_status == DeviceStatus.MULTIPAIR:
             data['multipair'] = 1
             data['aid'] = self.aid
         return data

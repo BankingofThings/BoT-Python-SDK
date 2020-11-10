@@ -184,13 +184,13 @@ class Store:
 
     @staticmethod
     def get_device_status():
-        Store.get_configuration_object().get_device_status()
+        return Store.get_configuration_object().get_device_status()
 
     @staticmethod
     def set_device_status(device_status):
         configuration = Store.get_configuration_object()
 
-        configuration.set_device_status(device_status.value)
+        configuration.set_device_status(device_status)
 
         Store.save_configuration_object(configuration)
 
