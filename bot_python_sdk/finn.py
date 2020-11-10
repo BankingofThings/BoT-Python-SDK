@@ -90,7 +90,7 @@ class Finn:
             if self.__pairing_service.start():
                 Logger.info('Finn', '__process_device_status paired')
                 self.__action_service.get_actions()
-            else::
+            else:
                 Logger.info('Finn', '__process_device_status not paired')
 
     def __bluetooth_wifi_config_done(self):
