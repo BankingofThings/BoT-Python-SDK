@@ -110,7 +110,7 @@ class Finn:
 
         if response is not None:
             Logger.info('Finn', '__start_bot_talk message found ' + str(response))
-            self.__action_service.trigger(response.action_id, None, response.customer_id)
+            self.__action_service.trigger(response['payload']['actionID'], None, response['payload']['customerID'])
             self.__start_bot_talk()
         else:
             # run infinite with 5 sec delay. Don't increase delay until CORE supports it.
