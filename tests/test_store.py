@@ -17,7 +17,7 @@ def test_has_configuration():
 
     stored_configuration = Store.get_configuration_object()
 
-    assert stored_configuration.maker_id == "mi"
+    assert stored_configuration.product_id == "mi"
     assert stored_configuration.device_id == "di"
     assert stored_configuration.device_status == DeviceStatus.ACTIVE
     assert stored_configuration.bluetooth_enabled == True

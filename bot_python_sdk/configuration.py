@@ -5,7 +5,7 @@ from bot_python_sdk.logger import Logger
 class Configuration:
 
     def __init__(self):
-        self.maker_id = ''
+        self.product_id = ''
         self.device_id = ''
         self.device_status = DeviceStatus.NEW
         self.public_key = ''
@@ -14,8 +14,8 @@ class Configuration:
         self.bluetooth_enabled = True
         self.initialized = False
 
-    def initialize(self, maker_id, device_id, device_status, bluetooth_enabled, aid, public_key, private_key):
-        self.maker_id = maker_id
+    def initialize(self, product_id, device_id, device_status, bluetooth_enabled, aid, public_key, private_key):
+        self.product_id = product_id
         self.device_id = device_id
         self.device_status = device_status
         self.bluetooth_enabled = bluetooth_enabled
@@ -31,8 +31,8 @@ class Configuration:
     def get_alternative_id(self):
         return self.aid
 
-    def get_maker_id(self):
-        return self.maker_id
+    def get_product_id(self):
+        return self.product_id
 
     def get_device_id(self):
         return self.device_id
@@ -60,7 +60,7 @@ class Configuration:
     def get_device_information(self):
         data = {
             'deviceID': self.device_id,
-            'makerID': self.maker_id,
+            'makerID': self.product_id,
             'publicKey': self.get_stripped_public_key()
         }
         # Check if its multipairing mode and initialize the necessary data stuctures
@@ -72,6 +72,6 @@ class Configuration:
     def get_headers(self):
         return {
             'Content-Type': 'application/json',
-            'makerID': self.maker_id,
+            'makerID': self.product_id,
             'deviceID': self.device_id
         }

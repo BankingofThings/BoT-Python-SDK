@@ -7,7 +7,7 @@ import pytest
 @pytest.fixture()
 def resource():
     resource = mock.Mock()
-    resource.maker_id = 'maker id'
+    resource.product_id = 'product id'
     resource.device_id = 'device id'
     resource.device_status = DeviceStatus.MULTIPAIR.value
     resource.bluetooth_enabled = True
@@ -32,7 +32,7 @@ def test_get_headers(resource):
 
     header = {
         'Content-Type': 'application/json',
-        'makerID': resource.maker_id,
+        'makerID': resource.product_id,
         'deviceID': resource.device_id
     }
 
@@ -44,7 +44,7 @@ def test_get_device_information(resource):
 
     device_info = {
         'deviceID': resource.device_id,
-        'makerID': resource.maker_id,
+        'makerID': resource.product_id,
         'publicKey': resource.public_key,
         'multipair': 1,
         'aid': resource.aid
@@ -56,7 +56,7 @@ def test_get_device_information(resource):
 def _initialize(resource):
     configuration = Configuration()
     configuration.initialize(
-        resource.maker_id,
+        resource.product_id,
         resource.device_id,
         resource.device_status,
         resource.bluetooth_enabled,

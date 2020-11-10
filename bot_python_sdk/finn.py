@@ -64,7 +64,7 @@ class Finn:
             self.__start_server()
         # We have already configuration, just start server
         else:
-            Logger.info('Finn', '__init__ resume device productID=' + self.__configuration.maker_id + ', deviceID = ' + self.__configuration.device_id)
+            Logger.info('Finn', '__init__ resume device productID=' + self.__configuration.product_id + ', deviceID = ' + self.__configuration.device_id)
             self.__start_server()
 
     def __process_device_status(self):

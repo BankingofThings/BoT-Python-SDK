@@ -172,7 +172,7 @@ class Store:
     @staticmethod
     def save_configuration_object(configuration):
         __dictionary = {
-            'makerId': configuration.get_maker_id(),
+            'makerId': configuration.get_product_id(),
             'deviceId': configuration.get_device_id(),
             'deviceStatus': configuration.get_device_status().value,
             'publicKey': configuration.get_public_key(),
