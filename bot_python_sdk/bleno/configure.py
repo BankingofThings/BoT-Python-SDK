@@ -1,9 +1,10 @@
-from pybleno import *
 import json
 import subprocess
-from bot_python_sdk.logger import Logger
-from bot_python_sdk.pairing_service import PairingService
 import time
+
+from pybleno import *
+
+from bot_python_sdk.logger import Logger
 
 LOCATION = 'Bluetooth Service'
 # Device specific configuration characteristics uuid
@@ -94,5 +95,5 @@ class ConfigureCharacteristic(Characteristic):
             Logger.info(LOCATION, 'Connected device configuration complete. ' +
                         'Start pairing process...')
             self.configureData.extend(map(ord, json.dumps(data)))
-            PairingService().start()
+            self.wifi_done_callback()
         callback(Characteristic.RESULT_SUCCESS, self.configureData[offset:])

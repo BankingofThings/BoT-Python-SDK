@@ -4,8 +4,8 @@ import subprocess
 import qrcode
 from qrcode.image.pure import PymagingImage
 
-from bot_python_sdk.PairingResource import PairingResource
-from bot_python_sdk.Utils import Utils
+from bot_python_sdk.pairing_resource import PairingResource
+from bot_python_sdk.utils import Utils
 from bot_python_sdk.activate_device_resource import ActionsResource
 from bot_python_sdk.action_service import ActionService
 from bot_python_sdk.activation_resource import ActivateDeviceResource
@@ -87,7 +87,8 @@ class Finn:
             if system_platform != 'Darwin' and self.__configuration.is_bluetooth_enabled():
                 self.__blue_service = BluetoothService(BlenoService(self.__bluetooth_wifi_config_done))
 
-            self.__pairing_service.start()
+            if self.__pairing_service.start():
+                self.__action_service.get_actions()
 
     def __bluetooth_wifi_config_done(self):
         self.__pairing_service.stop()
