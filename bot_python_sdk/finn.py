@@ -28,7 +28,7 @@ class Finn:
 
         # Server started, just continue with Finn.init
         if api is not None:
-            Logger.info('Finn', '__init__ server created')
+            Logger.info('Finn', '__init__ server created productID=' + self.__configuration.product_id + ', deviceID = ' + self.__configuration.device_id)
 
             self.__configuration = Store.get_configuration_object()
             self.__bot_service = BoTService(self.__configuration.private_key, self.__configuration.get_headers())
@@ -64,7 +64,7 @@ class Finn:
             self.__start_server()
         # We have already configuration, just start server
         else:
-            Logger.info('Finn', '__init__ resume device productID=' + self.__configuration.product_id + ', deviceID = ' + self.__configuration.device_id)
+            Logger.info('Finn', '__init__ resume device')
             self.__start_server()
 
     def __process_device_status(self):
