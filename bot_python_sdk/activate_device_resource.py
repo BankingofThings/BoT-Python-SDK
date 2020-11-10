@@ -11,9 +11,11 @@ class ActionsResource:
         self.action_service = action_service
 
     def on_get(self, request, response):
+        Logger.info('ActionsResource', 'on_get')
         response.media = self.action_service.get_actions()
 
     def on_post(self, request, response):
+        Logger.info('ActionsResource', 'on_post')
         configuration = Store.get_configuration_object()
         device_status = configuration.get_device_status()
 

@@ -20,7 +20,7 @@ class ActionService:
         Logger.info('Action Service', 'Retrieving actions...')
         try:
             actions = self.bot_service.get('actions')
-            Logger.success('Action Service', 'Successfully retrieved ' + str(len(actions)) + ' action(s) from server')
+            Logger.success('Action Service', 'Successfully retrieved ' + str(actions) + ' action(s) from server')
             Store.set_actions(actions)
             return actions
         except falcon.HTTPServiceUnavailable:
