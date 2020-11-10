@@ -41,8 +41,8 @@ class ActionService:
             self.store.set_last_triggered(action_id, time.time())
             return True
         # TODO : Make exception more specific
-        except:
-            Logger.error('Action Service', 'Unable to trigger action: ' + action_id)
+        except Exception as e:
+            Logger.info('ActionService', 'trigger error:' + str(e))
             return False
 
     def _validate_frequency(self, action):

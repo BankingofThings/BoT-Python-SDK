@@ -7,4 +7,8 @@ class BotTalkService:
         self.__bot_service = bot_service
 
     def start(self):
-        pass
+        try:
+            return self.__bot_service.get('messages')
+        except Exception as e:
+            Logger.info('BotTalkService', 'start error:' + str(e))
+            return None

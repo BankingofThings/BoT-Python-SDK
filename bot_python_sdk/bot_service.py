@@ -47,10 +47,7 @@ class BoTService:
             response = session.get(API_URL + url, headers=self.__headers)
             data = self._decode(response.text)
             if response.status_code < 200 or response.status_code >= 300:
-                Logger.error(
-                    LOCATION,
-                    'status: ' + str(response.status_code) + ', body: ' + json.dumps(data)
-                )
+                Logger.error(LOCATION, 'status: ' + str(response.status_code) + ', body: ' + json.dumps(data))
                 raise falcon.HTTPServiceUnavailable
             return self._get_response(data)
         except requests.exceptions.SSLError:

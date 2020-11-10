@@ -11,7 +11,7 @@ def test_has_no_configuration():
 
 def test_has_configuration():
     configuration = Configuration()
-    configuration.initialize("mi","di",DeviceStatus.ACTIVE, True, "aid", "puk", "prk")
+    configuration.initialize("mi","di",DeviceStatus.PAIRED, True, "aid", "puk", "prk")
 
     Store.save_configuration_object(configuration)
 
@@ -19,7 +19,7 @@ def test_has_configuration():
 
     assert stored_configuration.product_id == "mi"
     assert stored_configuration.device_id == "di"
-    assert stored_configuration.device_status == DeviceStatus.ACTIVE
+    assert stored_configuration.device_status == DeviceStatus.PAIRED
     assert stored_configuration.bluetooth_enabled == True
     assert stored_configuration.aid == "aid"
     assert stored_configuration.public_key == "puk"

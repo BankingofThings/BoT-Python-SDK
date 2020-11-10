@@ -9,7 +9,7 @@ from bot_python_sdk.services.service_bot_talk import BotTalkService
 from bot_python_sdk.utils import Utils
 from bot_python_sdk.actions_resource import ActionsResource
 from bot_python_sdk.action_service import ActionService
-from bot_python_sdk.activation_resource import ActivateDeviceResource
+from bot_python_sdk.activate_device_service import ActiveDeviceService
 from bot_python_sdk.base_resource import BaseResource
 from bot_python_sdk.bleno.bleno_service import BlenoService
 from bot_python_sdk.bluetooth_service import BluetoothService
@@ -36,7 +36,7 @@ class Finn:
             self.__bot_service = BoTService(self.__configuration.private_key, self.__configuration.get_headers())
             self.__action_service = ActionService(self.__configuration, self.__bot_service)
             self.__pairing_service = PairingService(self.__bot_service)
-            self.__activate_device_resource = ActivateDeviceResource(self.__bot_service)
+            self.__activate_device_service = ActiveDeviceService(self.__bot_service, self.__configuration.get_device_id())
             self.__bot_talk_service = BotTalkService(self.__bot_service)
 
             self.__init_api(api)
@@ -78,31 +78,33 @@ class Finn:
 
         device_status = self.__configuration.device_status
 
-        if device_status is DeviceStatus.ACTIVE:
-            Logger.info('Finn', '__init__' + ' Device is already active, no need to further configure')
-        elif device_status is DeviceStatus.PAIRED:
+        if device_status is DeviceStatus.PAIRED:
             Logger.info('Finn', '__init__' + ' Device state is PAIRED, resuming the configuration')
-            if self.__activate_device_resource.execute():
-                Store.set_device_status(DeviceStatus.ACTIVE)
+            if self.__activate_device_service.execute():
+                Logger.info('Finn', '__process_device_status device activated')
         else:
             Logger.info('Finn', '__init__' + ' Pair the device either using QRCode or Bluetooth Service through FINN Mobile App')
             if system_platform != 'Darwin' and self.__configuration.is_bluetooth_enabled():
                 self.__blue_service = BluetoothService(BlenoService(self.__on_bluetooth_wifi_config_done))
 
             if self.__pairing_service.start():
-                Logger.info('Finn', '__process_device_status paired')
-                self.__on_device_paired()
+                Logger.info('Finn', '__process_device_status device paired')
+                if self.__activate_device():
+                    Logger.info('Finn', '__process_device_status device status at CORE is active')
+                    self.__start_bot_talk()
+                    self.__get_actions()
             else:
                 Logger.info('Finn', '__process_device_status not paired')
 
-    def __on_device_paired(self):
-        if self.__activate_device_resource.execute():
-            Store.set_device_status(DeviceStatus.ACTIVE)
-            self.__action_service.get_actions()
-            self.__start_bot_talk()
+    def __get_actions(self):
+        return self.__action_service.get_actions()
+
+    def __activate_device(self):
+        return self.__activate_device_service.execute()
 
     def __start_bot_talk(self):
-        self.__bot_talk_service.start()
+        response = self.__bot_talk_service.start()
+        Logger.info('Finn', '__start_bot_talk response:' + str(response))
 
     def __on_bluetooth_wifi_config_done(self):
         self.__pairing_service.stop()
@@ -128,12 +130,13 @@ class Finn:
         # Executes api.py and indirectly finn.py
         subprocess.run(['gunicorn', '-b', __ip_address + ':3001', 'bot_python_sdk.api:api'])
 
+    # Console api
     def __init_api(self, api):
         Logger.info('Finn', 'init_api')
 
         api.add_route('/', BaseResource())
         api.add_route('/actions', ActionsResource(self.__action_service))
         api.add_route('/pairing', PairingResource())
-        api.add_route('/activate', self.__activate_device_resource)
+        api.add_route('/activate', self.__activate_device_service)
         api.add_route('/qrcode', QRCodeResource())
         api.add_route('/messages', self.__bot_talk_service)

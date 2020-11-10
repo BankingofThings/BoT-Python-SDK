@@ -19,12 +19,8 @@ class ActionsResource:
         configuration = Store.get_configuration_object()
         device_status = configuration.get_device_status()
 
-        if device_status is not DeviceStatus.ACTIVE and device_status is not DeviceStatus.MULTIPAIR:
-            error = 'Not allowed to trigger actions when device is not activated.'
-            Logger.error('api', error)
-            raise falcon.HTTPBadRequest(description=error)
-
         data = request.media
+
         if 'actionID' not in data.keys():
             Logger.error('api', 'Missing parameter `' + 'actionID' + '` for ' + 'POST' + ' ' + '/actions')
             raise falcon.HTTPBadRequest
