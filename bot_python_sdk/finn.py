@@ -28,9 +28,10 @@ class Finn:
 
         # Server started, just continue with Finn.init
         if api is not None:
+            self.__configuration = Store.get_configuration_object()
+
             Logger.info('Finn', '__init__ server created productID=' + self.__configuration.product_id + ', deviceID = ' + self.__configuration.device_id)
 
-            self.__configuration = Store.get_configuration_object()
             self.__bot_service = BoTService(self.__configuration.private_key, self.__configuration.get_headers())
             self.__action_service = ActionService(self.__configuration, self.__bot_service)
             self.__pairing_service = PairingService(self.__bot_service)
