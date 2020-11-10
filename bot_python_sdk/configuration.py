@@ -38,7 +38,7 @@ class Configuration:
         return self.device_id
 
     def get_device_status(self):
-        Logger.info('Configuration', 'get_device_status' + ' self.device_status = ' + self.device_status.value)
+        Logger.info('Configuration', 'get_device_status' + ' self.device_status = ' + str(self.device_status))
         return self.device_status
 
     def set_device_status(self, device_status):
