@@ -2,7 +2,7 @@ from bot_python_sdk.device_status import DeviceStatus
 
 
 def test_device_status_length():
-    assert len(DeviceStatus) == 4
+    assert len(DeviceStatus) == 3
 
 
 def test_device_status_names():

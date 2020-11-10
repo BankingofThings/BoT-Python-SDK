@@ -9,7 +9,7 @@ def resource():
     resource = mock.Mock()
     resource.product_id = 'product id'
     resource.device_id = 'device id'
-    resource.device_status = DeviceStatus.MULTIPAIR.value
+    resource.device_status = DeviceStatus.MULTIPAIR
     resource.bluetooth_enabled = True
     resource.aid = 'aid'
     resource.public_key = ''
