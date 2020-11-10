@@ -97,6 +97,8 @@ class Finn:
             else:
                 Logger.info('Finn', '__process_device_status not paired')
 
+        Logger.info('Finn', '__process_device_status done')
+
     def __get_actions(self):
         return self.__action_service.get_actions()
 

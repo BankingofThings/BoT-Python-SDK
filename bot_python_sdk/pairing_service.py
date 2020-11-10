@@ -45,7 +45,6 @@ class PairingService:
             else:
                 Logger.info('PairingService', '__get_remote_paired_status Failed pairing attempt.')
                 return False
-        # TODO : Make exception more specific
-        except:
-            Logger.info('PairingService', '__get_remote_paired_status')
+        except Exception as e:
+            Logger.info('PairingService', '__get_remote_paired_status error:' + str(e))
             return False
