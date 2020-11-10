@@ -109,7 +109,7 @@ class Finn:
         response = self.__bot_talk_service.execute()
 
         if response is not None:
-            Logger.info('Finn', '__start_bot_talk message found')
+            Logger.info('Finn', '__start_bot_talk message found ' + str(response))
             self.__action_service.trigger(response.action_id, None, response.customer_id)
             self.__start_bot_talk()
         else:
