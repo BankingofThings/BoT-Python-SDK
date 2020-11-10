@@ -108,8 +108,6 @@ class Finn:
     def __start_bot_talk(self):
         response = self.__bot_talk_service.execute()
 
-        response = {'payload': '{"actionID":"D85307AE-1699-4AC4-BBB8-56B70EC98B3C", "customerID":"B5124E90-A9A3-4CC5-9DA0-D12D91B802EA", "deviceID":"16515729-695d-42fd-a00c-9c395453978a"}', 'deviceID': '16515729-695d-42fd-a00c-9c395453978a', 'deliverd': 0, 'event': 'Action Activated', 'messageID': '45989A52-5ADC-47B4-9AA1-8552F82BF1B2'}
-
         if response is not None:
             Logger.info('Finn', '__start_bot_talk message found ' + str(response))
             payload = json.loads(response['payload'])
