@@ -5,8 +5,9 @@ import qrcode
 from qrcode.image.pure import PymagingImage
 
 from bot_python_sdk.pairing_resource import PairingResource
+from bot_python_sdk.services.service_bot_talk import BotTalkService
 from bot_python_sdk.utils import Utils
-from bot_python_sdk.activate_device_resource import ActionsResource
+from bot_python_sdk.actions_resource import ActionsResource
 from bot_python_sdk.action_service import ActionService
 from bot_python_sdk.activation_resource import ActivateDeviceResource
 from bot_python_sdk.base_resource import BaseResource
@@ -36,6 +37,7 @@ class Finn:
             self.__action_service = ActionService(self.__configuration, self.__bot_service)
             self.__pairing_service = PairingService(self.__bot_service)
             self.__activate_device_resource = ActivateDeviceResource(self.__bot_service)
+            self.__bot_talk_service = BotTalkService(self.__bot_service)
 
             self.__init_api(api)
 
@@ -85,15 +87,24 @@ class Finn:
         else:
             Logger.info('Finn', '__init__' + ' Pair the device either using QRCode or Bluetooth Service through FINN Mobile App')
             if system_platform != 'Darwin' and self.__configuration.is_bluetooth_enabled():
-                self.__blue_service = BluetoothService(BlenoService(self.__bluetooth_wifi_config_done))
+                self.__blue_service = BluetoothService(BlenoService(self.__on_bluetooth_wifi_config_done))
 
             if self.__pairing_service.start():
                 Logger.info('Finn', '__process_device_status paired')
-                self.__action_service.get_actions()
+                self.__on_device_paired()
             else:
                 Logger.info('Finn', '__process_device_status not paired')
 
-    def __bluetooth_wifi_config_done(self):
+    def __on_device_paired(self):
+        if self.__activate_device_resource.execute():
+            Store.set_device_status(DeviceStatus.ACTIVE)
+            self.__action_service.get_actions()
+            self.__start_bot_talk()
+
+    def __start_bot_talk(self):
+        self.__bot_talk_service.start()
+
+    def __on_bluetooth_wifi_config_done(self):
         self.__pairing_service.stop()
 
     def __start_server(self):
@@ -125,3 +136,4 @@ class Finn:
         api.add_route('/pairing', PairingResource())
         api.add_route('/activate', self.__activate_device_resource)
         api.add_route('/qrcode', QRCodeResource())
+        api.add_route('/messages', self.__bot_talk_service)
