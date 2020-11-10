@@ -45,12 +45,12 @@ class BoTService:
         session.mount(API_URL, FingerprintAdapter(SSL_FINGERPRINT))
         try:
             response = session.get(API_URL + url, headers=self.__headers)
-            Logger.info('BoTService', 'get response = \n' + str(response))
-            data = self._decode(response.text)
+            Logger.info('BoTService', 'get response = ' + str(response) + "'")
             if response.status_code < 200 or response.status_code >= 300:
-                Logger.error(LOCATION, 'status: ' + str(response.status_code) + ', body: ' + json.dumps(data))
+                Logger.error(LOCATION, 'status: ' + str(response.status_code) + ', raw: ' + str(response))
                 raise falcon.HTTPServiceUnavailable
-            return self._get_response(data)
+            else:
+                return self._get_response(self._decode(response.text))
         except requests.exceptions.SSLError:
             self._handle_ssl_exception()
 
