@@ -2,6 +2,7 @@ import json
 import subprocess
 import time
 
+import falcon
 import qrcode
 from qrcode.image.pure import PymagingImage
 
@@ -27,6 +28,8 @@ from bot_python_sdk.data.storage import Storage
 class Finn:
     def __init__(self, product_id, device_status, aid, bluetooth_enabled, api):
         Logger.info('Finn', '__init__')
+
+        raise falcon.HTTPServiceUnavailable
 
         # Server started, just continue with Finn.init
         if api is not None:
@@ -81,7 +84,7 @@ class Finn:
 
         if device_status is DeviceStatus.PAIRED:
             Logger.info('Finn', '__init__' + ' Device state is PAIRED, resuming the configuration')
-            if self.__activate_device_service.execute():
+            if self.__activate_device():
                 Logger.info('Finn', '__process_device_status device activated')
         else:
             Logger.info('Finn', '__init__' + ' Pair the device either using QRCode or Bluetooth Service through FINN Mobile App')
