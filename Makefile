@@ -2,7 +2,7 @@ install: ; sudo pip3 install --upgrade pip && sudo pip3 install --upgrade setupt
 
 server: ; sudo python3 server.py $(productID)
 
-reset: ; python3 -c "from bot_python_sdk.store import Store; Store().remove_configuration()"
+reset: ; python3 -c "from bot_python_sdk.data.storage import Storage; Storage.remove_configuration()"
 
 test: ; pytest
 
