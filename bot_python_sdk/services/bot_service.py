@@ -38,6 +38,7 @@ class BoTService:
             Logger.info('BoTService', 'get response = ' + str(response))
             if response.status_code < 200 or response.status_code >= 300:
                 raise falcon.HTTPServiceUnavailable
+
             else:
                 try:
                     # get data part of jwt
@@ -50,7 +51,7 @@ class BoTService:
                         return data
                 except Exception as e:
                     Logger.info('BoTService', '__get_response error: jwt decoding failed = ' + str(e))
-                    return response.text
+                    return response
         except requests.exceptions.SSLError:
             self.__handle_ssl_exception()
         except Exception as e:
