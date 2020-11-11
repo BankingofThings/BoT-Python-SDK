@@ -1,6 +1,6 @@
 import json
 
-from bot_python_sdk.services.service_bot_talk import BotTalkModel
+from bot_python_sdk.data.bot_talk_model import BotTalkModel
 
 
 class PojoConverter:

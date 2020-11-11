@@ -2,27 +2,26 @@ import json
 import subprocess
 import time
 
-import falcon
 import qrcode
 from qrcode.image.pure import PymagingImage
 
-from bot_python_sdk.resources.pairing_resource import PairingResource
-from bot_python_sdk.services.service_bot_talk import BotTalkService
-from bot_python_sdk.util.utils import Utils
-from bot_python_sdk.resources.actions_resource import ActionsResource
-from bot_python_sdk.services.action_service import ActionService
-from bot_python_sdk.services.activate_device_service import ActiveDeviceService
-from bot_python_sdk.resources.base_resource import BaseResource
 from bot_python_sdk.bleno.bleno_service import BlenoService
-from bot_python_sdk.services.bluetooth_service import BluetoothService
-from bot_python_sdk.services.bot_service import BoTService
 from bot_python_sdk.data.configuration import Configuration
 from bot_python_sdk.data.device_status import DeviceStatus
+from bot_python_sdk.data.storage import Storage
+from bot_python_sdk.resources.actions_resource import ActionsResource
+from bot_python_sdk.resources.base_resource import BaseResource
+from bot_python_sdk.resources.pairing_resource import PairingResource
+from bot_python_sdk.resources.qr_code_resource import QRCodeResource
+from bot_python_sdk.services.action_service import ActionService
+from bot_python_sdk.services.activate_device_service import ActiveDeviceService
+from bot_python_sdk.services.bluetooth_service import BluetoothService
+from bot_python_sdk.services.bot_service import BoTService
+from bot_python_sdk.services.pairing_service import PairingService
+from bot_python_sdk.services.service_bot_talk import BotTalkService
 from bot_python_sdk.util.key_generator import KeyGenerator
 from bot_python_sdk.util.logger import Logger
-from bot_python_sdk.services.pairing_service import PairingService
-from bot_python_sdk.resources.qr_code_resource import QRCodeResource
-from bot_python_sdk.data.storage import Storage
+from bot_python_sdk.util.utils import Utils
 
 
 class Finn:
