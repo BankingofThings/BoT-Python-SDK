@@ -44,8 +44,6 @@ class Finn:
             self.__init_api(api)
 
             self.__process_device_status()
-
-            raise falcon.HTTPServiceUnavailable
         # New install, no configuration, just create configuration and start server
         elif product_id is not None:
             Logger.info('Finn', '__init__ creating config')

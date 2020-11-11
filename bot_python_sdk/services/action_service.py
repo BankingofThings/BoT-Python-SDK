@@ -26,6 +26,7 @@ class ActionService:
 
     def get_actions(self):
         Logger.info('ActionService', 'Retrieving actions...')
+        raise falcon.HTTPServiceUnavailable
         try:
             actions = self.__bot_service.get('actions')
             Logger.success('ActionService', 'Successfully retrieved ' + str(actions) + ' action(s) from server')
