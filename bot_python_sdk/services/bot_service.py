@@ -39,7 +39,17 @@ class BoTService:
             if response.status_code < 200 or response.status_code >= 300:
                 raise falcon.HTTPServiceUnavailable
             else:
-                return self.__get_response(self.__validate_and_parse_data(response.text))
+                try:
+                    data = self.__validate_and_parse_data(response.text)
+
+                    if RESPONSE_DATA_KEY in data:
+                        return json.loads(data[RESPONSE_DATA_KEY])
+                    else:
+                        Logger.info('BoTService', '__get_response error:' + json.dumps(data))
+                        return data
+                except Exception as e:
+                    Logger.info('BoTService', 'get parse error:' + str(e))
+                    return response.text
         except requests.exceptions.SSLError:
             self.__handle_ssl_exception()
         except Exception as e:
@@ -50,20 +60,13 @@ class BoTService:
         jwt_token = jwt.encode({RESPONSE_DATA_KEY: data}, self.__private_key, algorithm='RS256').decode('UTF-8')
         return json.dumps({RESPONSE_DATA_KEY: jwt_token})
 
-    def __get_response(self, data):
-        if RESPONSE_DATA_KEY in data:
-            return json.loads(data[RESPONSE_DATA_KEY])
-        else:
-            Logger.info('BoTService', '__get_response error:' + json.dumps(data))
-            raise falcon.HTTPInternalServerError
-
     def __validate_and_parse_data(self, token):
         try:
             data = jwt.decode(token, Storage.get_bot_public_key(), algorithms=['RS256'])
             return data
         except Exception as e:
             Logger.info('BoTService', '__decode error:' + str(e))
-            raise falcon.HTTPInternalServerError
+            return token
 
     def __handle_ssl_exception(self):
         error = 'SSL Fingerprint verification failed. Could not verify server.'
