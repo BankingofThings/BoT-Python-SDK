@@ -18,7 +18,7 @@ from bot_python_sdk.services.activate_device_service import ActiveDeviceService
 from bot_python_sdk.services.bluetooth_service import BluetoothService
 from bot_python_sdk.services.bot_service import BoTService
 from bot_python_sdk.services.pairing_service import PairingService
-from bot_python_sdk.services.service_bot_talk import BotTalkService
+from bot_python_sdk.services.bot_talk_service import BotTalkService
 from bot_python_sdk.util.key_generator import KeyGenerator
 from bot_python_sdk.util.logger import Logger
 from bot_python_sdk.util.utils import Utils

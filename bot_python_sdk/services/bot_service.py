@@ -32,6 +32,7 @@ class BoTService:
             Logger.info('BoTService', 'post error:' + str(e))
             raise falcon.HTTPServiceUnavailable
 
+    # 204 returns None: just ignore
     def get(self, url):
         try:
             response = self.__create_session().get(API_URL + url, headers=self.__headers)
