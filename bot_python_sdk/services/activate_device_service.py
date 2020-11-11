@@ -1,5 +1,4 @@
-from bot_python_sdk.logger import Logger
-from bot_python_sdk.store import Store
+from bot_python_sdk.util.logger import Logger
 
 
 # Sets the device status at CORE to active. In app aka Connected/Not connected.

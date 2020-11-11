@@ -5,8 +5,8 @@ import requests
 
 from requests_toolbelt.adapters.fingerprint import FingerprintAdapter
 
-from bot_python_sdk.logger import Logger
-from bot_python_sdk.store import Store
+from bot_python_sdk.util.logger import Logger
+from bot_python_sdk.data.storage import Storage
 
 LOCATION = 'BoT Service'
 API_URL = 'https://iot-dev.bankingofthings.io/'
@@ -72,7 +72,7 @@ class BoTService:
     @staticmethod
     def _decode(token):
         try:
-            data = jwt.decode(token, Store.get_bot_public_key(), algorithms=['RS256'])
+            data = jwt.decode(token, Storage.get_bot_public_key(), algorithms=['RS256'])
         # TODO : Make exception more specific
         except:
             Logger.error(LOCATION, 'Could not decode message from BoT.')

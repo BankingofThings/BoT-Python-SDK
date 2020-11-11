@@ -1,7 +1,7 @@
 # TODO : Separate into file
 import os
 
-from bot_python_sdk.logger import Logger
+from bot_python_sdk.util.logger import Logger
 
 
 class QRCodeResource(object):

@@ -1,8 +1,8 @@
 import falcon
 
-from bot_python_sdk.device_status import DeviceStatus
-from bot_python_sdk.logger import Logger
-from bot_python_sdk.store import Store
+from bot_python_sdk.data.device_status import DeviceStatus
+from bot_python_sdk.util.logger import Logger
+from bot_python_sdk.data.storage import Storage
 
 
 class ActionsResource:
@@ -16,7 +16,7 @@ class ActionsResource:
 
     def on_post(self, request, response):
         Logger.info('ActionsResource', 'on_post')
-        configuration = Store.get_configuration_object()
+        configuration = Storage.get_configuration_object()
         device_status = configuration.get_device_status()
 
         data = request.media

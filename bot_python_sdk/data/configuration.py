@@ -1,5 +1,5 @@
-from bot_python_sdk.device_status import DeviceStatus
-from bot_python_sdk.logger import Logger
+from bot_python_sdk.data.device_status import DeviceStatus
+from bot_python_sdk.util.logger import Logger
 
 
 class Configuration:

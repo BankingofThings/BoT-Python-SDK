@@ -1,30 +1,29 @@
-from bot_python_sdk.action_service import ActionService
+from bot_python_sdk.services.action_service import ActionService
 from unittest.mock import patch
 
-from bot_python_sdk.bot_service import BoTService
-from bot_python_sdk.configuration import Configuration
+from bot_python_sdk.services.bot_service import BoTService
+from bot_python_sdk.data.configuration import Configuration
+from bot_python_sdk.util.pojo_converter import PojoConverter
 
 
-@patch('bot_python_sdk.configuration.Configuration.get_device_id')
-@patch('bot_python_sdk.key_generator.KeyGenerator.generate_uuid')
-def test_create_trigger_body(generate_uuid, get_device_id):
-    __actionService = ActionService(Configuration(), BoTService("", {}))
-
+@patch('bot_python_sdk.data.configuration.Configuration.get_device_id')
+def test_create_trigger_body(get_device_id):
     action_id = '44'
     device_id = '43'
-    uuid = 42
+    queue_id = 42
     alt_id = '45'
     value = '46'
 
-    generate_uuid.return_value = uuid
     get_device_id.return_value = device_id
 
-    trigger_body = {
+    expected_result = {
         'actionID': action_id,
         'deviceID': device_id,
-        'queueID': uuid,
+        'queueID': queue_id,
         'alternativeID': alt_id,
         'value': value
     }
 
-    assert __actionService._create_trigger_body(action_id, value, alt_id) == trigger_body
+    actual_result = PojoConverter.create_trigger_body(action_id, device_id, queue_id, alt_id, value)
+
+    assert actual_result == expected_result

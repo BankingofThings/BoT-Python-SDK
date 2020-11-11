@@ -1,4 +1,4 @@
-from bot_python_sdk.device_status import DeviceStatus
+from bot_python_sdk.data.device_status import DeviceStatus
 
 
 def test_device_status_length():

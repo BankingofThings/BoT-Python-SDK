@@ -1,9 +1,9 @@
 import json
 import os
 
-from bot_python_sdk.configuration import Configuration
-from bot_python_sdk.device_status import DeviceStatus
-from bot_python_sdk.logger import Logger
+from bot_python_sdk.data.configuration import Configuration
+from bot_python_sdk.data.device_status import DeviceStatus
+from bot_python_sdk.util.logger import Logger
 
 _actions_file_path = 'storage/actions.json'
 _last_triggered_file_path = 'storage/last_triggered.json'
@@ -15,7 +15,7 @@ _last_triggered_path = 'storage/last_triggered.json'
 
 
 # Storage manager
-class Store:
+class Storage:
 
     @staticmethod
     def set_actions(actions):
@@ -156,7 +156,7 @@ class Store:
 
     @staticmethod
     def get_configuration_object():
-        dictionary = Store.__get_configuration()
+        dictionary = Storage.__get_configuration()
         configuration = Configuration()
         configuration.initialize(
             dictionary['makerId'],
@@ -180,20 +180,20 @@ class Store:
             'alternativeId': configuration.get_alternative_id(),
             'bluetoothEnabled': configuration.is_bluetooth_enabled()
         }
-        Store.__set_configuration(__dictionary)
+        Storage.__set_configuration(__dictionary)
 
     @staticmethod
     def get_device_status():
-        return Store.get_configuration_object().get_device_status()
+        return Storage.get_configuration_object().get_device_status()
 
     @staticmethod
     def set_device_status(device_status):
-        configuration = Store.get_configuration_object()
+        configuration = Storage.get_configuration_object()
 
         configuration.set_device_status(device_status)
 
-        Store.save_configuration_object(configuration)
+        Storage.save_configuration_object(configuration)
 
     @staticmethod
     def get_device_pojo():
-        return Store.get_configuration_object().get_device_information()
+        return Storage.get_configuration_object().get_device_information()

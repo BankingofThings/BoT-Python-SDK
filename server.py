@@ -1,9 +1,9 @@
 import sys
 
-from bot_python_sdk.device_status import DeviceStatus
+from bot_python_sdk.data.device_status import DeviceStatus
 from bot_python_sdk.finn import Finn
-from bot_python_sdk.logger import Logger
-from bot_python_sdk.store import Store
+from bot_python_sdk.util.logger import Logger
+from bot_python_sdk.data.storage import Storage
 
 
 ###
@@ -32,7 +32,7 @@ def initialize_configuration(product_id):
 
 
 # Resume Finn or generate configuration
-if Store.has_configuration():
+if Storage.has_configuration():
     Finn(None, None, None, None, None)
 else:
     if len(sys.argv) != 2:

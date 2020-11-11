@@ -5,23 +5,23 @@ import time
 import qrcode
 from qrcode.image.pure import PymagingImage
 
-from bot_python_sdk.pairing_resource import PairingResource
+from bot_python_sdk.resources.pairing_resource import PairingResource
 from bot_python_sdk.services.service_bot_talk import BotTalkService
-from bot_python_sdk.utils import Utils
-from bot_python_sdk.actions_resource import ActionsResource
-from bot_python_sdk.action_service import ActionService
-from bot_python_sdk.activate_device_service import ActiveDeviceService
-from bot_python_sdk.base_resource import BaseResource
+from bot_python_sdk.util.utils import Utils
+from bot_python_sdk.resources.actions_resource import ActionsResource
+from bot_python_sdk.services.action_service import ActionService
+from bot_python_sdk.services.activate_device_service import ActiveDeviceService
+from bot_python_sdk.resources.base_resource import BaseResource
 from bot_python_sdk.bleno.bleno_service import BlenoService
-from bot_python_sdk.bluetooth_service import BluetoothService
-from bot_python_sdk.bot_service import BoTService
-from bot_python_sdk.configuration import Configuration
-from bot_python_sdk.device_status import DeviceStatus
-from bot_python_sdk.key_generator import KeyGenerator
-from bot_python_sdk.logger import Logger
-from bot_python_sdk.pairing_service import PairingService
-from bot_python_sdk.qr_code_resource import QRCodeResource
-from bot_python_sdk.store import Store
+from bot_python_sdk.services.bluetooth_service import BluetoothService
+from bot_python_sdk.services.bot_service import BoTService
+from bot_python_sdk.data.configuration import Configuration
+from bot_python_sdk.data.device_status import DeviceStatus
+from bot_python_sdk.util.key_generator import KeyGenerator
+from bot_python_sdk.util.logger import Logger
+from bot_python_sdk.services.pairing_service import PairingService
+from bot_python_sdk.resources.qr_code_resource import QRCodeResource
+from bot_python_sdk.data.storage import Storage
 
 
 class Finn:
@@ -30,12 +30,12 @@ class Finn:
 
         # Server started, just continue with Finn.init
         if api is not None:
-            self.__configuration = Store.get_configuration_object()
+            self.__configuration = Storage.get_configuration_object()
 
             Logger.info('Finn', '__init__ server created productID =' + self.__configuration.product_id + ', deviceID = ' + self.__configuration.device_id)
 
             self.__bot_service = BoTService(self.__configuration.private_key, self.__configuration.get_headers())
-            self.__action_service = ActionService(self.__configuration, self.__bot_service)
+            self.__action_service = ActionService(self.__configuration, self.__bot_service, self.__configuration.device_id)
             self.__pairing_service = PairingService(self.__bot_service)
             self.__activate_device_service = ActiveDeviceService(self.__bot_service, self.__configuration.get_device_id())
             self.__bot_talk_service = BotTalkService(self.__bot_service)
@@ -46,8 +46,8 @@ class Finn:
         # New install, no configuration, just create configuration and start server
         elif product_id is not None:
             Logger.info('Finn', '__init__ creating config')
-            public_key, private_key = KeyGenerator().generate_key()
-            device_id = KeyGenerator().generate_uuid()
+            public_key, private_key = KeyGenerator.generate_key()
+            device_id = KeyGenerator.generate_uuid()
             # Added alternative id as an argument to initializing the configuration
             self.__configuration = Configuration()
             self.__configuration.initialize(product_id,
@@ -57,10 +57,10 @@ class Finn:
                                             aid,
                                             public_key,
                                             private_key)
-            Store.save_configuration_object(self.__configuration)
+            Storage.save_configuration_object(self.__configuration)
 
             try:
-                Store.save_qrcode(qrcode.make(json.dumps(Store.get_device_pojo()), image_factory=PymagingImage))
+                Storage.save_qrcode(qrcode.make(json.dumps(Storage.get_device_pojo()), image_factory=PymagingImage))
             except Exception as e:
                 Logger.info('ConfigurationService', 'generate_qr_code error:' + str(e))
                 raise e
@@ -111,7 +111,7 @@ class Finn:
         if response is not None:
             Logger.info('Finn', '__start_bot_talk message found ' + str(response))
             payload = json.loads(response['payload'])
-            self.__action_service.trigger(payload['actionID'], None, payload['customerID'])
+            self.__action_service.trigger(payload['actionID'], "", payload['customerID'])
             self.__start_bot_talk()
         else:
             # run infinite with 5 sec delay. Don't increase delay until CORE supports it.

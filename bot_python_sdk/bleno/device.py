@@ -1,9 +1,9 @@
 from pybleno import *
 import socket
 import json
-from bot_python_sdk.logger import Logger
-from bot_python_sdk.device_status import DeviceStatus
-from bot_python_sdk.store import Store
+from bot_python_sdk.util.logger import Logger
+from bot_python_sdk.data.device_status import DeviceStatus
+from bot_python_sdk.data.storage import Storage
 
 LOCATION = 'Bluetooth Service'
 #Device characteristics uuid
@@ -32,7 +32,7 @@ class DeviceCharacteristic(Characteristic):
     '''
     def onReadRequest(self, offset, callback):        
         if not offset:
-            configuration = Store.get_configuration_object()
+            configuration = Storage.get_configuration_object()
             Logger.info(LOCATION, 'Device data being read by connected device.')
             device_status = configuration.get_device_status()
             device_information = configuration.get_device_information()

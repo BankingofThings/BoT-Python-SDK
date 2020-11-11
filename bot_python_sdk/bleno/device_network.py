@@ -1,7 +1,7 @@
 from pybleno import *
 import netifaces
 import json
-from bot_python_sdk.logger import Logger
+from bot_python_sdk.util.logger import Logger
 
 LOCATION = 'Bluetooth Service'
 #Device network characteristics uuid

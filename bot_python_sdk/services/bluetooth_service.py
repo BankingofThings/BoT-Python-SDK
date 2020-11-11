@@ -1,8 +1,7 @@
 from pybleno import *
 import platform
 import socket
-from bot_python_sdk.logger import Logger
-from bot_python_sdk.bleno.bleno_service import BlenoService
+from bot_python_sdk.util.logger import Logger
 
 '''
 Bluetooth service class responsible for start/stop advertising, handling 

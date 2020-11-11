@@ -4,7 +4,7 @@ import time
 
 from pybleno import *
 
-from bot_python_sdk.logger import Logger
+from bot_python_sdk.util.logger import Logger
 
 LOCATION = 'Bluetooth Service'
 # Device specific configuration characteristics uuid

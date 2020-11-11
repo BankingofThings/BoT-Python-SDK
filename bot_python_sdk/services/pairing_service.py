@@ -1,10 +1,8 @@
 import time
 
-from bot_python_sdk.bot_service import BoTService
-from bot_python_sdk.logger import Logger
+from bot_python_sdk.util.logger import Logger
 
 # PairingService.run() will start infinite loop with checking pair status at CORE
-from bot_python_sdk.store import Store
 
 
 class PairingService:

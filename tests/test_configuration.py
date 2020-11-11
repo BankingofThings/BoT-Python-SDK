@@ -1,5 +1,5 @@
-from bot_python_sdk.configuration import Configuration
-from bot_python_sdk.device_status import DeviceStatus
+from bot_python_sdk.data.configuration import Configuration
+from bot_python_sdk.data.device_status import DeviceStatus
 from unittest import mock
 import pytest
 
