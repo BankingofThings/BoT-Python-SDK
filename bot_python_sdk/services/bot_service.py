@@ -40,15 +40,16 @@ class BoTService:
                 raise falcon.HTTPServiceUnavailable
             else:
                 try:
-                    data = self.__validate_and_parse_data(response.text)
-
+                    # get data part of jwt
+                    data = jwt.decode(response.text, Storage.get_bot_public_key(), algorithms=['RS256'])
+                    # check data part has bot object
                     if RESPONSE_DATA_KEY in data:
                         return json.loads(data[RESPONSE_DATA_KEY])
                     else:
-                        Logger.info('BoTService', '__get_response error:' + json.dumps(data))
+                        Logger.info('BoTService', '__get_response error: bot object not found')
                         return data
                 except Exception as e:
-                    Logger.info('BoTService', 'get parse error:' + str(e))
+                    Logger.info('BoTService', '__get_response error: jwt decoding failed = ' + str(e))
                     return response.text
         except requests.exceptions.SSLError:
             self.__handle_ssl_exception()
@@ -59,14 +60,6 @@ class BoTService:
     def __create_request_body(self, data):
         jwt_token = jwt.encode({RESPONSE_DATA_KEY: data}, self.__private_key, algorithm='RS256').decode('UTF-8')
         return json.dumps({RESPONSE_DATA_KEY: jwt_token})
-
-    def __validate_and_parse_data(self, token):
-        try:
-            data = jwt.decode(token, Storage.get_bot_public_key(), algorithms=['RS256'])
-            return data
-        except Exception as e:
-            Logger.info('BoTService', '__decode error:' + str(e))
-            return token
 
     def __handle_ssl_exception(self):
         error = 'SSL Fingerprint verification failed. Could not verify server.'
