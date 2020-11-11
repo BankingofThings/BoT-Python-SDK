@@ -93,8 +93,8 @@ class Finn:
                 Logger.info('Finn', '__process_device_status device paired')
                 if self.__activate_device():
                     Logger.info('Finn', '__process_device_status device status at CORE is active')
-                    self.__start_bot_talk()
                     self.__get_actions()
+                    self.__start_bot_talk()
             else:
                 Logger.info('Finn', '__process_device_status not paired')
 
