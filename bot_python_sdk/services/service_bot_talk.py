@@ -11,6 +11,7 @@ class BotTalkService:
         try:
             response = self.__bot_service.get('messages')
 
+            Logger.info('BotTalkService', 'execute result = ' + str(response))
             if response is not None:
                 return PojoConverter.create_bot_talk_model(response)
             else:
