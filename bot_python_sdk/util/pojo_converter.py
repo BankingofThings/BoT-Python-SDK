@@ -1,4 +1,6 @@
-from bot_python_sdk.util.key_generator import KeyGenerator
+import json
+
+from bot_python_sdk.services.service_bot_talk import BotTalkModel
 
 
 class PojoConverter:
@@ -16,3 +18,8 @@ class PojoConverter:
         if value is not None:
             data['value'] = str(value)
         return data
+
+    @staticmethod
+    def create_bot_talk_model(payload):
+        payload_object = json.loads(payload['payload'])
+        return BotTalkModel(payload_object['actionID'], payload_object['customerID'])

@@ -107,12 +107,12 @@ class Finn:
         return self.__activate_device_service.execute()
 
     def __start_bot_talk(self):
-        response = self.__bot_talk_service.execute()
+        bot_talk_model = self.__bot_talk_service.execute()
 
-        if response is not None:
-            Logger.info('Finn', '__start_bot_talk message found ' + str(response))
-            payload = json.loads(response['payload'])
-            self.__action_service.trigger(payload['actionID'], "", payload['customerID'])
+        if bot_talk_model is not None:
+            Logger.info('Finn', '__start_bot_talk message found ' + str(bot_talk_model))
+
+            self.__action_service.trigger(bot_talk_model.action_id, "", bot_talk_model.customer_id)
             self.__start_bot_talk()
         else:
             # run infinite with 5 sec delay. Don't increase delay until CORE supports it.

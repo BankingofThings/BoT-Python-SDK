@@ -26,7 +26,6 @@ class ActionService:
 
     def get_actions(self):
         Logger.info('ActionService', 'Retrieving actions...')
-        raise falcon.HTTPServiceUnavailable
         try:
             actions = self.__bot_service.get('actions')
             Logger.success('ActionService', 'Successfully retrieved ' + str(actions) + ' action(s) from server')
@@ -53,8 +52,8 @@ class ActionService:
             except Exception as e:
                 Logger.info('ActionService', 'trigger error:' + str(e))
         elif action_validation_result is 1:
-            raise falcon.HTTPBadRequest(description='Frequency not supported')
+            Logger.info('ActionService', 'trigger error: Frequency not supported')
         elif action_validation_result is 2:
-            raise falcon.HTTPBadRequest(description='Maximum triggers reached')
+            Logger.info('ActionService', 'trigger error: Maximum triggers reached')
         else:
             Logger.info('ActionService', 'trigger should never happen')
