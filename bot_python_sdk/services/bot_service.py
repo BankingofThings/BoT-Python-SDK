@@ -38,7 +38,8 @@ class BoTService:
             Logger.info('BoTService', 'get response = ' + str(response))
             if response.status_code < 200 or response.status_code >= 300:
                 raise falcon.HTTPServiceUnavailable
-
+            elif response.status_code == 204:
+                return None
             else:
                 try:
                     # get data part of jwt
