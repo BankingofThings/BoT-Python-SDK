@@ -22,6 +22,7 @@ class BluetoothService:
         self.__bleno.onAdvertisingStart(self.on_advertising_start)
         self.__bleno.onStateChange(self.on_state_change)
         self.__bleno.start()
+        self.__bleno.startAdvertising(socket.gethostname(), ['729BE9C4-3C61-4EFB-884F-B310B6FFFFD1'])
 
     # start advertising depending on ble state (powered on/off)
     def start_advertising(self):
