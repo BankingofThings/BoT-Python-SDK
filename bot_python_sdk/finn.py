@@ -88,14 +88,6 @@ class Finn:
                 Logger.info('Finn', '__process_device_status start BLE')
                 self.__blue_service = BluetoothService(self.__on_bluetooth_wifi_config_done)
 
-            if self.__pairing_service.start():
-                Logger.info('Finn', '__process_device_status device paired')
-                if self.__activate_device():
-                    Logger.info('Finn', '__process_device_status device status at CORE is active')
-                    self.__get_actions()
-                    self.__start_bot_talk()
-            else:
-                Logger.info('Finn', '__process_device_status not paired')
 
         Logger.info('Finn', '__process_device_status done')
 
