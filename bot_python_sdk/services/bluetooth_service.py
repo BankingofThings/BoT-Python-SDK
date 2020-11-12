@@ -21,6 +21,8 @@ class BluetoothService:
         self.__bleno = Bleno()
         self.__bleno.onAdvertisingStart(self.on_advertising_start)
         self.__bleno.onStateChange(self.on_state_change)
+        self.__bleno.on('advertisingStart', self.on_advertising_start)
+        self.__bleno.on('stateChange', self.on_state_change)
         Logger.info('BluetoothService', '__init__' + str(self.__bleno))
         self.__bleno.start()
 
