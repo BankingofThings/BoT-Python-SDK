@@ -45,7 +45,7 @@ class Finn:
             self.__process_device_status()
         # New install, no configuration, just create configuration and start server
         elif product_id is not None:
-            Logger.info('Finn', '__init__ creating config')
+            Logger.info('Finn', '__init__ creating config bluetooth_enabled = ' + str(bluetooth_enabled))
             public_key, private_key = KeyGenerator.generate_key()
             device_id = KeyGenerator.generate_uuid()
             # Added alternative id as an argument to initializing the configuration
@@ -86,6 +86,7 @@ class Finn:
         else:
             Logger.info('Finn', '__init__' + ' Pair the device either using QRCode or Bluetooth Service through FINN Mobile App')
             if system_platform != 'Darwin' and self.__configuration.is_bluetooth_enabled():
+                Logger.info('Finn', '__process_device_status start BLE')
                 self.__blue_service = BluetoothService(BlenoService(self.__on_bluetooth_wifi_config_done))
 
             if self.__pairing_service.start():
