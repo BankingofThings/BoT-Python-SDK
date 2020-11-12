@@ -11,10 +11,11 @@ class BotTalkService:
         try:
             response = self.__bot_service.get('messages')
 
-            Logger.info('BotTalkService', 'execute result = ' + str(response))
-            if response is not None:
+            if response.status_code is not 204:
+                Logger.info('BotTalkService', 'execute message received')
                 return PojoConverter.create_bot_talk_model(response)
             else:
+                Logger.info('BotTalkService', 'execute no message')
                 return None
         except Exception as e:
             Logger.info('BotTalkService', 'start error:' + str(e))
