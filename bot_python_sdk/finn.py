@@ -5,7 +5,6 @@ import time
 import qrcode
 from qrcode.image.pure import PymagingImage
 
-from bot_python_sdk.bleno.bleno_service import BlenoService
 from bot_python_sdk.data.configuration import Configuration
 from bot_python_sdk.data.device_status import DeviceStatus
 from bot_python_sdk.data.storage import Storage
@@ -17,8 +16,8 @@ from bot_python_sdk.services.action_service import ActionService
 from bot_python_sdk.services.activate_device_service import ActiveDeviceService
 from bot_python_sdk.services.bluetooth_service import BluetoothService
 from bot_python_sdk.services.bot_service import BoTService
-from bot_python_sdk.services.pairing_service import PairingService
 from bot_python_sdk.services.bot_talk_service import BotTalkService
+from bot_python_sdk.services.pairing_service import PairingService
 from bot_python_sdk.util.key_generator import KeyGenerator
 from bot_python_sdk.util.logger import Logger
 from bot_python_sdk.util.utils import Utils
@@ -87,7 +86,7 @@ class Finn:
             Logger.info('Finn', '__init__' + ' Pair the device either using QRCode or Bluetooth Service through FINN Mobile App')
             if system_platform != 'Darwin' and self.__configuration.is_bluetooth_enabled():
                 Logger.info('Finn', '__process_device_status start BLE')
-                self.__blue_service = BluetoothService(BlenoService(self.__on_bluetooth_wifi_config_done))
+                self.__blue_service = BluetoothService(self.__on_bluetooth_wifi_config_done)
 
             if self.__pairing_service.start():
                 Logger.info('Finn', '__process_device_status device paired')

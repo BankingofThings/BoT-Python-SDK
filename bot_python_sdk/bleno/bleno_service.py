@@ -1,12 +1,9 @@
 from pybleno import *
-from bot_python_sdk.bleno.device import DeviceCharacteristic
-from bot_python_sdk.bleno.device_info import DeviceInfoCharacteristic
-from bot_python_sdk.bleno.configure import ConfigureCharacteristic
-from bot_python_sdk.bleno.device_network import DeviceNetworkCharacteristic
+from bot_python_sdk.bleno.device_characteristic import DeviceCharacteristic
+from bot_python_sdk.bleno.device_info_characteristic import DeviceInfoCharacteristic
+from bot_python_sdk.bleno.configure_characteristic import ConfigureCharacteristic
+from bot_python_sdk.bleno.device_network_characteristic import DeviceNetworkCharacteristic
 from bot_python_sdk.util.logger import Logger
-
-# Bleno primary service uuid
-BLENO_PRIMARY_SERVICE_UUID = '729BE9C43C614EFB884FB310B6FFFFD1'
 
 
 class BlenoService(BlenoPrimaryService):
@@ -17,7 +14,7 @@ class BlenoService(BlenoPrimaryService):
         Logger.info('BlenoService', '__init__')
 
         BlenoPrimaryService.__init__(self, {
-            'uuid': BLENO_PRIMARY_SERVICE_UUID,
+            'uuid': '729BE9C43C614EFB884FB310B6FFFFD1',
             'characteristics': [
                 DeviceCharacteristic(),
                 DeviceInfoCharacteristic(),

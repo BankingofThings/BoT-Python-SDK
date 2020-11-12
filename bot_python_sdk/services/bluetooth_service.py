@@ -1,21 +1,23 @@
-from pybleno import *
 import platform
 import socket
+
+from pybleno import *
+
+from bot_python_sdk.bleno.bleno_service import BlenoService
 from bot_python_sdk.util.logger import Logger
 
-'''
-Bluetooth service class responsible for start/stop advertising, handling 
-state chanegs, initialize the pybleno, register the necessay callbacks
-with pybleno to process the events from BLE stack.
-'''
 
-
+###
+# Bluetooth service class responsible for start/stop advertising, handling
+# state chanegs, initialize the pybleno, register the necessay callbacks
+# with pybleno to process the events from BLE stack.
+##
 class BluetoothService:
 
     # register event handlers with pybleno and start the bleno service
-    def __init__(self, bleno_service):
+    def __init__(self, on_bluetooth_wifi_config_done):
         Logger.info('BluetoothService', '__init__')
-        self.__bleno_service = bleno_service
+        self.__bleno_service = BlenoService(on_bluetooth_wifi_config_done)
         self.__bleno = Bleno()
         self.__bleno.onAdvertisingStart(self.on_advertising_start)
         self.__bleno.onStateChange(self.on_state_change)
