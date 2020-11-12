@@ -18,8 +18,8 @@ class BluetoothService:
     # register event handlers with pybleno and start the bleno service
     def __init__(self, on_bluetooth_wifi_config_done):
         Logger.info('BluetoothService', '__init__')
-        self.__service = BlenoService(on_bluetooth_wifi_config_done)
         self.__bleno = Bleno()
+        self.__bleno.setServices([BlenoService(on_bluetooth_wifi_config_done)], self.__on_set_services)
         self.__bleno.on('advertisingStart', self.on_advertising_start)
         self.__bleno.on('stateChange', self.on_state_change)
         Logger.info('BluetoothService', '__init__' + str(self.__bleno))
@@ -61,7 +61,7 @@ class BluetoothService:
             Logger.error('BluetoothService', 'Failed to start advertising.')
         else:
             Logger.info('BluetoothService', 'Successfully started advertising.')
-            self.__bleno.setServices([self.__service], self.__on_set_services)
+
 
     def __on_set_services(self, error):
         if error:
