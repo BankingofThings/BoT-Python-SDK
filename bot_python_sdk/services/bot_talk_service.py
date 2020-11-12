@@ -11,7 +11,7 @@ class BotTalkService:
         try:
             response = self.__bot_service.get('messages')
 
-            if response.status_code is not 204:
+            if response is not None:
                 Logger.info('BotTalkService', 'execute message received')
                 return PojoConverter.create_bot_talk_model(response)
             else:
