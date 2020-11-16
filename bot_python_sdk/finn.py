@@ -3,6 +3,7 @@ import subprocess
 import time
 
 import qrcode
+from cryptography.fernet import Fernet
 from qrcode.image.pure import PymagingImage
 
 from bot_python_sdk.data.configuration import Configuration
@@ -48,6 +49,7 @@ class Finn:
             public_key, private_key = KeyGenerator.generate_key()
             device_id = KeyGenerator.generate_uuid()
             # Added alternative id as an argument to initializing the configuration
+            Storage.store_aes_key(Fernet.generate_key())
             self.__configuration = Configuration()
             self.__configuration.initialize(product_id,
                                             device_id,

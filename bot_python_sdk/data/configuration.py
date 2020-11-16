@@ -38,7 +38,6 @@ class Configuration:
         return self.device_id
 
     def get_device_status(self):
-        Logger.info('Configuration', 'get_device_status' + ' self.device_status = ' + str(self.device_status))
         return self.device_status
 
     def set_device_status(self, device_status):
@@ -48,8 +47,7 @@ class Configuration:
         return self.public_key
 
     def get_stripped_public_key(self):
-        stripped_public_key = self.public_key.replace('-----BEGIN RSA PUBLIC KEY-----\n', '')
-        return stripped_public_key.replace('-----END RSA PUBLIC KEY-----\n', '')
+        return self.public_key.replace('-----BEGIN RSA PUBLIC KEY-----\n', '').replace('-----END RSA PUBLIC KEY-----\n', '')
 
     def get_private_key(self):
         return self.private_key

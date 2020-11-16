@@ -1,6 +1,8 @@
 import json
 import os
 
+from cryptography.fernet import Fernet
+
 from bot_python_sdk.data.configuration import Configuration
 from bot_python_sdk.data.device_status import DeviceStatus
 from bot_python_sdk.util.logger import Logger
@@ -16,6 +18,7 @@ _last_triggered_path = 'storage/last_triggered.json'
 
 # Storage manager
 class Storage:
+    __aes_key_path = 'storage/key'
 
     @staticmethod
     def set_actions(actions):
@@ -150,9 +153,32 @@ class Storage:
             with open(_bot_public_key) as bot_file:
                 public_key = bot_file.read()
                 return public_key
-        except IOError as io_error:
-            Logger.error('Store', io_error.message)
-            raise io_error
+        except IOError as e:
+            Logger.info('Storage', 'get_bot_public_key' + str(e))
+            raise e
+
+    ###
+    # Do only once
+    ##
+    @staticmethod
+    def store_aes_key(key):
+        Logger.info('Storage', 'store_aes_key')
+
+        try:
+            open(Storage.__aes_key_path, 'wb').write(key)
+        except IOError as e:
+            Logger.info('Storage', 'store_aes_key' + str(e))
+            raise e
+
+    @staticmethod
+    def get_aes_key():
+        Logger.info('Storage', 'get_aes_key')
+
+        try:
+            return open(Storage.__aes_key_path, "rb").read()
+        except IOError as e:
+            Logger.error('Store', e.message)
+            raise e
 
     @staticmethod
     def get_configuration_object():
@@ -164,8 +190,8 @@ class Storage:
             DeviceStatus[dictionary['deviceStatus']],
             dictionary['bluetoothEnabled'],
             dictionary['alternativeId'],
-            dictionary['publicKey'],
-            dictionary['privateKey']
+            Storage.decrypt(dictionary['publicKey']),
+            Storage.decrypt(dictionary['privateKey'])
         )
         return configuration
 
@@ -175,8 +201,8 @@ class Storage:
             'makerId': configuration.get_product_id(),
             'deviceId': configuration.get_device_id(),
             'deviceStatus': configuration.get_device_status().value,
-            'publicKey': configuration.get_public_key(),
-            'privateKey': configuration.get_private_key(),
+            'publicKey': Storage.encrypt(configuration.get_public_key()),
+            'privateKey': Storage.encrypt(configuration.get_private_key()),
             'alternativeId': configuration.get_alternative_id(),
             'bluetoothEnabled': configuration.is_bluetooth_enabled()
         }
@@ -197,3 +223,12 @@ class Storage:
     @staticmethod
     def get_device_pojo():
         return Storage.get_configuration_object().get_device_information()
+
+    @staticmethod
+    def encrypt(data):
+        return Fernet(Storage.get_aes_key()).encrypt(data.encode())
+
+    @staticmethod
+    def decrypt(data):
+        return Fernet(Storage.get_aes_key()).decrypt(data).decode()
+        pass
