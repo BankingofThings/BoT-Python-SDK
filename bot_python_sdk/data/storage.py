@@ -120,30 +120,37 @@ class Storage:
         try:
             if os.path.isfile(_configuration_file_path):
                 os.remove(_configuration_file_path)
-        except IOError as io_error:
-            Logger.error('Store', io_error.message)
-            raise io_error
+        except IOError as e:
+            Logger.error('Store', e.message)
+            raise e
 
         try:
             if os.path.isfile(_qr_image_path):
                 os.remove(_qr_image_path)
-        except IOError as io_error:
-            Logger.error('Store', io_error.message)
-            raise io_error
+        except IOError as e:
+            Logger.error('Store', e.message)
+            raise e
 
         try:
             if os.path.isfile(_saved_actions_path):
                 os.remove(_saved_actions_path)
-        except IOError as io_error:
-            Logger.error('Store', io_error.message)
-            raise io_error
+        except IOError as e:
+            Logger.error('Store', e.message)
+            raise e
 
         try:
             if os.path.isfile(_last_triggered_path):
                 os.remove(_last_triggered_path)
-        except IOError as io_error:
-            Logger.error('Store', io_error.message)
-            raise io_error
+        except IOError as e:
+            Logger.error('Store', e.message)
+            raise e
+
+        try:
+            if os.path.isfile(Storage.__aes_key_path):
+                os.remove(Storage.__aes_key_path)
+        except IOError as e:
+            Logger.info('Storage', 'remove_configuration aes key:' + str(e))
+            raise e
 
     @staticmethod
     def get_bot_public_key():
