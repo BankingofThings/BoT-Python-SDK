@@ -147,9 +147,10 @@ class Storage:
 
         try:
             if os.path.isfile(Storage.__aes_key_path):
+                Logger.info('Storage', 'remove_configuration key found and removed')
                 os.remove(Storage.__aes_key_path)
         except IOError as e:
-            Logger.info('Storage', 'remove_configuration aes key:' + str(e))
+            Logger.info('Storage', 'remove_configuration key:' + str(e))
             raise e
 
     @staticmethod
