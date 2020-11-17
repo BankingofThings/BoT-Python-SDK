@@ -66,7 +66,7 @@ class Finn:
                 Logger.info('ConfigurationService', 'generate_qr_code error:' + str(e))
                 raise e
 
-            #self.__start_server()
+            self.__start_server()
         # We have already configuration, just start server
         else:
             Logger.info('Finn', '__init__ resume device')
