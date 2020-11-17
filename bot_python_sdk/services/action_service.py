@@ -42,7 +42,7 @@ class ActionService:
         action = self.__get_action_stored(action_id)
 
         action_validation_result = Utils.validate_frequency(action)
-        if action_validation_result is 0:
+        if action_validation_result == 0:
             Logger.info('ActionService', 'trigger action can be triggered')
             data = PojoConverter.create_trigger_body(action_id, self.__device_id, KeyGenerator.generate_uuid(), alternative_id, value)
             try:
@@ -51,9 +51,9 @@ class ActionService:
                 Storage.set_last_triggered(action_id, time.time())
             except Exception as e:
                 Logger.info('ActionService', 'trigger error:' + str(e))
-        elif action_validation_result is 1:
+        elif action_validation_result == 1:
             Logger.info('ActionService', 'trigger error: Frequency not supported')
-        elif action_validation_result is 2:
+        elif action_validation_result == 2:
             Logger.info('ActionService', 'trigger error: Maximum triggers reached')
         else:
             Logger.info('ActionService', 'trigger should never happen')

@@ -15,7 +15,6 @@ from bot_python_sdk.resources.pairing_resource import PairingResource
 from bot_python_sdk.resources.qr_code_resource import QRCodeResource
 from bot_python_sdk.services.action_service import ActionService
 from bot_python_sdk.services.activate_device_service import ActiveDeviceService
-from bot_python_sdk.services.bluetooth_service import BluetoothService
 from bot_python_sdk.services.bot_service import BoTService
 from bot_python_sdk.services.bot_talk_service import BotTalkService
 from bot_python_sdk.services.pairing_service import PairingService
@@ -34,7 +33,7 @@ class Finn:
 
             Logger.info('Finn', '__init__ server created productID =' + self.__configuration.product_id + ', deviceID = ' + self.__configuration.device_id)
 
-            self.__bot_service = BoTService(self.__configuration.private_key, self.__configuration.get_headers())
+            self.__bot_service = BoTService(Storage.get_private_key(), self.__configuration.get_headers())
             self.__action_service = ActionService(self.__configuration, self.__bot_service, self.__configuration.device_id)
             self.__pairing_service = PairingService(self.__bot_service)
             self.__activate_device_service = ActiveDeviceService(self.__bot_service, self.__configuration.get_device_id())
@@ -56,9 +55,10 @@ class Finn:
                                             device_status,
                                             bluetooth_enabled,
                                             aid,
-                                            public_key,
-                                            private_key)
+                                            public_key)
             Storage.save_configuration_object(self.__configuration)
+
+            Storage.store_private_key(private_key)
 
             try:
                 Storage.save_qrcode(qrcode.make(json.dumps(Storage.get_device_pojo()), image_factory=PymagingImage))
@@ -66,7 +66,7 @@ class Finn:
                 Logger.info('ConfigurationService', 'generate_qr_code error:' + str(e))
                 raise e
 
-            self.__start_server()
+            #self.__start_server()
         # We have already configuration, just start server
         else:
             Logger.info('Finn', '__init__ resume device')
@@ -88,6 +88,7 @@ class Finn:
             Logger.info('Finn', '__init__' + ' Pair the device either using QRCode or Bluetooth Service through FINN Mobile App')
             if system_platform != 'Darwin' and self.__configuration.is_bluetooth_enabled():
                 Logger.info('Finn', '__process_device_status start BLE')
+                from bot_python_sdk.services.bluetooth_service import BluetoothService
                 self.__blue_service = BluetoothService(self.__on_bluetooth_wifi_config_done)
 
 

@@ -19,6 +19,7 @@ _last_triggered_path = 'storage/last_triggered.json'
 # Storage manager
 class Storage:
     __aes_key_path = 'storage/key'
+    __private_key_path = 'storage/pkey'
 
     @staticmethod
     def set_actions(actions):
@@ -153,6 +154,14 @@ class Storage:
             Logger.info('Storage', 'remove_configuration key:' + str(e))
             raise e
 
+        try:
+            if os.path.isfile(Storage.__private_key_path):
+                Logger.info('Storage', 'remove_configuration private key found and removed')
+                os.remove(Storage.__private_key_path)
+        except IOError as e:
+            Logger.info('Storage', 'remove_configuration private key:' + str(e))
+            raise e
+
     @staticmethod
     def get_bot_public_key():
         Logger.info('Store', 'get_bot_public_key')
@@ -188,6 +197,29 @@ class Storage:
             Logger.error('Store', e.message)
             raise e
 
+    ###
+    # Encrypt string key and store as binary
+    ##
+    @staticmethod
+    def store_private_key(key: str):
+        Logger.info('Storage', 'store_private_key')
+
+        try:
+            open(Storage.__private_key_path, 'wb').write(Storage.encrypt(key))
+        except IOError as e:
+            Logger.info('Storage', 'store_aes_key' + str(e))
+            raise e
+
+    @staticmethod
+    def get_private_key() -> str:
+        Logger.info('Storage', 'get_private_key')
+
+        try:
+            return Storage.decrypt(open(Storage.__private_key_path, "rb").read())
+        except IOError as e:
+            Logger.error('Store', e.message)
+            raise e
+
     @staticmethod
     def get_configuration_object():
         dictionary = Storage.__get_configuration()
@@ -198,23 +230,20 @@ class Storage:
             DeviceStatus[dictionary['deviceStatus']],
             dictionary['bluetoothEnabled'],
             dictionary['alternativeId'],
-            Storage.decrypt(dictionary['publicKey']),
-            Storage.decrypt(dictionary['privateKey'])
-        )
+            dictionary['publicKey'])
         return configuration
 
     @staticmethod
     def save_configuration_object(configuration):
-        __dictionary = {
+        dictionary = {
             'makerId': configuration.get_product_id(),
             'deviceId': configuration.get_device_id(),
             'deviceStatus': configuration.get_device_status().value,
-            'publicKey': Storage.encrypt(configuration.get_public_key()),
-            'privateKey': Storage.encrypt(configuration.get_private_key()),
+            'publicKey': configuration.get_public_key(),
             'alternativeId': configuration.get_alternative_id(),
             'bluetoothEnabled': configuration.is_bluetooth_enabled()
         }
-        Storage.__set_configuration(__dictionary)
+        Storage.__set_configuration(dictionary)
 
     @staticmethod
     def get_device_status():
@@ -232,11 +261,17 @@ class Storage:
     def get_device_pojo():
         return Storage.get_configuration_object().get_device_information()
 
+    ###
+    # Encrypt string by encoding to binary.
+    ##
     @staticmethod
-    def encrypt(data):
+    def encrypt(data: str) -> bytes:
         return Fernet(Storage.get_aes_key()).encrypt(data.encode())
 
+    ###
+    # Decrypt encrypted binary data and decode to string.
+    ##
     @staticmethod
-    def decrypt(data):
+    def decrypt(data: bytes) -> str:
         return Fernet(Storage.get_aes_key()).decrypt(data).decode()
         pass

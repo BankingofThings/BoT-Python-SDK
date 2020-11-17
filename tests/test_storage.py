@@ -1,9 +1,13 @@
+from cryptography.fernet import Fernet
+
 from bot_python_sdk.data.configuration import Configuration
 from bot_python_sdk.data.device_status import DeviceStatus
 from bot_python_sdk.data.storage import Storage
+from bot_python_sdk.util.key_generator import KeyGenerator
 
 
 def test_has_no_configuration():
+    Storage.remove_configuration()
     value = Storage.has_configuration()
 
     assert not value
@@ -11,7 +15,7 @@ def test_has_no_configuration():
 
 def test_has_configuration():
     configuration = Configuration()
-    configuration.initialize("mi","di",DeviceStatus.PAIRED, True, "aid", "puk", "prk")
+    configuration.initialize("mi", "di", DeviceStatus.PAIRED, True, "aid", "puk")
 
     Storage.save_configuration_object(configuration)
 
@@ -23,10 +27,18 @@ def test_has_configuration():
     assert stored_configuration.bluetooth_enabled == True
     assert stored_configuration.aid == "aid"
     assert stored_configuration.public_key == "puk"
-    assert stored_configuration.private_key == "prk"
 
     value = Storage.has_configuration()
 
     assert value
 
     Storage.remove_configuration()
+
+
+def test_private_key_storage():
+    Storage.store_aes_key(Fernet.generate_key())
+    public_key, private_key = KeyGenerator.generate_key()
+    Storage.store_private_key(private_key)
+    restored_pkey = Storage.get_private_key()
+
+    assert private_key == restored_pkey

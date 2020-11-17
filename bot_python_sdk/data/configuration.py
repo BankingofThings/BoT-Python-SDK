@@ -9,19 +9,17 @@ class Configuration:
         self.device_id = ''
         self.device_status = DeviceStatus.NEW
         self.public_key = ''
-        self.private_key = ''
         self.aid = ''
         self.bluetooth_enabled = True
         self.initialized = False
 
-    def initialize(self, product_id, device_id, device_status, bluetooth_enabled, aid, public_key, private_key):
+    def initialize(self, product_id, device_id, device_status, bluetooth_enabled, aid, public_key):
         self.product_id = product_id
         self.device_id = device_id
         self.device_status = device_status
         self.bluetooth_enabled = bluetooth_enabled
         self.aid = aid
         self.public_key = public_key
-        self.private_key = private_key
         self.initialized = True
 
     def is_initialized(self):
@@ -48,9 +46,6 @@ class Configuration:
 
     def get_stripped_public_key(self):
         return self.public_key.replace('-----BEGIN RSA PUBLIC KEY-----\n', '').replace('-----END RSA PUBLIC KEY-----\n', '')
-
-    def get_private_key(self):
-        return self.private_key
 
     def is_bluetooth_enabled(self):
         return self.bluetooth_enabled
