@@ -29,7 +29,8 @@ class DeviceCharacteristic(Characteristic):
     # callback during subsequent calls to this API. The sent data is of JSON format.
     ##
     def onReadRequest(self, offset, callback):
-        Logger.info('DeviceCharacteristic', 'onReadRequest')
+        Logger.info('DeviceCharacteristic', 'onReadRequest' + str(offset))
+
         if not offset:
             configuration = Storage.get_configuration_object()
             Logger.info('DeviceCharacteristic', 'Device data being read by connected device.')
@@ -47,5 +48,7 @@ class DeviceCharacteristic(Characteristic):
                 data['aid'] = device_information['aid']
             self.deviceData.extend(map(ord, json.dumps(data)))
             Logger.info('DeviceCharacteristic', json.dumps(data))
+        else:
+            Logger.info('DeviceCharacteristic', 'onReadRequest 2 ' + str(offset))
         # Return through the callback the necessary data
         callback(Characteristic.RESULT_SUCCESS, self.deviceData[offset:])
