@@ -30,10 +30,10 @@ class Finn:
         if api is not None:
             self.__configuration = Storage.get_configuration_object()
 
-            Logger.info('Finn', '__init__ server created productID =' + self.__configuration.product_id + ', deviceID = ' + self.__configuration.device_id)
+            Logger.info('Finn', '__init__ server created productID =' + self.__configuration.get_product_id() + ', deviceID = ' + self.__configuration.get_device_id())
 
             self.__bot_service = BoTService(Storage.get_private_key(), self.__configuration.get_headers())
-            self.__action_service = ActionService(self.__configuration, self.__bot_service, self.__configuration.device_id)
+            self.__action_service = ActionService(self.__configuration, self.__bot_service, self.__configuration.get_device_id())
             self.__pairing_service = PairingService(self.__bot_service)
             self.__activate_device_service = ActiveDeviceService(self.__bot_service, self.__configuration.get_device_id())
             self.__bot_talk_service = BotTalkService(self.__bot_service)
