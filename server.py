@@ -1,6 +1,5 @@
 import sys
 
-from bot_python_sdk.data.device_status import DeviceStatus
 from bot_python_sdk.finn import Finn
 from bot_python_sdk.util.logger import Logger
 from bot_python_sdk.data.storage import Storage
@@ -17,10 +16,10 @@ def initialize_configuration(product_id):
 
     # Option for Multi pairing
     # If the option is yes, then alternative id needed
-    device_status = DeviceStatus.NEW
+    is_multi_pair = False
     aid = ''
     if input('Enable Multi pair(yes/no)') == 'yes':
-        device_status = DeviceStatus.MULTIPAIR
+        is_multi_pair = True
         aid = input('Enter your alternativeID:')
 
     bluetooth_enabled = False
@@ -28,7 +27,7 @@ def initialize_configuration(product_id):
         bluetooth_enabled = True
 
     Logger.info('Server', 'initialize_configuration done')
-    Finn(product_id, device_status, aid, bluetooth_enabled, None)
+    Finn(product_id, is_multi_pair, aid, bluetooth_enabled, None)
 
 
 # Resume Finn or generate configuration

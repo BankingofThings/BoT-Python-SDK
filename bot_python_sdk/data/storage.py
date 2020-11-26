@@ -4,7 +4,6 @@ import os
 from cryptography.fernet import Fernet
 
 from bot_python_sdk.data.configuration import Configuration
-from bot_python_sdk.data.device_status import DeviceStatus
 from bot_python_sdk.util.logger import Logger
 
 _actions_file_path = 'storage/actions.json'
@@ -227,7 +226,7 @@ class Storage:
         configuration.initialize(
             dictionary['makerId'],
             dictionary['deviceId'],
-            DeviceStatus[dictionary['deviceStatus']],
+            dictionary['isMultiPair'],
             dictionary['bluetoothEnabled'],
             dictionary['alternativeId'],
             dictionary['publicKey'])
@@ -238,24 +237,12 @@ class Storage:
         dictionary = {
             'makerId': configuration.get_product_id(),
             'deviceId': configuration.get_device_id(),
-            'deviceStatus': configuration.get_device_status().value,
+            'isMultiPair': configuration.get_is_multi_pair(),
             'publicKey': configuration.get_public_key(),
             'alternativeId': configuration.get_alternative_id(),
             'bluetoothEnabled': configuration.is_bluetooth_enabled()
         }
         Storage.__set_configuration(dictionary)
-
-    @staticmethod
-    def get_device_status():
-        return Storage.get_configuration_object().get_device_status()
-
-    @staticmethod
-    def set_device_status(device_status):
-        configuration = Storage.get_configuration_object()
-
-        configuration.set_device_status(device_status)
-
-        Storage.save_configuration_object(configuration)
 
     @staticmethod
     def get_device_pojo():

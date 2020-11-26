@@ -16,10 +16,10 @@ from bot_python_sdk.util.logger import Logger
 class BluetoothService:
 
     # register event handlers with pybleno and start the bleno service
-    def __init__(self, on_bluetooth_wifi_config_done):
+    def __init__(self):
         Logger.info('BluetoothService', '__init__')
         self.__bleno = Bleno()
-        self.__bleno.setServices([BlenoService(on_bluetooth_wifi_config_done)], self.__on_set_services)
+        self.__bleno.setServices([BlenoService()], self.__on_set_services)
         self.__bleno.on('advertisingStart', self.on_advertising_start)
         self.__bleno.on('stateChange', self.on_state_change)
         Logger.info('BluetoothService', '__init__' + str(self.__bleno))

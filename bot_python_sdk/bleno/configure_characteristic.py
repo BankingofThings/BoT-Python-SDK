@@ -11,10 +11,9 @@ from bot_python_sdk.util.logger import Logger
 class ConfigureCharacteristic(Characteristic):
 
     # On initializing this class set the uuid for read and write request
-    def __init__(self, wifi_done_callback):
+    def __init__(self):
         Logger.info('ConfigureCharacteristic', '__init__')
 
-        self.__wifi_done_callback = wifi_done_callback
         self.option = {'uuid': '2901', 'value': 'desc'}
         Characteristic.__init__(self, {
             'uuid': '32BEAA1BD20B47AC9385B243B8071DE4',
@@ -49,10 +48,8 @@ class ConfigureCharacteristic(Characteristic):
             except:
                 Logger.info('ConfigureCharacteristic', 'Wifi Configuration is available ..')
                 # wifi configuration is enabled from the client
-            if skip_wifi_config == True:
-                Logger.info('ConfigureCharacteristic', 'Connected device skipped Wifi setup. ' +
-                            'Initializing pairing process...')
-                self.__wifi_done_callback()
+            if skip_wifi_config:
+                Logger.info('ConfigureCharacteristic', 'Connected device skipped Wifi setup.')
             else:
                 # if valid SSID provided then create the wpa supplicant configuration.
                 wifi_details = ''
@@ -65,7 +62,6 @@ class ConfigureCharacteristic(Characteristic):
                                    '" \r\n        ' + \
                                    'key_mgmt=WPA-PSK \r\n}'
                 Logger.info('ConfigureCharacteristic', 'Wifi setup complete. Initializing pairing process...')
-                self.__wifi_done_callback()
                 time.sleep(3)
                 subprocess.run(['sudo echo \'' + wifi_details + '\' > ./wpa_supplicant.conf'], shell=True)
                 subprocess.run(["sudo", "cp", "./wpa_supplicant.conf", "/etc/wpa_supplicant/"])
@@ -90,5 +86,4 @@ class ConfigureCharacteristic(Characteristic):
             data = {'BoT': 'Configuration Done'}
             self.configureData.clear()
             self.configureData.extend(map(ord, json.dumps(data)))
-            self.__wifi_done_callback()
         callback(Characteristic.RESULT_SUCCESS, self.configureData[offset:])

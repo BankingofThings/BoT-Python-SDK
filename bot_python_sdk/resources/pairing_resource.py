@@ -2,7 +2,6 @@ import subprocess
 
 import falcon
 
-from bot_python_sdk.data.device_status import DeviceStatus
 from bot_python_sdk.util.logger import Logger
 from bot_python_sdk.data.storage import Storage
 
@@ -14,7 +13,7 @@ class PairingResource:
     def on_get(self, request, response):
         Logger.info('PairingResource', 'on_get')
         configuration = Storage.get_configuration_object()
-        if configuration.get_device_status() is not DeviceStatus.NEW:
+        if configuration.get_is_paired():
             error = 'Device is already paired.'
             Logger.error('api', error)
             raise falcon.HTTPBadRequest(description=error)

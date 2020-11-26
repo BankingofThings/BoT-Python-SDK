@@ -1,22 +1,19 @@
-from bot_python_sdk.data.device_status import DeviceStatus
-from bot_python_sdk.util.logger import Logger
-
-
 class Configuration:
 
     def __init__(self):
         self.product_id = ''
         self.device_id = ''
-        self.device_status = DeviceStatus.NEW
         self.public_key = ''
         self.aid = ''
         self.bluetooth_enabled = True
+        self.is_paired = False
+        self.is_multi_pair = False
         self.initialized = False
 
-    def initialize(self, product_id, device_id, device_status, bluetooth_enabled, aid, public_key):
+    def initialize(self, product_id, device_id, is_multi_pair, bluetooth_enabled, aid, public_key):
         self.product_id = product_id
         self.device_id = device_id
-        self.device_status = device_status
+        self.is_multi_pair = is_multi_pair
         self.bluetooth_enabled = bluetooth_enabled
         self.aid = aid
         self.public_key = public_key
@@ -35,11 +32,11 @@ class Configuration:
     def get_device_id(self):
         return self.device_id
 
-    def get_device_status(self):
-        return self.device_status
+    def get_is_paired(self):
+        return self.is_paired
 
-    def set_device_status(self, device_status):
-        self.device_status = device_status
+    def get_is_multi_pair(self):
+        return self.is_multi_pair
 
     def get_public_key(self):
         return self.public_key
@@ -57,7 +54,7 @@ class Configuration:
             'publicKey': self.get_stripped_public_key()
         }
         # Check if its multipairing mode and initialize the necessary data stuctures
-        if self.device_status == DeviceStatus.MULTIPAIR:
+        if self.is_multi_pair:
             data['multipair'] = 1
             data['aid'] = self.aid
         return data

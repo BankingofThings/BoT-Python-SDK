@@ -1,5 +1,4 @@
 from bot_python_sdk.data.configuration import Configuration
-from bot_python_sdk.data.device_status import DeviceStatus
 from unittest import mock
 import pytest
 
@@ -9,7 +8,7 @@ def resource():
     resource = mock.Mock()
     resource.product_id = 'product id'
     resource.device_id = 'device id'
-    resource.device_status = DeviceStatus.MULTIPAIR
+    resource.is_multi_pair = True
     resource.bluetooth_enabled = True
     resource.aid = 'aid'
     resource.public_key = ''
@@ -58,10 +57,9 @@ def _initialize(resource):
     configuration.initialize(
         resource.product_id,
         resource.device_id,
-        resource.device_status,
+        resource.is_multi_pair,
         resource.bluetooth_enabled,
         resource.aid,
-        resource.public_key,
-        resource.private_key
+        resource.public_key
     )
     return configuration

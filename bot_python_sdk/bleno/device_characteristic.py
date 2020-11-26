@@ -3,7 +3,6 @@ import socket
 
 from pybleno import *
 
-from bot_python_sdk.data.device_status import DeviceStatus
 from bot_python_sdk.data.storage import Storage
 from bot_python_sdk.util.logger import Logger
 
@@ -44,7 +43,7 @@ class DeviceCharacteristic(Characteristic):
             }
 
             # Multipairing mode checks
-            if configuration.get_device_status() == DeviceStatus.MULTIPAIR:
+            if configuration.get_is_multi_pair():
                 data['multipair'] = 1
                 data['aid'] = device_information['aid']
 

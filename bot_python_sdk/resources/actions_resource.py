@@ -1,6 +1,5 @@
 import falcon
 
-from bot_python_sdk.data.device_status import DeviceStatus
 from bot_python_sdk.util.logger import Logger
 from bot_python_sdk.data.storage import Storage
 
@@ -17,7 +16,6 @@ class ActionsResource:
     def on_post(self, request, response):
         Logger.info('ActionsResource', 'on_post')
         configuration = Storage.get_configuration_object()
-        device_status = configuration.get_device_status()
 
         data = request.media
 
@@ -25,7 +23,7 @@ class ActionsResource:
             Logger.error('api', 'Missing parameter `' + 'actionID' + '` for ' + 'POST' + ' ' + '/actions')
             raise falcon.HTTPBadRequest
 
-        if device_status is DeviceStatus.MULTIPAIR and 'alternativeID' not in data.keys():
+        if configuration.get_is_multi_pair() and 'alternativeID' not in data.keys():
             Logger.error('api', 'Missing parameter `' + 'alternativeID' + '` for ' + 'POST' + ' ' + '/actions')
             raise falcon.HTTPBadRequest
 

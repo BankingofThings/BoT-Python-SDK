@@ -10,7 +10,7 @@ class BlenoService(BlenoPrimaryService):
 
     # Bleno primary service, responsible for advertising frames.
     # Register the necessary characteristics
-    def __init__(self, wifi_done_callback):
+    def __init__(self):
         Logger.info('BlenoService', '__init__')
 
         BlenoPrimaryService.__init__(self, {
@@ -19,5 +19,5 @@ class BlenoService(BlenoPrimaryService):
                 DeviceCharacteristic(),
                 DeviceInfoCharacteristic(),
                 DeviceNetworkCharacteristic(),
-                ConfigureCharacteristic(wifi_done_callback),
+                ConfigureCharacteristic(),
             ]})

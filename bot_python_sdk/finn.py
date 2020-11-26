@@ -7,7 +7,6 @@ from cryptography.fernet import Fernet
 from qrcode.image.pure import PymagingImage
 
 from bot_python_sdk.data.configuration import Configuration
-from bot_python_sdk.data.device_status import DeviceStatus
 from bot_python_sdk.data.storage import Storage
 from bot_python_sdk.resources.actions_resource import ActionsResource
 from bot_python_sdk.resources.base_resource import BaseResource
@@ -24,7 +23,7 @@ from bot_python_sdk.util.utils import Utils
 
 
 class Finn:
-    def __init__(self, product_id, device_status, aid, bluetooth_enabled, api):
+    def __init__(self, product_id, is_multi_pair, aid, bluetooth_enabled, api):
         Logger.info('Finn', '__init__')
 
         # Server started, just continue with Finn.init
@@ -52,7 +51,7 @@ class Finn:
             self.__configuration = Configuration()
             self.__configuration.initialize(product_id,
                                             device_id,
-                                            device_status,
+                                            is_multi_pair,
                                             bluetooth_enabled,
                                             aid,
                                             public_key)
@@ -75,24 +74,22 @@ class Finn:
     def __process_device_status(self):
         import platform
         system_platform = platform.system()
+        Logger.info('Finn', '__process_device_status' + ' system_platform = ' + system_platform)
 
-        Logger.info('Finn', 'init' + ' system_platform = ' + system_platform)
-
-        device_status = self.__configuration.device_status
-
-        if device_status is DeviceStatus.PAIRED:
-            Logger.info('Finn', '__init__' + ' Device state is PAIRED, resuming the configuration')
+        ## TODO
+        if self.__configuration.get_is_paired():
+            Logger.info('Finn', '__process_device_status' + ' Device state is PAIRED, resuming the configuration')
             if self.__activate_device():
                 Logger.info('Finn', '__process_device_status device activated')
         else:
-            Logger.info('Finn', '__init__' + ' Pair the device either using QRCode or Bluetooth Service through FINN Mobile App')
+            Logger.info('Finn', '__process_device_status' + ' Pair the device either using QRCode or Bluetooth Service through FINN Mobile App')
+
+            self.__pairing_service.start()
+
             if system_platform != 'Darwin' and self.__configuration.is_bluetooth_enabled():
                 Logger.info('Finn', '__process_device_status start BLE')
                 from bot_python_sdk.services.bluetooth_service import BluetoothService
-                self.__blue_service = BluetoothService(self.__on_bluetooth_wifi_config_done)
-
-
-        Logger.info('Finn', '__process_device_status done')
+                self.__blue_service = BluetoothService()
 
     def __get_actions(self):
         return self.__action_service.get_actions()
@@ -112,9 +109,6 @@ class Finn:
             # run infinite with 5 sec delay. Don't increase delay until CORE supports it.
             time.sleep(5)
             self.__start_bot_talk()
-
-    def __on_bluetooth_wifi_config_done(self):
-        self.__pairing_service.stop()
 
     def __start_server(self):
         Logger.info('Finn', '__start_server')
