@@ -55,6 +55,7 @@ class ConfigureCharacteristic(Characteristic):
                 self.__wifi_done_callback()
             else:
                 # if valid SSID provided then create the wpa supplicant configuration.
+                wifi_details = ''
                 if details['SSID'] != '':
                     wifi_details = 'ctrl_interface=DIR=/var/run/wpa_supplicant' + \
                                    ' GROUP=netdev\r\n update_config=1\r\n country=GB \r\n' + \
@@ -64,7 +65,6 @@ class ConfigureCharacteristic(Characteristic):
                                    '" \r\n        ' + \
                                    'key_mgmt=WPA-PSK \r\n}'
                 Logger.info('ConfigureCharacteristic', 'Wifi setup complete. Initializing pairing process...')
-                wifi_details = ''
                 self.__wifi_done_callback()
                 time.sleep(3)
                 subprocess.run(['sudo echo \'' + wifi_details + '\' > ./wpa_supplicant.conf'], shell=True)

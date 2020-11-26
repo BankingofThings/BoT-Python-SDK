@@ -22,7 +22,7 @@ class DeviceCharacteristic(Characteristic):
         self.deviceData = bytearray()
 
     ###
-    # OnReadRequest is trigged when device specific data are required. As per the offset
+    # OnReadRequest is triggered when device specific data are required. As per the offset
     # the data is prepared and sent back via the callback. On first request the offset
     # will be 0, hence the function compiles the device characteristics data and returns
     # it via the callback. Depending on the offset values, the data is returned through the
@@ -34,21 +34,24 @@ class DeviceCharacteristic(Characteristic):
         if not offset:
             configuration = Storage.get_configuration_object()
             Logger.info('DeviceCharacteristic', 'Device data being read by connected device.')
-            device_status = configuration.get_device_status()
             device_information = configuration.get_device_information()
+
             data = {
                 'deviceID': device_information['deviceID'],
                 'makerID': device_information['makerID'],
                 'name': socket.gethostname(),
                 'publicKey': device_information['publicKey']
             }
+
             # Multipairing mode checks
-            if (device_status == DeviceStatus.MULTIPAIR):
+            if configuration.get_device_status() == DeviceStatus.MULTIPAIR:
                 data['multipair'] = 1
                 data['aid'] = device_information['aid']
+
             self.deviceData.extend(map(ord, json.dumps(data)))
             Logger.info('DeviceCharacteristic', json.dumps(data))
         else:
             Logger.info('DeviceCharacteristic', 'onReadRequest 2 ' + str(offset))
+
         # Return through the callback the necessary data
         callback(Characteristic.RESULT_SUCCESS, self.deviceData[offset:])
