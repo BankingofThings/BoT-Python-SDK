@@ -48,6 +48,7 @@ class DeviceCharacteristic(Characteristic):
                 data['multipair'] = 1
                 data['aid'] = device_information['aid']
 
+            self.deviceData.clear()
             self.deviceData.extend(map(ord, json.dumps(data)))
             Logger.info('DeviceCharacteristic', json.dumps(data))
         else:
