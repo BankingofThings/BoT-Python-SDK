@@ -2,6 +2,7 @@ import time
 
 from bot_python_sdk.util.logger import Logger
 
+
 # PairingService.run() will start infinite loop with checking pair status at CORE
 
 
@@ -11,6 +12,15 @@ class PairingService:
         self.bot_service = bot_service
         self.kill_loop = False
 
+    ###
+    # Get paired status
+    ##
+    def get_is_paired(self):
+        return self.__get_remote_paired_status()
+
+    ###
+    # Starts infinite loops check
+    ##
     def start(self):
         Logger.info('PairingService', 'run')
 

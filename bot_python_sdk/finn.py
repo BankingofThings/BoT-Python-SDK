@@ -76,26 +76,29 @@ class Finn:
         system_platform = platform.system()
         Logger.info('Finn', '__process_device_status' + ' system_platform = ' + system_platform)
 
-        ## TODO
-        if self.__configuration.get_is_paired():
-            Logger.info('Finn', '__process_device_status' + ' Device state is PAIRED, resuming the configuration')
-            if self.__activate_device():
-                Logger.info('Finn', '__process_device_status device activated')
-        else:
-            Logger.info('Finn', '__process_device_status' + ' Pair the device either using QRCode or Bluetooth Service through FINN Mobile App')
+        if self.__pairing_service.get_is_paired():
+            self.__configuration.set_is_paired(True)
+            self.__activate_device_service.execute()
 
-            self.__pairing_service.start()
-
-            if system_platform != 'Darwin' and self.__configuration.is_bluetooth_enabled():
-                Logger.info('Finn', '__process_device_status start BLE')
+            if self.__configuration.get_is_multi_pair() and system_platform != 'Darwin' and self.__configuration.is_bluetooth_enabled():
                 from bot_python_sdk.services.bluetooth_service import BluetoothService
                 self.__blue_service = BluetoothService()
 
+                if self.__pairing_service.start():
+                    self.__configuration.set_is_paired(True)
+                    self.__activate_device_service.execute()
+
+        elif system_platform != 'Darwin' and self.__configuration.is_bluetooth_enabled():
+            Logger.info('Finn', '__process_device_status start BLE')
+            from bot_python_sdk.services.bluetooth_service import BluetoothService
+            self.__blue_service = BluetoothService()
+
+            if self.__pairing_service.start():
+                self.__configuration.set_is_paired(True)
+                self.__activate_device_service.execute()
+
     def __get_actions(self):
         return self.__action_service.get_actions()
-
-    def __activate_device(self):
-        return self.__activate_device_service.execute()
 
     def __start_bot_talk(self):
         bot_talk_model = self.__bot_talk_service.execute()
