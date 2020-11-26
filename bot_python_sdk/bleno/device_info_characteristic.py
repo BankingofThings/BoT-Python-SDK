@@ -45,6 +45,7 @@ class DeviceInfoCharacteristic(Characteristic):
                 'endianness': 'LE' if sys.byteorder == 'little' else 'BE'
             }
             # Mapping endian value to match with node sdk
+            self.deviceInfoData.clear()
             self.deviceInfoData.extend(map(ord, json.dumps(system_data)))
         # Return the necessary data through the call back
         callback(Characteristic.RESULT_SUCCESS, self.deviceInfoData[offset:])

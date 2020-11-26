@@ -85,9 +85,10 @@ class ConfigureCharacteristic(Characteristic):
     ##
     def onReadRequest(self, offset, callback):
         if not offset:
+            Logger.info('ConfigureCharacteristic', 'Connected device configuration complete. Start pairing process...')
+
             data = {'BoT': 'Configuration Done'}
-            Logger.info('ConfigureCharacteristic', 'Connected device configuration complete. ' +
-                        'Start pairing process...')
+            self.configureData.clear()
             self.configureData.extend(map(ord, json.dumps(data)))
             self.__wifi_done_callback()
         callback(Characteristic.RESULT_SUCCESS, self.configureData[offset:])

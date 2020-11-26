@@ -49,6 +49,7 @@ class DeviceNetworkCharacteristic(Characteristic):
                 'network': address,
                 'ip': interface_name
             }
+            self.networkData.clear()
             self.networkData.extend(map(ord, json.dumps(data)))
         # Return the necessary network related data through the callback
         callback(Characteristic.RESULT_SUCCESS, self.networkData[offset:])
