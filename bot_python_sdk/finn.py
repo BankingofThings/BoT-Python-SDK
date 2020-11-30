@@ -80,7 +80,7 @@ class Finn:
             self.__configuration.set_is_paired(True)
             self.__activate_device_service.execute()
 
-            if self.__configuration.get_is_multi_pair() and system_platform != 'Darwin' and self.__configuration.is_bluetooth_enabled():
+            if self.__configuration.get_is_multi_pair() and system_platform != 'Darwin' and self.__configuration.get_is_bluetooth_enabled():
                 from bot_python_sdk.services.bluetooth_service import BluetoothService
                 self.__blue_service = BluetoothService()
 
@@ -88,7 +88,7 @@ class Finn:
                     self.__configuration.set_is_paired(True)
                     self.__activate_device_service.execute()
 
-        elif system_platform != 'Darwin' and self.__configuration.is_bluetooth_enabled():
+        elif system_platform != 'Darwin' and self.__configuration.get_is_bluetooth_enabled():
             Logger.info('Finn', '__process_device_status start BLE')
             from bot_python_sdk.services.bluetooth_service import BluetoothService
             self.__blue_service = BluetoothService()

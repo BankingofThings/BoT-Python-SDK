@@ -240,7 +240,7 @@ class Storage:
             'isMultiPair': configuration.get_is_multi_pair(),
             'publicKey': configuration.get_public_key(),
             'alternativeId': configuration.get_alternative_id(),
-            'bluetoothEnabled': configuration.is_bluetooth_enabled()
+            'bluetoothEnabled': configuration.get_is_bluetooth_enabled()
         }
         Storage.__set_configuration(dictionary)
 

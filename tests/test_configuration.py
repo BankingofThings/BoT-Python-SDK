@@ -16,16 +16,6 @@ def resource():
     return resource
 
 
-def test_configuration():
-    configuration = Configuration()
-    assert not configuration.is_initialized()
-
-
-def test_configuration_initialize(resource):
-    configuration = _initialize(resource)
-    assert configuration.is_initialized()
-
-
 def test_get_headers(resource):
     configuration = _initialize(resource)
 
