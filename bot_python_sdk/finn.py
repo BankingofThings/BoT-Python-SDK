@@ -95,8 +95,11 @@ class Finn:
 
     def __on_device_paired(self):
         Logger.info('Finn', '__on_device_paired')
+
         self.__configuration.set_is_paired(True)
-        self.__activate_device_service.execute()
+
+        if self.__activate_device_service.execute():
+            self.__start_bot_talk()
 
     def __get_actions(self):
         return self.__action_service.get_actions()
