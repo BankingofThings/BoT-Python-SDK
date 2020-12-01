@@ -136,7 +136,7 @@ class Finn:
         Logger.info('Server', "Starting server at URL: http://" + __ip_address + ':3001/')
 
         # Executes api.py and indirectly finn.py
-        subprocess.run(['gunicorn', '-b', __ip_address + ':3001', 'bot_python_sdk.api:api'])
+        subprocess.run(['gunicorn', '-t', "9999", '-b', __ip_address + ':3001', 'bot_python_sdk.api:api'])
 
     # Console api
     def __init_api(self, api):
