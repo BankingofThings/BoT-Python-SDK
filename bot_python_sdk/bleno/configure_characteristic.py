@@ -51,23 +51,29 @@ class ConfigureCharacteristic(Characteristic):
             if skip_wifi_config:
                 Logger.info('ConfigureCharacteristic', 'Connected device skipped Wifi setup.')
             else:
+                Logger.info('ConfigureCharacteristic', 'onWriteRequest ssid:' + str(details['SSID']))
+                Logger.info('ConfigureCharacteristic', 'onWriteRequest password:' + str(details['PWD']))
+
                 # if valid SSID provided then create the wpa supplicant configuration.
                 wifi_details = ''
+
                 if details['SSID'] != '':
-                    wifi_details = 'ctrl_interface=DIR=/var/run/wpa_supplicant' + \
-                                   ' GROUP=netdev\r\n update_config=1\r\n country=GB \r\n' + \
-                                   'network={ \r\n        ssid="' + details['SSID'] + \
-                                   '" \r\n' + \
-                                   '        psk="' + details['PWD'] + \
-                                   '" \r\n        ' + \
-                                   'key_mgmt=WPA-PSK \r\n}'
-                Logger.info('ConfigureCharacteristic', 'Wifi setup complete. Initializing pairing process...')
+                    wifi_details = 'ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev\r\n' \
+                                   'update_config=1\r\n' \
+                                   'country=GB\r\n' \
+                                   'network=' \
+                                   '{\r\n' \
+                                   'ssid="' + details['SSID'] + '"\r\n' \
+                                   'psk="' + details['PWD'] + '"\r\n' \
+                                   '}'
+
                 time.sleep(3)
+
                 subprocess.run(['sudo echo \'' + wifi_details + '\' > ./wpa_supplicant.conf'], shell=True)
                 subprocess.run(["sudo", "cp", "./wpa_supplicant.conf", "/etc/wpa_supplicant/"])
+
                 Logger.info('ConfigureCharacteristic', 'Wifi configuration done! Device reboot in progress')
                 # run the necessary command to update the wpa supplicant file with in /etc/
-                subprocess.run(["sudo", "rm", "./wpa_supplicant.conf"])
                 subprocess.run(["sudo", "sleep", "1"])
                 # reboot the device after successful update of wpa suppicant configuration
                 subprocess.run(["sudo", "reboot"])
