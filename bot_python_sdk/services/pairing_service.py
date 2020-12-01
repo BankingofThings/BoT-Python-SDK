@@ -11,6 +11,7 @@ class PairingService:
     def __init__(self, bot_service):
         self.bot_service = bot_service
         self.kill_loop = False
+        self.callback = None
 
     ###
     # Get paired status
@@ -21,10 +22,11 @@ class PairingService:
     ###
     # Starts infinite loops check
     ##
-    def start(self):
+    def start(self, callback):
         Logger.info('PairingService', 'run')
+        self.callback = callback
 
-        return self.__start_check_paired_loop()
+        self.__start_check_paired_loop()
 
     def stop(self):
         Logger.info('PairingService', 'stop')
@@ -35,6 +37,7 @@ class PairingService:
         if self.kill_loop:
             return False
         elif self.__get_remote_paired_status():
+            self.callback()
             return True
         else:
             time.sleep(10)
