@@ -11,7 +11,7 @@ from bot_python_sdk.data.storage import Storage
 ##
 
 # Request user input
-def initialize_configuration(product_id):
+def __initialize_configuration(product_id):
     Logger.info('Server', 'initialize_configuration product_id = ' + product_id)
 
     # Option for Multi pairing
@@ -34,10 +34,13 @@ def initialize_configuration(product_id):
 if Storage.has_configuration():
     Finn(None, None, None, None, None)
 else:
+    Logger.info('Server', 'initialize_configuration done 1 = ' + str(sys.argv[0]))
+    Logger.info('Server', 'initialize_configuration done 2 = ' + str(sys.argv[1]))
+
     if len(sys.argv) != 2:
         exit('Please add your productID to configure the SDK: "make server productID=YOUR_PRODUCT_ID"')
     elif len(sys.argv[1]) != 36:
         exit('Please enter a valid productID')
     else:
         # argv is the console input
-        initialize_configuration(sys.argv[1])
+        __initialize_configuration(sys.argv[1])

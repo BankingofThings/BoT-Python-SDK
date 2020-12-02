@@ -26,7 +26,7 @@ class Finn:
     def __init__(self, product_id, is_multi_pair, aid, bluetooth_enabled, api):
         Logger.info('Finn', '__init__')
 
-        # Server started, just continue with Finn.init
+        # From api, server started, just continue with Finn.init
         if api is not None:
             self.__configuration = Storage.get_configuration_object()
 
