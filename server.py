@@ -34,12 +34,9 @@ def __initialize_configuration(product_id):
 if Storage.has_configuration():
     Finn(None, None, None, None, None)
 else:
-    try:
-        Logger.info('Server', 'initialize_configuration done 1 = ' + str(sys.argv[0]))
-        Logger.info('Server', 'initialize_configuration done 2 = ' + str(sys.argv[1]))
-    except:
-        Logger.info('Server', 'initialize_configuration done error')
-
+    # argv comes from Makefile
+    # argv 1 is server.py
+    # argv 2 is input after productID=
 
     if len(sys.argv) != 2:
         exit('Please add your productID to configure the SDK: "make server productID=YOUR_PRODUCT_ID"')

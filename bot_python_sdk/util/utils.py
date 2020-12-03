@@ -1,8 +1,6 @@
 import re
 import time
 
-import falcon
-
 from bot_python_sdk.data.frequency import FrequenciesInSeconds
 from bot_python_sdk.data.storage import Storage
 from bot_python_sdk.util.logger import Logger
@@ -30,3 +28,16 @@ class Utils:
                 return 0
         else:
             return 0
+
+    @staticmethod
+    def get_platform():
+        import platform
+        return platform.system()
+
+    @staticmethod
+    def is_platform_windows():
+        return Utils.get_platform() == "Windows"
+
+    @staticmethod
+    def is_platform_osx():
+        return Utils.get_platform() == "Darwin"

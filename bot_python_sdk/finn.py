@@ -23,8 +23,13 @@ from bot_python_sdk.util.utils import Utils
 
 
 class Finn:
+    ###
+    # Scenario all None = device already configured, just start > will start gunicorn and comeback
+    # Scenario product_id, multi_pair, aid, bluetooth_enabled exists > new install > will start gunicorn and comeback
+    # Scenario api exists = gunicorn server started > resume
+    ##
     def __init__(self, product_id, is_multi_pair, aid, bluetooth_enabled, api):
-        Logger.info('Finn', '__init__')
+        Logger.info('Finn', '__init__ platform:' + Utils.get_platform())
 
         # From api, server started, just continue with Finn.init
         if api is not None:
@@ -62,7 +67,7 @@ class Finn:
             try:
                 Storage.save_qrcode(qrcode.make(json.dumps(Storage.get_device_pojo()), image_factory=PymagingImage))
             except Exception as e:
-                Logger.info('ConfigurationService', 'generate_qr_code error:' + str(e))
+                Logger.info('Finn', '__init__ generate_qr_code error:' + str(e))
                 raise e
 
             self.__start_server()
@@ -72,21 +77,17 @@ class Finn:
             self.__start_server()
 
     def __process_device_status(self):
-        import platform
-        system_platform = platform.system()
-        Logger.info('Finn', '__process_device_status' + ' system_platform = ' + system_platform)
-
         if self.__pairing_service.get_is_paired():
             self.__configuration.set_is_paired(True)
             self.__activate_device_service.execute()
 
-            if self.__configuration.get_is_multi_pair() and system_platform != 'Darwin' and self.__configuration.get_is_bluetooth_enabled():
+            if self.__configuration.get_is_multi_pair() and not Utils.is_platform_osx() and self.__configuration.get_is_bluetooth_enabled():
                 from bot_python_sdk.services.bluetooth_service import BluetoothService
                 self.__blue_service = BluetoothService()
 
                 self.__pairing_service.start(self.__on_device_paired)
 
-        elif system_platform != 'Darwin' and self.__configuration.get_is_bluetooth_enabled():
+        elif Utils.is_platform_osx() and self.__configuration.get_is_bluetooth_enabled():
             Logger.info('Finn', '__process_device_status start BLE')
             from bot_python_sdk.services.bluetooth_service import BluetoothService
             self.__blue_service = BluetoothService()
@@ -100,9 +101,6 @@ class Finn:
 
         if self.__activate_device_service.execute():
             self.__start_bot_talk()
-
-    def __get_actions(self):
-        return self.__action_service.get_actions()
 
     def __start_bot_talk(self):
         bot_talk_model = self.__bot_talk_service.execute()
@@ -125,15 +123,15 @@ class Finn:
         # 3. api.py starts instance of Finn
         __ip_address = subprocess.Popen(['hostname', '-I'], stdout=subprocess.PIPE).communicate()[0].decode('ascii').split(' ')[0]
 
-        Logger.info('Server', "starting with configuration... IP" + __ip_address)
+        Logger.info('Finn', "__start_server starting with configuration... IP" + __ip_address)
 
         if Utils.is_valid(__ip_address):
-            Logger.info('Server', "Detected IP Address :" + __ip_address)
+            Logger.info('Finn', "__start_server Detected IP Address :" + __ip_address)
         else:
             __ip_address = '127.0.0.1'
-            Logger.info('Server', "Failed in detecting valid IP Address, using loop back address: " + __ip_address)
+            Logger.info('Finn', "__start_server Failed in detecting valid IP Address, using loop back address: " + __ip_address)
 
-        Logger.info('Server', "Starting server at URL: http://" + __ip_address + ':3001/')
+        Logger.info('Finn', "__start_server Starting server at URL: http://" + __ip_address + ':3001/')
 
         # Executes api.py and indirectly finn.py
         subprocess.run(['gunicorn', '-t', "9999", '-b', __ip_address + ':3001', 'bot_python_sdk.api:api'])
