@@ -21,7 +21,7 @@ def test_get_headers(resource):
 
     header = {
         'Content-Type': 'application/json',
-        'makerID': resource.product_id,
+        'productID': resource.product_id,
         'deviceID': resource.device_id
     }
 
@@ -33,7 +33,7 @@ def test_get_device_information(resource):
 
     device_info = {
         'deviceID': resource.device_id,
-        'makerID': resource.product_id,
+        'productID': resource.product_id,
         'publicKey': resource.public_key,
         'multipair': 1,
         'aid': resource.aid

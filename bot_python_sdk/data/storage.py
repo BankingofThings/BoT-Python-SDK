@@ -224,7 +224,7 @@ class Storage:
         dictionary = Storage.__get_configuration()
         configuration = Configuration()
         configuration.initialize(
-            dictionary['makerId'],
+            dictionary['productID'],
             dictionary['deviceId'],
             dictionary['isMultiPair'],
             dictionary['bluetoothEnabled'],
@@ -235,7 +235,7 @@ class Storage:
     @staticmethod
     def save_configuration_object(configuration):
         dictionary = {
-            'makerId': configuration.get_product_id(),
+            'productID': configuration.get_product_id(),
             'deviceId': configuration.get_device_id(),
             'isMultiPair': configuration.get_is_multi_pair(),
             'publicKey': configuration.get_public_key(),

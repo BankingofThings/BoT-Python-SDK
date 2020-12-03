@@ -47,7 +47,7 @@ class Configuration:
     def get_device_information(self):
         data = {
             'deviceID': self.__device_id,
-            'makerID': self.__product_id,
+            'productID': self.__product_id,
             'publicKey': self.get_stripped_public_key()
         }
         # Check if its multipairing mode and initialize the necessary data stuctures
@@ -59,6 +59,6 @@ class Configuration:
     def get_headers(self):
         return {
             'Content-Type': 'application/json',
-            'makerID': self.__product_id,
+            'productID': self.__product_id,
             'deviceID': self.__device_id
         }

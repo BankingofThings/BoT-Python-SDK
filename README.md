@@ -73,14 +73,14 @@ make test
 ```
 
 # Configuration
-Sign in to the [Maker Portal](https://maker.bankingofthings.io/) and get the makerID from your account.
-On your first run, replace YOUR_ID with the productID or the makerID from your Maker portal, and run:
+Sign in to the [Maker Portal](https://maker.bankingofthings.io/) and get the productID from your account.
+On your first run, replace YOUR_ID with the productID or the productID from your Maker portal, and run:
 ```bash
 make server productID=PRODUCT_ID_FROM_PORTAL
 ```
 Webserver supports endpoint `/qrcode` to retrieve the generated Qrcode for the device to pair with the [Finn Mobile Application](https://docs.bankingofthings.io/mobile-app). Make a note of webserver's base url displayed in the above command's output and append `/qrcode`. The Webserver can be accessed remotely from any system connected to same network as that of the device.
 
-Note: You can also use a productID from your product page in the Maker portal, like this: `makerID=PRODUCT_ID`
+Note: You can also use a productID from your product page in the Maker portal, like this: `productID=PRODUCT_ID`
 
 # Running the server
 To run the server normally after you've configured it, simply run in your venv:

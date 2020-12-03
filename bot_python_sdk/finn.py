@@ -33,18 +33,8 @@ class Finn:
 
         # From api, server started, just continue with Finn.init
         if api is not None:
-            self.__configuration = Storage.get_configuration_object()
-
-            Logger.info('Finn', '__init__ server created productID =' + self.__configuration.get_product_id() + ', deviceID = ' + self.__configuration.get_device_id())
-
-            self.__bot_service = BoTService(Storage.get_private_key(), self.__configuration.get_headers())
-            self.__action_service = ActionService(self.__configuration, self.__bot_service, self.__configuration.get_device_id())
-            self.__pairing_service = PairingService(self.__bot_service)
-            self.__activate_device_service = ActiveDeviceService(self.__bot_service, self.__configuration.get_device_id())
-            self.__bot_talk_service = BotTalkService(self.__bot_service)
-
+            self.__kick_start()
             self.__init_api(api)
-
             self.__process_device_status()
         # New install, no configuration, just create configuration and start server
         elif product_id is not None:
@@ -70,11 +60,29 @@ class Finn:
                 Logger.info('Finn', '__init__ generate_qr_code error:' + str(e))
                 raise e
 
-            self.__start_server()
+            self.__check_server_needed()
         # We have already configuration, just start server
         else:
             Logger.info('Finn', '__init__ resume device')
+            self.__check_server_needed()
+
+    def __check_server_needed(self):
+        if Utils.is_platform_linux():
             self.__start_server()
+        else:
+            self.__kick_start()
+            self.__process_device_status()
+
+    def __kick_start(self):
+        self.__configuration = Storage.get_configuration_object()
+
+        Logger.info('Finn', '__kick_start productID:' + self.__configuration.get_product_id() + ', deviceID = ' + self.__configuration.get_device_id())
+
+        self.__bot_service = BoTService(Storage.get_private_key(), self.__configuration.get_headers())
+        self.__action_service = ActionService(self.__configuration, self.__bot_service, self.__configuration.get_device_id())
+        self.__pairing_service = PairingService(self.__bot_service)
+        self.__activate_device_service = ActiveDeviceService(self.__bot_service, self.__configuration.get_device_id())
+        self.__bot_talk_service = BotTalkService(self.__bot_service)
 
     def __process_device_status(self):
         if self.__pairing_service.get_is_paired():

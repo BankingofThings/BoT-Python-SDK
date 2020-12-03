@@ -41,3 +41,11 @@ class Utils:
     @staticmethod
     def is_platform_osx():
         return Utils.get_platform() == "Darwin"
+
+    @staticmethod
+    def is_platform_linux():
+        return Utils.get_platform() == "Linux"
+
+    @staticmethod
+    def is_platform_raspberrypi():
+        return Utils.is_platform_linux()

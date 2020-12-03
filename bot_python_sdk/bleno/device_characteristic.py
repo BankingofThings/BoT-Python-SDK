@@ -37,7 +37,7 @@ class DeviceCharacteristic(Characteristic):
 
             data = {
                 'deviceID': device_information['deviceID'],
-                'makerID': device_information['makerID'],
+                'productID': device_information['productID'],
                 'name': socket.gethostname(),
                 'publicKey': device_information['publicKey']
             }
