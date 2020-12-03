@@ -20,7 +20,7 @@ def __initialize_configuration(product_id):
     aid = ''
     if input('Enable Multi pair(yes/no)') == 'yes':
         is_multi_pair = True
-        aid = input('Enter your alternativeID:')
+        aid = input('Enter device alternative identifier displayname:')
 
     bluetooth_enabled = False
     if input('Enable Bluetooth (yes/no; default is yes)') == 'yes':

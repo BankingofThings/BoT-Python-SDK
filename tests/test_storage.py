@@ -20,12 +20,12 @@ def test_has_configuration():
 
     stored_configuration = Storage.get_configuration_object()
 
-    assert stored_configuration.product_id == "mi"
-    assert stored_configuration.device_id == "di"
-    assert stored_configuration.is_multi_pair
-    assert stored_configuration.bluetooth_enabled
-    assert stored_configuration.aid == "aid"
-    assert stored_configuration.public_key == "puk"
+    assert stored_configuration.get_product_id() == "mi"
+    assert stored_configuration.get_device_id() == "di"
+    assert stored_configuration.get_is_multi_pair()
+    assert stored_configuration.get_is_bluetooth_enabled()
+    assert stored_configuration.get_alternative_id() == "aid"
+    assert stored_configuration.get_public_key() == "puk"
 
     value = Storage.has_configuration()
 
