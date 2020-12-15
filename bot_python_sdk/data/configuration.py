@@ -65,6 +65,7 @@ class Configuration:
 
         return {
             'Content-Type': 'application/json',
-            'productID': self.__product_id,
+            # CORE make productID
+            'makerID': self.__product_id,
             'deviceID': self.__device_id
         }
