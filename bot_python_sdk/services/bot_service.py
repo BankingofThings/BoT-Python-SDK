@@ -17,6 +17,8 @@ class BoTService:
 
     def __init__(self, private_key, headers):
         Logger.info('BoTService', '__init__ ' + API_URL)
+        Logger.info('BoTService', '__init__ pKey:' + str(private_key))
+        Logger.info('BoTService', '__init__ headers:' + str(headers))
         self.__private_key = private_key
         self.__headers = headers
 
@@ -37,8 +39,14 @@ class BoTService:
         try:
             Logger.info('BoTService', 'get' + str(self.__headers))
 
-            response = self.__create_session().get(API_URL + url, headers=self.__headers)
+            apiUrl = API_URL + url
+
+            Logger.info('BoTService', 'get ' + apiUrl)
+
+            response = self.__create_session().get(apiUrl, headers=self.__headers)
+
             Logger.info('BoTService', 'get response = ' + str(response))
+
             if response.status_code < 200 or response.status_code >= 300:
                 raise falcon.HTTPServiceUnavailable
             elif response.status_code == 204:
