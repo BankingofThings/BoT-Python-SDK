@@ -17,12 +17,14 @@ class PairingService:
     # Get paired status
     ##
     def get_is_paired(self):
+        Logger.info('PairingService', 'get_is_paired')
         return self.__get_remote_paired_status()
 
     ###
     # Starts infinite loops check
     ##
     def start(self, callback):
+        Logger.info('PairingService', 'start')
         Logger.info('PairingService', 'run')
         self.callback = callback
 

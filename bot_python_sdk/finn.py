@@ -84,6 +84,9 @@ class Finn:
         self.__activate_device_service = ActiveDeviceService(self.__bot_service, self.__configuration.get_device_id())
         self.__bot_talk_service = BotTalkService(self.__bot_service)
 
+    ###
+    # Check pairing status, and start the pairing check if necessary.
+    ##
     def __process_device_status(self):
         if self.__pairing_service.get_is_paired():
             self.__configuration.set_is_paired(True)
@@ -100,6 +103,9 @@ class Finn:
             from bot_python_sdk.services.bluetooth_service import BluetoothService
             self.__blue_service = BluetoothService()
 
+            self.__pairing_service.start(self.__on_device_paired)
+
+        else:
             self.__pairing_service.start(self.__on_device_paired)
 
     def __on_device_paired(self):
