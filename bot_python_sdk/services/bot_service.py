@@ -24,8 +24,16 @@ class BoTService:
 
     def post(self, url, data):
         try:
-            response = self.__create_session().post(API_URL + url, data=self.__create_request_body(data), headers=self.__headers)
+            Logger.info('BoTService', 'post' + str(self.__headers))
+
+            full_url = API_URL + url
+
+            Logger.info('BoTService', 'post' + full_url)
+
+            response = self.__create_session().post(full_url, data=self.__create_request_body(data), headers=self.__headers)
+
             Logger.info('BoTService', 'post response:' + str(response))
+
             if response.status_code < 200 or response.status_code >= 300:
                 raise falcon.HTTPServiceUnavailable
         except requests.exceptions.SSLError:
@@ -39,11 +47,11 @@ class BoTService:
         try:
             Logger.info('BoTService', 'get' + str(self.__headers))
 
-            apiUrl = API_URL + url
+            full_url = API_URL + url
 
-            Logger.info('BoTService', 'get ' + apiUrl)
+            Logger.info('BoTService', 'get ' + full_url)
 
-            response = self.__create_session().get(apiUrl, headers=self.__headers)
+            response = self.__create_session().get(full_url, headers=self.__headers)
 
             Logger.info('BoTService', 'get response = ' + str(response))
 
