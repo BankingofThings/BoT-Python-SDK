@@ -33,8 +33,8 @@ class Finn:
 
         # From api, server started, just continue with Finn.init
         if api is not None:
-            self.__kick_start()
-            self.__init_api(api)
+            self.__init_cli(api)
+            self.__create_services()
             self.__process_device_status()
         # New install, no configuration, just create configuration and start server
         elif product_id is not None:
@@ -70,10 +70,10 @@ class Finn:
         if Utils.is_platform_linux():
             self.__start_server()
         else:
-            self.__kick_start()
+            self.__create_services()
             self.__process_device_status()
 
-    def __kick_start(self):
+    def __create_services(self):
         self.__configuration = Storage.get_configuration_object()
 
         Logger.info('Finn', '__kick_start productID:' + self.__configuration.get_product_id() + ', deviceID = ' + self.__configuration.get_device_id())
@@ -153,9 +153,9 @@ class Finn:
         # Executes api.py and indirectly finn.py
         subprocess.run(['gunicorn', '-t', "9999", '-b', __ip_address + ':3001', 'bot_python_sdk.api:api'])
 
-    # Console api
-    def __init_api(self, api):
-        Logger.info('Finn', 'init_api')
+    # Enable CLI (gunicorn)
+    def __init_cli(self, api):
+        Logger.info('Finn', 'init_cli')
 
         api.add_route('/', BaseResource())
         api.add_route('/actions', ActionsResource(self.__action_service))
