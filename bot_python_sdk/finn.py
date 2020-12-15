@@ -96,17 +96,20 @@ class Finn:
                 from bot_python_sdk.services.bluetooth_service import BluetoothService
                 self.__blue_service = BluetoothService()
 
-                self.__pairing_service.start(self.__on_device_paired)
+                self.__start_pairing()
 
         elif Utils.is_platform_osx() and self.__configuration.get_is_bluetooth_enabled():
             Logger.info('Finn', '__process_device_status start BLE')
             from bot_python_sdk.services.bluetooth_service import BluetoothService
             self.__blue_service = BluetoothService()
 
-            self.__pairing_service.start(self.__on_device_paired)
+            self.__start_pairing()
 
         else:
-            self.__pairing_service.start(self.__on_device_paired)
+            self.__start_pairing()
+
+    def __start_pairing(self):
+        self.__pairing_service.start(self.__on_device_paired)
 
     def __on_device_paired(self):
         Logger.info('Finn', '__on_device_paired')

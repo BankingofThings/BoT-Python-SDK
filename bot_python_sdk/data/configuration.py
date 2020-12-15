@@ -1,3 +1,6 @@
+from bot_python_sdk.util.logger import Logger
+
+
 class Configuration:
 
     def __init__(self):
@@ -57,6 +60,9 @@ class Configuration:
         return data
 
     def get_headers(self):
+        Logger.info('Configuration', 'get_headers productID:' + str(self.__product_id))
+        Logger.info('Configuration', 'get_headers deviceID:' + str(self.__device_id))
+
         return {
             'Content-Type': 'application/json',
             'productID': self.__product_id,
