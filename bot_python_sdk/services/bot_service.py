@@ -35,6 +35,8 @@ class BoTService:
     # 204 returns None: just ignore
     def get(self, url):
         try:
+            Logger.info('BoTService', 'get' + str(self.__headers))
+
             response = self.__create_session().get(API_URL + url, headers=self.__headers)
             Logger.info('BoTService', 'get response = ' + str(response))
             if response.status_code < 200 or response.status_code >= 300:
