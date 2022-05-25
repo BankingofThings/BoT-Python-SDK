@@ -7,7 +7,7 @@ falcon==1.4.1
 gunicorn==19.9.0
 idna==2.7
 pycparser==2.18
-PyJWT==1.6.4
+PyJWT==2.4.0
 git+git://github.com/ojii/pymaging.git#egg=pymaging
 git+git://github.com/ojii/pymaging-png.git#egg=pymaging-png
 git+git://github.com/Adam-Langley/pybleno.git#egg=pybleno
