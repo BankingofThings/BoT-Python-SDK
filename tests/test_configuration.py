@@ -1,5 +1,4 @@
-from bot_python_sdk.configuration import Configuration
-from bot_python_sdk.device_status import DeviceStatus
+from bot_python_sdk.data.configuration import Configuration
 from unittest import mock
 import pytest
 
@@ -7,9 +6,9 @@ import pytest
 @pytest.fixture()
 def resource():
     resource = mock.Mock()
-    resource.maker_id = 'maker id'
+    resource.product_id = 'product id'
     resource.device_id = 'device id'
-    resource.device_status = DeviceStatus.MULTIPAIR.value
+    resource.is_multi_pair = True
     resource.bluetooth_enabled = True
     resource.aid = 'aid'
     resource.public_key = ''
@@ -17,22 +16,12 @@ def resource():
     return resource
 
 
-def test_configuration():
-    configuration = Configuration()
-    assert not configuration.is_initialized()
-
-
-def test_configuration_initialize(resource):
-    configuration = _initialize(resource)
-    assert configuration.is_initialized()
-
-
 def test_get_headers(resource):
     configuration = _initialize(resource)
 
     header = {
         'Content-Type': 'application/json',
-        'makerID': resource.maker_id,
+        'productID': resource.product_id,
         'deviceID': resource.device_id
     }
 
@@ -44,7 +33,7 @@ def test_get_device_information(resource):
 
     device_info = {
         'deviceID': resource.device_id,
-        'makerID': resource.maker_id,
+        'productID': resource.product_id,
         'publicKey': resource.public_key,
         'multipair': 1,
         'aid': resource.aid
@@ -56,12 +45,11 @@ def test_get_device_information(resource):
 def _initialize(resource):
     configuration = Configuration()
     configuration.initialize(
-        resource.maker_id,
+        resource.product_id,
         resource.device_id,
-        resource.device_status,
+        resource.is_multi_pair,
         resource.bluetooth_enabled,
         resource.aid,
-        resource.public_key,
-        resource.private_key
+        resource.public_key
     )
     return configuration

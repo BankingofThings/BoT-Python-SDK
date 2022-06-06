@@ -1,43 +1,47 @@
-import os
-import subprocess
 import sys
-import re
 
-from bot_python_sdk.configuration_service import ConfigurationService
-from bot_python_sdk.store import Store
-from bot_python_sdk.logger import Logger
-
-configuration_service = ConfigurationService()
-store = Store()
-LOCATION = 'Server'
+from bot_python_sdk.finn import Finn
+from bot_python_sdk.util.logger import Logger
+from bot_python_sdk.data.storage import Storage
 
 
-# Function to validate the given IP Address
-def is_valid(ip):
-    regex = '''^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(
-                25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(
-                25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(
-                25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)'''
+###
+# Class Server
+# Started with 'make server' user input
+##
 
-    return re.search(regex, ip)
+# Request user input
+def __initialize_configuration(product_id):
+    Logger.info('Server', 'initialize_configuration product_id = ' + product_id)
+
+    # Option for Multi pairing
+    # If the option is yes, then alternative id needed
+    is_multi_pair = False
+    aid = ''
+    if input('Enable Multi pair(yes/no)') == 'yes':
+        is_multi_pair = True
+        aid = input('Enter device alternative identifier displayname:')
+
+    bluetooth_enabled = False
+    if input('Enable Bluetooth (yes/no; default is yes)') == 'yes':
+        bluetooth_enabled = True
+
+    Logger.info('Server', 'initialize_configuration done')
+    Finn(product_id, is_multi_pair, aid, bluetooth_enabled, None)
 
 
-if not store.has_configuration():
-    if len(sys.argv) <= 1:
-        exit('Please add your makerID to configure the SDK: "make server makerID=YOUR_MAKER_ID"')
-    maker_id = sys.argv[1]  # 1 -> First argument after server.py
-    configuration_service.initialize_configuration(maker_id)
-
-# If OS is windows based, it doesn't support gunicorn so we run waitress
-if os.name == 'nt':
-    subprocess.run(['waitress-serve', '--port=3001', 'bot_python_sdk.api:api'])
+# Resume Finn or generate configuration
+if Storage.has_configuration():
+    Finn(None, None, None, None, None)
 else:
-    cmd = subprocess.Popen(['hostname', '-I'], stdout=subprocess.PIPE)
-    ip = cmd.communicate()[0].decode('ascii').split(' ')[0]
-    if is_valid(ip):
-        Logger.info(LOCATION, "Detected IP Address :" + ip)
+    # argv comes from Makefile
+    # argv 1 is server.py
+    # argv 2 is input after productID=
+
+    if len(sys.argv) != 2:
+        exit('Please add your productID to configure the SDK: "make server productID=YOUR_PRODUCT_ID"')
+    elif len(sys.argv[1]) != 36:
+        exit('Please enter a valid productID')
     else:
-        Logger.info(LOCATION, "Failed in detecting valid IP Address, using loop back address: 127.0.0.1")
-        ip = '127.0.0.1'
-    Logger.info(LOCATION, "Starting Webserver at URL: http://" + ip + ':3001/')
-    subprocess.run(['gunicorn', '-b', ip + ':3001', 'bot_python_sdk.api:api'])
+        # argv is the console input
+        __initialize_configuration(sys.argv[1])

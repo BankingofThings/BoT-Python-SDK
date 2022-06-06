@@ -1,16 +1,8 @@
 install: ; sudo pip3 install --upgrade pip && sudo pip3 install --upgrade setuptools && sudo pip3 install -r requirements.txt
 
-server: ; sudo python3 server.py $(makerID)
+server: ; sudo python3 server.py $(productID)
 
-configuration: ; python3 -c "from bot_python_sdk.configuration_service import ConfigurationService; ConfigurationService().resume_configuration()"
-
-pair: ; python3 -c "from bot_python_sdk.configuration_service import ConfigurationService; ConfigurationService().pair()"
-
-activate: ; python3 -c "from bot_python_sdk.configuration_service import ConfigurationService; ConfigurationService().activate()"
-
-reset: ; python3 -c "from bot_python_sdk.store import Store; Store().remove_configuration()"
-
-qr: ;  python3 -c "from bot_python_sdk.configuration_service import ConfigurationService; ConfigurationService().generate_qr_code()"
+reset: ; python3 -c "from bot_python_sdk.data.storage import Storage; Storage.remove_configuration()"
 
 test: ; pytest
 

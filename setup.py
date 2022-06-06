@@ -1,3 +1,6 @@
+# For preventing log variables in classes, for pyCharm add live template
+# Also prevent logging any unnecessary code
+
 from io import open
 
 from setuptools import find_packages, setup
